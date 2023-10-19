@@ -39,7 +39,6 @@ export default{
 <style lang="scss" scoped>
   h2{
     color: white;
-    margin-top: 50px;
     font-size: 36pt;
     padding: 0 20px;
   }
@@ -51,17 +50,17 @@ export default{
     color: white;
   }
   .page{
-    height: 100vh; 
+    height: 100%; 
     align-items: center;
     background-color: black;
     border-top: 1px white solid;
-    margin: 0%;
+    padding: 100px;
     .ContentArea{
+      height: 88%;
+      width: 100%;
       display: flex;
-      margin-top: 50px;
-      margin-left: 20%;
     .Img{
-      width: 30%;
+      width: 400px;
       height: 400px;
       background-image: url(../../public/selfie.JPG);
       background-size: contain;

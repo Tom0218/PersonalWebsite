@@ -37,6 +37,32 @@ const router = createRouter({
       name: 'Snack',
       component: () => import('../views/Snack.vue')
     },
+    {
+      path: '/Login',
+      name: 'Login',
+      component: () => import('../views/Login.vue')
+    },
+    {
+      path: '/WaterFall',
+      name: 'WaterFall',
+      component: () => import('../views/WaterFall.vue')
+    },
+    {
+      path: '/Register',
+      name: 'Register',
+      component: () => import('../views/Register.vue')
+    },
+    {
+      path: '/VifandVshow',
+      name: 'VifandVshow',
+      component: () => import('../views/VifandVshow.vue')
+    },
+    {
+      path: '/Props',
+      name: 'Props',
+      component: () => import('../views/Props.vue')
+      // chi
+    },
   ]
 })
 

@@ -32,7 +32,6 @@
         width: 100vw;
         height: 10vh;
         background-color: black;
-        border:1px white solid;
     }
     .VforPractice02SecondArea{
         width: 100vw;

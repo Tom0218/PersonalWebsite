@@ -7,20 +7,22 @@
         RouterLink
     }
 }
-function toggle() {
-    document.getElementById('nav-container').classList.toggle('is-active');
-    document.getElementById('btn-menu').classList.toggle('is-active');
-}
+
 </script>
 
 <template>
     <div class="headerpage">
-        <RouterLink to="/" class="Home Btn">Home</RouterLink>
-        <RouterLink to="/VtextAndVmodel" class=" Btn shape-ex1" onclick="toggle()">Vtext&Vmodel</RouterLink>
-        <RouterLink to="/Practice01" class=" Btn shape-ex1" onclick="toggle()">V-for Practice01</RouterLink>
-        <RouterLink to="/Practice02" class=" Btn shape-ex1" onclick="toggle()">V-for Practice02</RouterLink>
-        <RouterLink to="/GuessNumber" class=" Btn shape-ex1" onclick="toggle()">GuessNumber</RouterLink>
-        <RouterLink to="/Snack" class=" Btn shape-ex1" onclick="toggle()">Snack</RouterLink>
+        <RouterLink to="/" class="Home Btn Btn shape-ex1">Home</RouterLink>
+        <RouterLink to="/VtextAndVmodel" class=" Btn shape-ex1" >Vtext&Vmodel</RouterLink>
+        <RouterLink to="/Practice01" class=" Btn shape-ex1" >Practice01</RouterLink>
+        <RouterLink to="/Practice02" class=" Btn shape-ex1" >Practice02</RouterLink>
+        <RouterLink to="/GuessNumber" class=" Btn shape-ex1" >GuessNumber</RouterLink>
+        <RouterLink to="/Snack" class=" Btn shape-ex1" >Snack</RouterLink>
+        <RouterLink to="/Login" class=" Btn shape-ex1" >Login</RouterLink>
+        <RouterLink to="/Register" class=" Btn shape-ex1" >Register</RouterLink>
+        <RouterLink to="/WaterFall" class=" Btn shape-ex1" >WaterFall</RouterLink>
+        <RouterLink to="/VifandVshow" class=" Btn shape-ex1" >VifandVshow</RouterLink>
+        <RouterLink to="/Props" class=" Btn shape-ex1" >Props</RouterLink>
         </div>
 </template>
 
@@ -30,6 +32,7 @@ function toggle() {
         height: 100%;
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
     }
     .Btn{
         color: white;

@@ -13,6 +13,15 @@ export default{
             trimText:"",
             radioText:"",
             checkboxText:[],
+            title:"cool",
+            isRed:"false",
+            isLarge:"false",
+            styleArr:[],
+            item:[
+                "../../public/Snackphoto/7.png",
+                "../../public/Snackphoto/5.png",
+                "../../public/Snackphoto/6.png",
+            ],
 
         }
 
@@ -28,9 +37,23 @@ export default{
                 <p>使用方法 : { { } }，兩個大括號</p>
 <pre>
 <code>
-&lt;p&gt;Name : { { this.name } }&lt;p&gt;
-&lt;p&gt;age : { { this.age } }&lt;p&gt;
-&lt;p&gt;address : { { this.address } }&lt;p&gt;
+&lt;script>
+    export deflault{
+        data(){
+            return{ 
+                name:"andy",
+                age:18,
+                address:"台南市永康區00號",
+            }
+        }
+    }
+&lt;/script>
+
+&lt;template>
+    &lt;p&gt;Name : { { this.name } }&lt;p&gt;
+    &lt;p&gt;age : { { this.age } }&lt;p&gt;
+    &lt;p&gt;address : { { this.address } }&lt;p&gt;
+&lt;/template>
 </code>
 </pre>           
             </div>
@@ -60,6 +83,71 @@ export default{
                 <option value="3">3</option>
             </select>
                 <p>[ {{ selectText }} ]</p>
+            </div>
+
+            <h1>V-mode1綁定物件</h1>
+            <p>未啟動時h2無class名稱，當isRed or isLarge為true時便賦予h2標籤class名稱</p>
+<pre>
+<code>
+&lt;label for="">isred&lt;/label>
+&lt;input type="checkbox" value="true" v-model="isRed">
+&lt;label for="">islarge&lt;/label>
+&lt;input type="checkbox" value="true" v-model="isLarge">
+&lt;h2 :class="{red:isRed,large:isLarge}">here&lt;/h2>
+
+&lt;style>
+    .red{ color: red;}
+    .large{font-size: 36pt;}
+&lt;/style>
+</code>
+</pre>
+            <div class="d-flex">
+                <div>
+                    <label for="">isred</label>
+                    <input type="checkbox" value="true" v-model="isRed">
+                    <label for="">islarge</label>
+                    <input type="checkbox" value="true" v-model="isLarge">
+                </div>
+            <h2 :class="{red:isRed,large:isLarge}">here</h2>
+            </div>
+
+            <h1>v-mode綁定陣列array</h1>
+<pre>
+<code>
+&lt;script>
+    export deflault{
+        data(){
+            return{ >styleArr:[] }
+        }
+    }
+&lt;/script>
+
+&lt;template>
+    &lt;label for="">Red&lt;/label>
+    &lt;input type="checkbox" value="red" v-model="styleArr">
+    &lt;label for="">Large&lt;/label>
+    &lt;input type="checkbox" value="large" v-model="styleArr">
+    &lt;label for="">bold&lt;/label>
+    &lt;input type="checkbox" value="bold" v-model="styleArr">
+&lt;/template>
+
+&lt;style>
+    .red{ color: red;}
+    .large{font-size: 36pt;}
+    .bold{font-weight: bolder;}
+&lt;/style>
+</code>
+</pre>
+            <div class="d-flex">
+                <div>
+                <label for="">Red</label>
+                <input type="checkbox" value="red" v-model="styleArr">
+                <label for="">Large</label>
+                <input type="checkbox" value="large" v-model="styleArr">
+                <label for="">bold</label>
+                <input type="checkbox" value="bold" v-model="styleArr">
+                </div>
+            <h2 :class="styleArr">here</h2>
             </div>
             <h1>V-model.lazy</h1>
                 <p>點擊input外側才會更動</p>
@@ -105,8 +193,7 @@ export default{
             <input type="text" v-model.trim="trimText">
             <p>[ 頭{{this.trimText}}尾 ] (有trim 首尾輸入的空格會被去除)</p>
 
-
-            <h1>radio</h1>
+            <h1>V-mode與radio</h1>
             <p>單選按鈕</p>
 <pre>
 <code>
@@ -128,7 +215,7 @@ export default{
             <p>{{ this.radioText }}</p>
 
 
-            <h1>checkbox</h1>
+            <h1>V-model與checkbox</h1>
             <p>若變數設為""則回全選且checkboxText也會變成布林值，所以必須設成陣列[]</p>
 <pre>
 <code>
@@ -141,13 +228,58 @@ export default{
 &lt;p>{ {this.checkboxText} }&lt;/p>  
 </code>
 </pre>
-            <label>早餐</label>
-            <input type="checkbox" v-model="checkboxText" name="meal" value="breakfast" id="breakfast">
+            <label for="">早餐</label>
+            <input type="checkbox" v-model="checkboxText" name="meal" value="breakfast" id="Bf">
             <label for="">午餐</label>
-            <input type="checkbox" v-model="checkboxText" name="meal" value="launch" id="launch">
+            <input type="checkbox" v-model="checkboxText" name="meal" value="launch" id="Lh">
             <label for="">晚餐</label>
-            <input type="checkbox" v-model="checkboxText" name="meal" value="dinner" id="dinner">
+            <input type="checkbox" v-model="checkboxText" name="meal" value="dinner" id="Din">
             <p>{{ this.checkboxText }}</p>
+
+
+            <h1>v-bind</h1>
+            <p>綁定標籤屬性 css or class，此處h2綁定title的屬性cool</p>
+<pre>
+<code>
+&lt;h1 class="cool">cool1&lt;/h1>
+&lt;h2 v-bind:class="title">cool2&lt;/h2>            
+</code>
+</pre>
+            <div class="d-flex">
+            <h3 class="cool">cool1</h3>
+            <h2 v-bind:class="title">cool2</h2>
+            </div>
+            
+            <h1>v-bind綁定陣列</h1>
+            <p>此範例為應用v-blind綁定陣列item，並以item裡的三個圖片做for迴圈</p>
+<pre>
+<code>
+&lt;div class="d-flex ">
+    &lt;div class="card " style="width: 18rem;" v-for="x in item" >
+        &lt;img  v-bind:src= "x" class="card-img-top" alt="..." >
+            &lt;div class="card-body">
+            &lt;h5 class="card-title">Card title&lt;/h5>
+            &lt;p class="card-text">Some quick example text to build on the card title&lt;/p>
+            &lt;a href="#" class="btn btn-primary">Go somewhere&lt;/a>
+            &lt;/div>
+    &lt;/div>
+&lt;/div>
+</code>
+</pre>
+            <div class="d-flex ">
+                <div class="card " style="width: 18rem;" v-for="x in item" >
+                    <img  v-bind:src= "x" class="card-img-top" alt="..." >
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+
+
+
+        
         </div>
     </div>    
 
@@ -171,6 +303,9 @@ export default{
         margin-top: 60px;
         margin-bottom: 20px;
     }
+    h2{
+        color: white;
+    }
     input{
         width: 40px;
         margin-right: 10px;
@@ -189,7 +324,6 @@ export default{
     label{
         color: white;
     }
-
     .mainArea{
         width: 50vw;
         margin: 0 25%;
@@ -221,5 +355,23 @@ export default{
             display: flex;
         }
     }
+    .cool{
+        color: blueviolet;
+        margin-right: 50px;
+    }
+    .red{
+        color: red;
+    }
+    .large{
+        font-size: 36pt;
+    }
+    .bold{
+        font-weight: bolder;
+    }
+    .card-text{
+        color: black;
+    }
+
+
 
 </style>

@@ -53,28 +53,36 @@ export default{
     <!-- <h1>V-on</h1>
     <button type="button" v-on:click="print()">btn</button>
     <button type="button" @click="print()">btn</button> -->
-    <div class="Box">
-        <div>
-            <h1>猜數字</h1>
-            <p>{{ this.showText }}</p>
-            <div class="d-flex showArea">
-                <p>{{ this.minNum }}</p>
-                <p>-</p>
-                <p>{{ this.maxNum }}</p>
-            </div>
-            <div class="">
-                <input type="number" v-model.number="inputText" >
-                <button type="button" v-on:click="guess()">guess</button>
+    <div class="body" >    
+        <div class="Box">
+            <div>
+                <h1>猜數字</h1>
+                <p>{{ this.showText }}</p>
+                <div class="d-flex showArea">
+                    <p>{{ this.minNum }}</p>
+                    <p>-</p>
+                    <p>{{ this.maxNum }}</p>
+                </div>
+                <div class="">
+                    <input type="number" v-model.number="inputText" >
+                    <button type="button" v-on:click="guess()">guess</button>
+                </div>
             </div>
         </div>
     </div>
-    
 </template>
 
 <style lang="scss" scoped>
+
     p{
         font-size: 18pt;
         font-weight: bold;
+    }
+    .body{
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .Box{
         height: 300px;
@@ -94,4 +102,5 @@ export default{
         
 
     }
+   
 </style>
