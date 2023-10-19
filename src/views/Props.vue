@@ -15,8 +15,7 @@ export default{
                 Interest:""
 
             },
-            Info:["Name","Phone","Email","Address","GraduatedSchool","sex","Interest"]
-        }   
+        }
     },
     components:{
         Child
@@ -33,27 +32,27 @@ export default{
     <div class="MainArea">
         <div class="Register" v-if="Page==1">
             <p>Name</p>
-            <input type="text" v-model="this.Name">
+            <input type="text" v-model="this.propsObject.Name">
             <p>Phone</p>
-            <input type="text" v-model="this.Phone">
+            <input type="text" v-model="this.propsObject.Phone">
             <p>Eamil</p>
-            <input type="text" v-model="this.Eamil">
+            <input type="text" v-model="this.propsObject.Eamil">
             <p>Address</p>
-            <input type="text" v-model="this.Address">
+            <input type="text" v-model="this.propsObject.Address">
             <p>GraduatedSchool</p>
-            <input type="text" v-model="this.GraduatedSchool">
+            <input type="text" v-model="this.propsObject.GraduatedSchool">
             <p>sex</p>
-            <input type="radio" name="sex" value="man" v-model="sex">男
-            <input type="radio" name="sex" value="wemon" v-model="sex">女
+            <input type="radio" name="sex" value="man" v-model="this.propsObject.sex">男
+            <input type="radio" name="sex" value="wemon" v-model="this.propsObject.sex">女
             <p>Interest</p>
-            <input type="text" v-model="this.Interest">
+            <input type="text" v-model="this.propsObject.Interest">
 
             <button type="button" @click="changePage()">next</button>
             
             </div>
             <div class="show" v-else-if="Page ==2">
                 <Child
-                :person={Name,Phone,Eamil,Address,GraduatedSchool,sex,Interest}
+                :person= propsObject
                 />    
             </div>
     </div>

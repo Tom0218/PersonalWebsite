@@ -23,6 +23,8 @@
         <RouterLink to="/WaterFall" class=" Btn shape-ex1" >WaterFall</RouterLink>
         <RouterLink to="/VifandVshow" class=" Btn shape-ex1" >VifandVshow</RouterLink>
         <RouterLink to="/Props" class=" Btn shape-ex1" >Props</RouterLink>
+        <RouterLink to="/Emit" class=" Btn shape-ex1" >Emit</RouterLink>
+        <RouterLink to="/PropsAndEmit" class=" Btn shape-ex1" >PropsAndEmit</RouterLink>
         </div>
 </template>
 
