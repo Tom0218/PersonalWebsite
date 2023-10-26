@@ -1,5 +1,4 @@
 <script>
-import { RouterLink} from 'vue-router';
 export default{
     data(){
         return{
@@ -10,12 +9,7 @@ export default{
             userData:[],
         }
     },
-
-    components:{
-        RouterLink
-    },
     methods:{
-
         RegisterBtn(){
             let userinfo={
                 account:this.Email,
@@ -23,39 +17,13 @@ export default{
             }
             this.userData.push(userinfo)
             localStorage.setItem("user",JSON.stringify(this.userData));
-            // if(JSON.parse(localStorage.getItem("user")) == null){//若為第一次使用localstorage
-            //     localStorage.setItem("user",JSON.stringify(userData));
-            //     showText = "註冊成功";
-
-
-
-            // for(let i = 0;i<)
-            // this.outputArr = JSON.parse(localStorage.getItem("user"));
-            //     // console.log(this.outputArr[0].account)
-            //     for(let i = 0;i<)
-            }
-
-
-
-
-            // else{
-                // this.outputArr.forEach(account => {
-                //     console(account)
-                // });
-                    // if (item.account == userInfo.email) {
-                    //     showText = "該email已註冊";    
-                    // } else {
-                    //     localStorage.setItem("user",JSON.stringify(userData));
-                    //     showText = "註冊成功";
-                    // }
-                // });
-                
-            // }
-        
-
+        },
+        LogIn(){
+            let x = 0
+            this.$emit('changepage',x)
+        }
     }
 }
-
 </script>
 
 <template>
@@ -66,7 +34,6 @@ export default{
                 <div class="emailbox">
                     <p >email</p>
                     <input type="text" v-model="Email">
-                    <p></p>
                 </div>
                 <div class="namebox">
                     <p>name</p>
@@ -84,7 +51,7 @@ export default{
                 <div class="Signupbtnbox">
                     <button @click="RegisterBtn">Register</button>
                 </div>
-                <RouterLink to="/Login" class=" Btn shape-ex1" >Login</RouterLink>
+                <button type="button" @click="LogIn()">logIn</button>
             </div>
         </div>
 </div>
@@ -129,7 +96,6 @@ h1{
 .page{
     width: 500px;
     height: 500px;
-    border: 1px black solid;
     display: flex;
     justify-content: center;
     .mainArea{

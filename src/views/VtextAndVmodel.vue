@@ -61,15 +61,26 @@ export default{
             <p>雙向資料綁定</p>
 <pre>
 <code>
-&lt;input type="text" v-model="age"&gt;
-&lt;p&gt; { { this.age} } &lt;/p&gt;
+&lt;script>
+export default{
+    data(){
+        return{
+            age:18,
+        }
+    }
+}
+&lt;/script>
+&lt;template>
+    &lt;input type="text" v-model="age"&gt;
+    &lt;p&gt; { { this.age} } &lt;/p&gt;
 
-&lt;select v-model="selectText" &gt;
-    &lt;option value="1"&gt;1&lt;/option&gt;
-    &lt;option value="2"&gt;2&lt;/option&gt;
-    &lt;option value="3"&gt;3&lt;/option&gt;
-&lt;/select&gt;
+    &lt;select v-model="selectText" &gt;
+        &lt;option value="1"&gt;1&lt;/option&gt;
+        &lt;option value="2"&gt;2&lt;/option&gt;
+        &lt;option value="3"&gt;3&lt;/option&gt;
+    &lt;/select&gt;
 &lt;p&gt;{ { selectText } }&lt;/p&gt;
+&lt;/template>
 </code>
 </pre>
             <div class="Vmodel-1">
@@ -85,15 +96,28 @@ export default{
                 <p>[ {{ selectText }} ]</p>
             </div>
 
-            <h1>V-mode1綁定物件</h1>
+            <h1>V-model綁定物件</h1>
             <p>未啟動時h2無class名稱，當isRed or isLarge為true時便賦予h2標籤class名稱</p>
 <pre>
 <code>
-&lt;label for="">isred&lt;/label>
+&lt;script>
+export default{
+    data(){
+        return{
+            isRed:"false",
+            isLarge:"false",
+        }
+    }
+}
+&lt;/script>
+
+&lt;template>
+&lt;label for=""isred&lt;/label>
 &lt;input type="checkbox" value="true" v-model="isRed">
 &lt;label for="">islarge&lt;/label>
 &lt;input type="checkbox" value="true" v-model="isLarge">
 &lt;h2 :class="{red:isRed,large:isLarge}">here&lt;/h2>
+&lt;/template>
 
 &lt;style>
     .red{ color: red;}
@@ -111,13 +135,13 @@ export default{
             <h2 :class="{red:isRed,large:isLarge}">here</h2>
             </div>
 
-            <h1>v-mode綁定陣列array</h1>
+            <h1>v-model綁定陣列array</h1>
 <pre>
 <code>
 &lt;script>
     export deflault{
         data(){
-            return{ >styleArr:[] }
+            return{ styleArr:[] }
         }
     }
 &lt;/script>
@@ -197,12 +221,23 @@ export default{
             <p>單選按鈕</p>
 <pre>
 <code>
+&lt;script>
+    export deflault{
+        data(){
+            return{ 
+                radioText:"" 
+            }
+        }
+    }
+&lt;/script>
 &lt;label>早餐&lt;/label&gt;
     &lt;input type="radio" v-model="radioText" name="food" value="pork" id="breakfast"&gt;
 &lt;label>中餐&lt;/label&gt;
     &lt;input type="radio" v-model="radioText" name="food" value="fish" id="launch"&gt;
 &lt;label>晚餐&lt;/label&gt;
     &lt;input type="radio" v-model="radioText" name="food" value="beef" id="dinner"&gt;
+
+    &lt;p>{ { this.radioText } }&lt;/p>
 </code>
 </pre>
             <label for="">早餐</label>
@@ -216,9 +251,18 @@ export default{
 
 
             <h1>V-model與checkbox</h1>
-            <p>若變數設為""則回全選且checkboxText也會變成布林值，所以必須設成陣列[]</p>
+            <p>若變數設為""則會全選且checkboxText也會變成布林值，所以必須設成陣列[]</p>
 <pre>
 <code>
+&lt;script>
+    export deflault{
+        data(){
+            return{ 
+                checkboxText:[] 
+            }
+        }
+    }
+&lt;/script>
 &lt;label>早餐&lt;/label&gt;
     &lt;input type="checkbox" v-model="checkboxText" name="meal" value="breakfast" id="breakfast"&gt;
 &lt;label>中餐&lt;/label&gt;
@@ -241,8 +285,24 @@ export default{
             <p>綁定標籤屬性 css or class，此處h2綁定title的屬性cool</p>
 <pre>
 <code>
+&lt;script>
+    export deflault{
+        data(){
+            return{ 
+                title:"cool"
+            }
+        }
+    }
+&lt;/script>
 &lt;h1 class="cool">cool1&lt;/h1>
-&lt;h2 v-bind:class="title">cool2&lt;/h2>            
+&lt;h2 v-bind:class="title">cool2&lt;/h2>  
+
+&lt;style>
+.cool{
+        color: blueviolet;
+        margin-right: 50px;
+    }
+&lt;/style>          
 </code>
 </pre>
             <div class="d-flex">
@@ -251,9 +311,22 @@ export default{
             </div>
             
             <h1>v-bind綁定陣列</h1>
-            <p>此範例為應用v-blind綁定陣列item，並以item裡的三個圖片做for迴圈</p>
+            <p>此範例為應用v-blind綁定陣列item，並以item裡的三個圖片做for迴圈便能快速做出三張卡片</p>
 <pre>
 <code>
+&lt;script>
+    export deflault{
+        data(){
+            return{ 
+                item:[
+                "../../public/Snackphoto/7.png",
+                "../../public/Snackphoto/5.png",
+                "../../public/Snackphoto/6.png",
+            ],
+            }
+        }
+    }
+&lt;/script>
 &lt;div class="d-flex ">
     &lt;div class="card " style="width: 18rem;" v-for="x in item" >
         &lt;img  v-bind:src= "x" class="card-img-top" alt="..." >

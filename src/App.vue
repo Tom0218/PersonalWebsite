@@ -14,12 +14,11 @@ import Header from './components/Header.vue'
 
 <style lang="scss" scoped>
     .Top{
-      width: 100vw;
       height: auto;
     }
     .content{
       width: 100%;
-      height: 90vh;
+      height: 100vh;
       margin: 0;
     }
 

@@ -1,5 +1,5 @@
 <script>
-import  {RouterLink} from 'vue-router';
+import Register from "../components/Register.vue"; 
 export default{
         data(){
             return{
@@ -14,38 +14,41 @@ export default{
             }
         },
         components:{
-            RouterLink
-        
+            Register
         },
         methods:{
-            Register(){
+            LogIn(){
                 this.getData = localStorage.getItem('user');
                 this.userData = JSON.parse( this.getData );
                 this.UserDatalength = this.userData.length;
                 for(let i = 0; i <  this.UserDatalength+1 ;i++){
-                    // console.log(this.userData[i].account);
-                    // console.log(this.userData[i].pwd);
+                    console.log(this.userData[i].account);
+                    console.log(this.userData[i].pwd);
                     if (this.Email == this.userData[i].account && this.Password == this.userData[i].pwd){
 
                         console.log("有這個帳號跟密碼");
-                        this.check1 = "登入成功"
-                        page+=1
-                        
+                        this.check1 = "登入成功";         
                         return
                         
                     }else{
                         this.check1 = "帳號或密碼錯誤"
                     }
                 }
+            },
+            changePage(x){
+                this.page = x
+            },
+            GoRegister(){
+                this.page +=1
             }
-    }
+        }
 }
 </script>
 
 <template>
-<div class="body">
+<div class="body" >
     <div class="mainArea">
-            <div class="Gamebox">
+            <div class="Gamebox" v-if="this.page==0">
                 <h1>login Page</h1>
                 <p>Email</p>
                 <input type="text" v-model="Email">
@@ -53,15 +56,19 @@ export default{
                 <input type="text" v-model="Password">
                 <div class="line-5">
                     <input type="checkbox" class="chekBox">
-                    <p>Keep login</p>
-                    <RouterLink to="/Register" class=" Btn shape-ex1" >Register</RouterLink>
+                    <small>Keep login</small>
+                    <button type="button" @click="GoRegister()">Register</button>
                 </div>
-                <button type="button"  @click="Register()">Log In</button>
+                <button type="button" class="loginbtn" @click="LogIn()">Log In</button>
                 <div><p>{{ check1 }}</p></div>
                 
             </div>
+            <div v-else-if="page ==1">
+                <Register @changepage ="changePage"/>
+            </div>
         </div>
-</div>
+        </div>
+
 </template>
 
 <style lang="scss" scoped>
@@ -80,12 +87,12 @@ p{
 }
 h1{
     text-align: center;
+    margin-bottom: 30px;
 }
 
 .mainArea{
     height: 400px;
     width: 500px;
-    border: 1px black solid;
     display: flex;
     justify-content: center;
     .Gamebox{
@@ -98,6 +105,7 @@ h1{
 
         }
         .line-5{
+            width: 100%;
             display: flex;
             align-items: center;
             position: relative;
@@ -123,10 +131,17 @@ h1{
             height: 40px;
             border: none;
             font-size: 16pt;
-            margin: 5% 30%;
+            margin-left: 29%;
         }
         #check1{
             text-align: center;
+        }
+        .loginbtn{
+            margin-top: 30px;
+        }
+        small{
+            width: 50px;
+            margin-left: 5%;
         }
         
 

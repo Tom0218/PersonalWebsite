@@ -48,11 +48,6 @@ const router = createRouter({
       component: () => import('../views/WaterFall.vue')
     },
     {
-      path: '/Register',
-      name: 'Register',
-      component: () => import('../views/Register.vue')
-    },
-    {
       path: '/VifandVshow',
       name: 'VifandVshow',
       component: () => import('../views/VifandVshow.vue')
@@ -72,6 +67,16 @@ const router = createRouter({
       path: '/PropsAndEmit',
       name: 'EmPropsAndEmitit',
       component: () => import('../views/PropsAndEmit.vue')
+    },
+    {
+      path: '/WatchandComputed',
+      name: 'WatchandComputed',
+      component: () => import('../views/WatchandComputed.vue')
+    },
+    {
+      path: '/WeatherAPI',
+      name: 'WeatherAPI',
+      component: () => import('../views/WeatherAPI.vue')
     },
   ]
 })

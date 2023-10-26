@@ -4,7 +4,7 @@
 </template>
 <style lang="scss" scoped>
 .header1{
-    background-color: aquamarine;
+    background-color: orange;
     width: 100vw;
     height: 20vh;
 

@@ -9,7 +9,7 @@
     .box{
         width: 300px;
         height: 300px;
-        background-color: aquamarine;
+        background-color: orange;
         display: flex;
         
     }

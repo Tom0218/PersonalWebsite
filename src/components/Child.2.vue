@@ -20,13 +20,38 @@ export default{
 </script>
 
 <template>
+
     <div>
         <div class="showArea">
             <div class="MainArea">
-                <h1>Emit child2</h1>
+                <h1>Emit child</h1>
                 <p>text變數:{{this.TextObj}}</p>
                 <button type="button" @click="emitGO">emitGO</button>
-                <button type="button" @click="$emit('apple', this.TextObj)">emitGO2(無functoin)</button>
+                <!-- <button type="button" @click="$emit('apple', this.TextObj)">emitGO2(無functoin)</button> -->
+<div class="code">
+<pre>
+<code>
+&lt;script>
+export default{
+    methods:{
+--------------------------------------------|
+        emitGO(){                           |
+        this.$emit('apple', this.TextObj);  |   將資料存進變數apple
+        }                                   |
+    }                                       |
+--------------------------------------------|
+},
+&lt;
+&lt;/script>
+&lt;template>
+-------------------------------------------------------------|
+&lt;button type="button" @click="emitGO">emitGO&lt;/button>        |  執行
+-------------------------------------------------------------|
+&lt;/template>
+
+</code>
+</pre>
+</div>
             </div>
         </div>
     </div>
@@ -39,9 +64,15 @@ export default{
     justify-content: center;
     align-items: center;
     .MainArea{
-        height: 500px;
-        width: 500px;
+        height: auto;
+        width: 550px;
         border: 1px black solid;
+    }
+    .code{
+        border-top: 1px black solid;
+    }
+    pre{
+        background-color: whitesmoke;
     }
 }
 </style>

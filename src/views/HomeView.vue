@@ -60,9 +60,9 @@ export default{
       width: 100%;
       display: flex;
     .Img{
-      width: 400px;
-      height: 400px;
-      background-image: url(../../public/selfie.JPG);
+      width: 40%;
+      height: 100%;
+      background-image: url(../../public/bike1.jpg);
       background-size: contain;
       background-position: 50% 50%;
       background-repeat: no-repeat;

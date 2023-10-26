@@ -15,7 +15,7 @@
         flex-direction: column;
         height: 500px;
         width: 50%;
-        background-color: aquamarine;
+        background-color: orange;
         margin-top: 0;
         }
         .txt{

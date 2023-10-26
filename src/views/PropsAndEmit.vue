@@ -4,7 +4,7 @@ import Dog2 from "../components/Dog2.vue"
 export default{
     data(){
         return{
-            page : 0,
+            page : 1,
             infoBox:"",
         }
     },
@@ -16,11 +16,10 @@ export default{
         GoFatherObj(userinfo){
             console.log(userinfo)
             this.infoBox = userinfo
+            this.page = userinfo.page
         },
-        GoDog2(){
-            this.page+=2
-            this.infoBox.page+=1
-            console.log(this.infoBox.page)
+        GoDog1(){
+            this.page = 2 ;
         }
 
     }
@@ -30,17 +29,22 @@ export default{
 
 <template>
     <div class="MainArea">
-        <div class="Register" v-if="this.infoBox.page==1">
-            <h1>Father</h1>
+        <div class="TextArea">
+            此時做主要功能是讓使用者在子網頁(dog1)進行輸入並傳送至主網頁(Father)，並由主網頁再將資料帶到另一個子網頁(Dog2)且可直接於dog2上進行修改
+        </div>
+        <div class="Register" v-if="page == 1">
+            <div>
+            <h1>後台</h1>
             <P>Name is  {{ this.infoBox.name}}</P>
-            <p>Age is {{ this.infoBox.age }}</p>
-            <button type="button" @click="GoDog2">GoDog2</button>
+            <p>Age is  {{ this.infoBox.age }}</p>
+            <button type="button" @click="GoDog1">GoDog1</button>
             </div>
-            <div v-else-if="page==0">
+        </div>  
+        <div v-else-if="page === 2">
             <Dog1 @userinfo = "GoFatherObj"/>
-            </div>
-            <div v-else>
-            <Dog2 :userData = this.infoBox></Dog2>
+        </div>
+            <div>
+            <Dog2 :userData = this.infoBox v-model:age="infoBox.age" v-model:name="infoBox.name" />
             </div>
     </div>
 </template>
@@ -55,6 +59,16 @@ export default{
         .Register{
             width: 300px;
             height: 300px;
+            border: 1px black solid;
+            display: flex;
+            padding-left: 4%;
+            padding-top: 0.5%;
+        }
+        .TextArea{
+            width: 200px;
+            height: 200px;
+            margin-right: 2%;
+            border-radius: 5px;
             border: 1px black solid;
         }
     }

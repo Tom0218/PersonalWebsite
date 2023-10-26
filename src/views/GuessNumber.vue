@@ -3,8 +3,7 @@
 export default{
         data(){
         return{
-            title:"e04",
-            inputText:"6",
+            inputText:0,
             minNum:0,
             maxNum:100,
             showText:"",
@@ -13,9 +12,6 @@ export default{
         }
     },
     methods:{
-        // print(){
-        //     console.log(this.title)
-        // }
         guess(){
 
             let guessNum = this.inputText;
@@ -50,9 +46,6 @@ export default{
 
 
 <template>
-    <!-- <h1>V-on</h1>
-    <button type="button" v-on:click="print()">btn</button>
-    <button type="button" @click="print()">btn</button> -->
     <div class="body" >    
         <div class="Box">
             <div>

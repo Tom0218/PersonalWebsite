@@ -8,6 +8,6 @@
     .bottom{
         widows: 100%;
         height: 20vh;
-        background-color: aquamarine;
+        background-color: orange;
     }
 </style>
