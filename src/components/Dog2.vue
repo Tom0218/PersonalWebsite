@@ -25,6 +25,12 @@ export default{
     .showArea{
         height: 300px;
         width: 300px;
-        border: 1px black solid;
+    }
+    button{
+        margin-top: 2%;
+    }
+    input{
+        border-radius: 5px;
+        margin: 1% 0;
     }
 </style>

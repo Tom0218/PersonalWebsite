@@ -1,49 +1,95 @@
-<script setup>
-import Title from '../components/DessertTitle.vue'
-import Vfor from '../components/DessertVfor.vue'
-import Content from'../components/DessertContent.vue'
-import Bottom from'../components/DessertBottom.vue'
+<script >
 </script>
 
 <template>
-
-    <div class="headerShow">
-        <Title/>
+<div class="body">
+    <div class="MainArea">
+        <div class="headerShow">
+        </div>
+        <div class="box" >
+            <div class="box1 one" >
+                <img src="https://picsum.photos/360/440?random=1" alt="">
+            </div>
+            <div class="box1 two">
+                <img src="https://picsum.photos/360/450?random=1" alt="">
+            </div>
+            <div class="box1 three">
+                <img src="https://picsum.photos/360/460?random=1" alt="">
+            </div>
+        </div>
+        <div class="content">
+            <div class="pic">
+                <img src="https://picsum.photos/500/440?random=1" alt="">
+            </div>
+            <div class="txt">
+                <h1>Title</h1>
+                <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde eius esse officiis tenetur veniam nam dignissimos temporibus nemo commodi possimus.</span>
+            </div>
+        </div>
+        <div class="bottom">
+        </div>
     </div>
-
-    <div class="box" >
-        <Vfor/>
-    </div>
-
-    <div class="content">
-        <Content/>
-    </div>
-    <div class="bottom">
-        <Bottom/>
-    </div>
-
-
+</div>
 </template>
 
 <style lang="scss" coped>
-    body{
+    .body{
+        height: auto;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 5%;
+
+    }
+    .MainArea{
         margin: 0;
+        height: 100%;
+        width: 70%;
+        
     }
     .headerShow{
-        width: 100vw;
-        height: 20vh
-        ;
+        background-color: rgb(48, 48, 48);
+        width: 100%;
+        height: 25%;
     }
     .box{
+        height: 60%;
+        width: 100%;
         display: flex;
-        justify-content: space-around;
-        margin-top: 50px;
+        margin-top: 10%;
+        justify-content: space-between;
+        margin-bottom: 0;
+        .box1{
+            width: 30%;
+            height: 100%;
+            background-color: rgb(48, 48, 48);
+            display: flex;
+            border: 10px black solid;
+        }
     }
     .content{
-        margin-top: 100px;
+        height: 60%;
+        width: 100%;
+        display: flex;
+        margin-top: 5%;
+        .pic{
+            height: 100%;
+            width: 55%;
+            background-color:rgb(48, 48, 48);
+            margin-top: 0;
+        }
+        .txt{
+            width: 50%;
+            height: 100%;
+            margin-top: 130px;
+            margin-left: 50px;
+            }
     }
     .bottom{
-        margin-top: 100px;
+        margin-top: 100px; 
+        widows: 100%;
+        height: 20%;
+        background-color: rgb(48, 48, 48);
     }
     
 </style>

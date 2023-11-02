@@ -21,10 +21,11 @@ export default{
 
 <template>
 <div class="showArea">
-    <div class="MainArea">
-        <h1>Emit</h1>
-        {{ this.ChildText }}
-    <pre>
+    <div class="inputArea">
+        <div class="MainArea">
+            <h1>Emit</h1>
+            {{ this.ChildText }}
+<pre>
 <code>
 &lt;script>
 -------------------------------------------------|
@@ -52,12 +53,12 @@ export default{
 &lt;/template>
 </code>
 </pre>
-    </div>
-    <div>
+        </div>
+        <div>
     <!-- 告知子元件想要父元件做什麼事就傳遞apple暗號 -->
     <child2 @apple="emitObj"/>
+        </div>
     </div>
-
 </div>
 </template>
 
@@ -67,11 +68,9 @@ export default{
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
     .MainArea{
-        height: auto;
+
         width: 500px;
-        border: 1px black solid;
         margin-right: 5%;
     }
 }
@@ -81,5 +80,10 @@ pre{
 }
 p{
     font-weight: bold;
+}
+.inputArea{
+    margin-top: 3%;
+    display: flex;
+    height: auto;
 }
 </style>

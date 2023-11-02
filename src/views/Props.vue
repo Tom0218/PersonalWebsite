@@ -33,8 +33,8 @@ export default{
 <template>
 <div class="MainArea">
         
-
-        <div class="Register d-flex" v-if="Page===1">
+<div class="inputArea">
+        <div class="d-flex Register" v-if="Page===1">
 <div class="code">
 <pre>
 <code>
@@ -113,6 +113,7 @@ export default{
         :person= propsObject @PageControl="PageControl"
         />    
         </div>
+</div>
 
 </div>
 </template>
@@ -132,8 +133,6 @@ p{
         height: auto;
         display: flex;
         justify-content: center;
-        align-items: center;
-        padding-top: 5%;
 }
 .code{
     margin-right: 100px;
@@ -150,6 +149,9 @@ pre{
 button{
     font-weight: bold;
     margin-top: 10px;
+}
+.inputArea{
+    margin-top: 5%;
 }
 
 </style>

@@ -32,7 +32,7 @@ export default{
                 <p>age</p>
                 <input type="number" v-model="infoBox.age" >
                 <div class="gofatherbtn">
-                    <button type="button" @click="GoFather">Update</button>
+                    <button type="button" @click="GoFather">Register</button>
                 </div>
         </div>
     </div>
@@ -41,8 +41,6 @@ export default{
     .showArea{
         height: 300px;
         width: 300px;
-        border: 1px black solid;
-        padding: 2%;
         border-radius: 5px;
         display: flex;
         justify-content: center;

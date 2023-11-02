@@ -15,7 +15,17 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/VtextAndVmodel.vue')
+      component: () => import('../views/VtextAndVmodel.vue'),
+      children: [
+        {
+          path: 'Note',
+          component: () => import('../views/Note.vue')         
+        },
+        {
+          path: 'About',
+          component: () => import('../views/About.vue')         
+        },
+      ]
     },
     {
       path: '/Practice01',
@@ -43,6 +53,42 @@ const router = createRouter({
       component: () => import('../views/Login.vue')
     },
     {
+      path: '/RealEstate',
+      name: 'RealEstate',
+      component: () => import('../views/RealEstate.vue'),
+      children: [
+        {
+          path: 'RealEstateLocationSearch',
+          component: () => import('../components/RealEstateLocationSearch.vue')         
+        },
+        {
+          path: 'RealEstateCenterAreaPage',
+          component: () => import('../components/RealEstateCenterAreaPage.vue') 
+        },
+        {
+          path: 'ObjectA',
+          component: () => import('../components/ObjectA.vue') 
+        },
+        {
+          path: 'RealEstateLogInPage',
+          component: () => import('../components/RealEstateLogInPage.vue') 
+        },
+        {
+          path: 'RealEstatePersonalPage',
+          component: () => import('../components/RealEstatePersonalPage.vue') 
+        },
+        {
+          path: 'RealEstateAsk',
+          component: () => import('../components/RealEstateAsk.vue') 
+        },
+        // {
+        //   path: 'Note',
+        //   component: () => import('../views//Note.vue') 
+        // },
+        
+      ]
+    },
+    {
       path: '/WaterFall',
       name: 'WaterFall',
       component: () => import('../views/WaterFall.vue')
@@ -56,7 +102,6 @@ const router = createRouter({
       path: '/Props',
       name: 'Props',
       component: () => import('../views/Props.vue')
-      // chi
     },
     {
       path: '/Emit',
@@ -77,6 +122,31 @@ const router = createRouter({
       path: '/WeatherAPI',
       name: 'WeatherAPI',
       component: () => import('../views/WeatherAPI.vue')
+    },
+    {
+      path: '/ProvideAndInject',
+      name: 'ProvideAndInject',
+      component: () => import('../views/ProvideAndInject.vue')
+    },
+    {
+      path: '/FindPrimeNumbers',
+      name: 'FindPrimeNumbers',
+      component: () => import('../views/FindPrimeNumbers.vue')
+    },
+    {
+      path: '/ExpenseTracker',
+      name: 'ExpenseTracker',
+      component: () => import('../views/ExpenseTracker.vue')
+    },
+    {
+      path: '/ExpenseTrackerRegister',
+      name: 'ExpenseTrackerRegister',
+      component: () => import('../components//ExpenseTrackerRegister.vue')
+    },
+    {
+      path: '/ExpenseTrackerMain',
+      name: 'ExpenseTrackerMain',
+      component: () => import('../components//ExpenseTrackerMain.vue')
     },
   ]
 })

@@ -18,9 +18,9 @@ export default{
             this.inputText = ""
 
             
-            let a = parseInt(this.minNum);
-            let b = parseInt(this.maxNum);
-            let answer = parseInt(this.answer);
+            let a = this.minNum;
+            let b = this.maxNum;
+            let answer =this.answer;
             console.log(guessNum)
             console.log("答案 : "+answer)
 
@@ -49,8 +49,7 @@ export default{
     <div class="body" >    
         <div class="Box">
             <div>
-                <h1>猜數字</h1>
-                <p>{{ this.showText }}</p>
+                <h1>猜數字</h1> 
                 <div class="d-flex showArea">
                     <p>{{ this.minNum }}</p>
                     <p>-</p>
@@ -59,6 +58,7 @@ export default{
                 <div class="">
                     <input type="number" v-model.number="inputText" >
                     <button type="button" v-on:click="guess()">guess</button>
+                    <p>{{ this.showText }}</p>
                 </div>
             </div>
         </div>

@@ -33,11 +33,11 @@ export default{
             此時做主要功能是讓使用者在子網頁(dog1)進行輸入並傳送至主網頁(Father)，並由主網頁再將資料帶到另一個子網頁(Dog2)且可直接於dog2上進行修改
         </div>
         <div class="Register" v-if="page == 1">
-            <div>
-            <h1>後台</h1>
-            <P>Name is  {{ this.infoBox.name}}</P>
-            <p>Age is  {{ this.infoBox.age }}</p>
-            <button type="button" @click="GoDog1">GoDog1</button>
+            <div class="backEndshow">
+                <h1>後台</h1>
+                <P>Name is  {{ this.infoBox.name}}</P>
+                <p>Age is  {{ this.infoBox.age }}</p>
+                <button type="button" @click="GoDog1">GoDog1</button>
             </div>
         </div>  
         <div v-else-if="page === 2">
@@ -59,10 +59,8 @@ export default{
         .Register{
             width: 300px;
             height: 300px;
-            border: 1px black solid;
             display: flex;
-            padding-left: 4%;
-            padding-top: 0.5%;
+            justify-content: center;
         }
         .TextArea{
             width: 200px;
@@ -72,5 +70,6 @@ export default{
             border: 1px black solid;
         }
     }
+    
 
 </style>

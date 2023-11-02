@@ -16,31 +16,30 @@ export default{
 
 
 <template>
-
   <div class="page">
-    <h2>Hi! guys 我是謝育騰 Hsieh YuTeng </h2>
-
-    <div class="ContentArea">
-      <div class="Img"></div>
-      <div class="Introduction">
-        <ul>
-          <li>我畢業於台南應用科技大學資訊管理系，於2023年9月份參加了產業新尖兵計畫，對整個網頁前後端有了新的認知，從剛開始只會簡單的CSS切版以到現在使用Vue框架將各個元件插入網頁使我的程式碼不再日漸壯大也增加了易讀性、以及Bootstrap套件的應用使得建構網頁更快速。學習網頁設計讓我能具體化我的想法並以網頁的方式呈現出來，建構網站的過程使我沉溺其中。</li>
-          <li>此網頁彙整了整個學習歷程的點點滴滴，不定期更新中!!!</li>
-        </ul>
+    <div>
+      <h2>Hi! guys 我是謝育騰 Hsieh YuTeng </h2>
+      <div class="ContentArea">
+        <div class="Img"></div>
+        <div class="Introduction">
+          <ul>
+            <li>我畢業於台南應用科技大學資訊管理系，於2023年9月份參加了產業新尖兵計畫，對整個網頁前後端有了新的認知，從起初只會簡單的CSS切版以到能使用Vue框架建構網頁，使用Bootstrap將各個元件插入網頁使建構網頁更快速、學習網頁設計讓我能具體化我的想法並以網頁的方式呈現出來，建構網站的過程使我付有成就感，能把自己的想法體現出來。</li>
+            <li>應用 :  HTML、CSS、JavaScript、Boostrap、Vue.js</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
-  
-  
-
 </template>
 
 
 <style lang="scss" scoped>
   h2{
     color: white;
-    font-size: 36pt;
+    font-size: 28pt;
     padding: 0 20px;
+    background-color: #008170;
+    border-radius: 20px;
   }
 
   p{
@@ -48,30 +47,37 @@ export default{
   }
   li{
     color: white;
+    font-size: 16pt;
+    margin: 2% 0;
   }
   .page{
     height: 100%; 
-    align-items: center;
-    background-color: black;
+    background-color: #232D3F;
     border-top: 1px white solid;
     padding: 100px;
+    display: flex;
+    justify-content: center;
     .ContentArea{
-      height: 88%;
+      height: 100%;
       width: 100%;
       display: flex;
-    .Img{
-      width: 40%;
-      height: 100%;
-      background-image: url(../../public/bike1.jpg);
-      background-size: contain;
-      background-position: 50% 50%;
-      background-repeat: no-repeat;
-    }
-    .Introduction{
-      width: 400px;
-      margin-top: 20px;
-
-    }
+      background-color: rgb(0, 91, 65);
+      border-radius: 10%;
+      .Img{
+        width: 50%;
+        height: 100%;
+        background-image: url(../../public/bike01.jpg);
+        background-size: contain;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        margin:0 4%;
+        border-radius: 5%;
+        
+      }
+      .Introduction{
+        width: 500px;
+        margin-top: 20px;
+      }
   }
   }
 

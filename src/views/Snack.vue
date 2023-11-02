@@ -4,7 +4,6 @@
     <div class="body">
         <div class="header page">
                 <div class="headerSquare">
-
                 </div>
                 <img src="../../public/Snackphoto/Group 10.png" alt="" class="hanburger">
             </div>
@@ -37,19 +36,26 @@
                 <h1>News</h1>
                 <div class="cradsArea">
                     <div class="crad1">
-                        <img src="../../public/Snackphoto/5.png" alt="">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet veritatis unde pariatur</p>
-                        <button type="button" class="cradBtn">Detail</button>
+                        <div>
+                            <img src="../../public/Snackphoto/5.png" alt="">
+                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet veritatis unde pariatur</p>
+                            <button type="button" class="cradBtn">Detail</button>
+                        </div>
+                        
                     </div>
                     <div class="crad2">
-                        <img src="../../public/Snackphoto/6.png" alt="">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet veritatis unde pariatur</p>
-                        <button type="button" class="cradBtn">Detail</button>
+                        <div>
+                            <img src="../../public/Snackphoto/6.png" alt="">
+                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet veritatis unde pariatur</p>
+                            <button type="button" class="cradBtn">Detail</button>
+                        </div>
                     </div>
                     <div class="crad3">
-                        <img src="../../public/Snackphoto/7.png" alt="">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet veritatis unde pariatur</p>
-                        <button type="button" class="cradBtn">Detail</button>
+                        <div>
+                            <img src="../../public/Snackphoto/7.png" alt="">
+                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet veritatis unde pariatur</p>
+                            <button type="button" class="cradBtn">Detail</button>
+                        </div>
                     </div>
                 </div>
                 <button type="button" class="newBtn">More</button>
@@ -73,18 +79,23 @@
 $mainColor: orange;
 
 .body{
+    height: auto;
+    width: 100%;
     background-color: whitesmoke;
+}
+p{
+    font-weight: bold;
+    font-size: 16pt;
 }
 
 .page {
     width: 90%;
     margin: 0 5%;
-    margin-top: 5%;
     display: flex;
 }
 
 .header {
-    height: 15vh;
+    height: 30vh;
     position: relative;
 
     .headerSquare {
@@ -92,19 +103,22 @@ $mainColor: orange;
         height: 100px;
         border-radius: 10px;
         background-color: $mainColor;
+        margin-top: 2%;
     }
 
     .hanburger {
         position: absolute;
         right: 0;
-        top: 20px;
-        width: 41px;
-        height: 40px;
+        top: 60px;
+        width: 50px;
+        height: 50px;
     }
 }
 
 .second {
     height: 60vh;
+    width: 70%;
+    margin: 0 15%;
     justify-content: space-between;
 
     .secondText {
@@ -133,6 +147,7 @@ $mainColor: orange;
     align-items: center;
     margin-bottom: 50px;
     background-color: $mainColor;
+    margin-top: 10%;
 
     .onsaleText{
         background-color: orange;
@@ -232,6 +247,7 @@ $mainColor: orange;
     align-items: center;
     border-radius: 20px;
     background-color: orange;
+    margin-top: 3%;
     
 
     .cradsArea {
@@ -246,6 +262,8 @@ $mainColor: orange;
             width: 30%;
             background-color: #fff;
             border-radius: 20px;
+            display: flex;
+            justify-content: center;
 
             img {
                 width: 100%;
@@ -253,7 +271,7 @@ $mainColor: orange;
             }
 
             p {
-
+                font-size: 14pt;
                 margin: 2% 10%;
             }
 
@@ -274,6 +292,8 @@ $mainColor: orange;
             width: 30%;
             background-color: #fff;
             border-radius: 20px;
+            display: flex;
+            justify-content: center;
 
             img {
                 width: 100%;
@@ -281,6 +301,7 @@ $mainColor: orange;
             }
 
             p {
+                font-size: 14pt;
                 margin: 2% 10%;
             }
 
@@ -301,6 +322,8 @@ $mainColor: orange;
             width: 30%;
             background-color: #fff;
             border-radius: 20px;
+            display: flex;
+            justify-content: center;
 
             img {
                 width: 100%;
@@ -308,6 +331,7 @@ $mainColor: orange;
             }
 
             p {
+                font-size: 14pt;
                 margin: 2% 10%;
             }
 
@@ -316,9 +340,9 @@ $mainColor: orange;
                 height: 10%;
                 font-size: 16pt;
                 color: white;
-                margin-left: 35%;
                 border-radius: 5px;
                 background-color: #030303;
+                margin-left: 35%;
             }
 
         }

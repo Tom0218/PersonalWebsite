@@ -6,10 +6,10 @@ import Header from './components/Header.vue'
 <template>
     <div class="Top Area">
       <Header/>
+    </div>
     <div class="content">
     <RouterView/>
     </div>
-  </div>
 </template>
 
 <style lang="scss" scoped>

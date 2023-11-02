@@ -4,23 +4,24 @@
 
 
 <template>
-<div class="VforPractice02TopArea"></div>
-<div class="VforPractice02SecondArea"></div>
-<div class="VforPractice02ContentArea">
-        <div class="Colorblock"></div>
-        <div class="Text">
-            <div class="d-flex">
-                <h1>Title</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime voluptatum temporibus ea labore deserunt. Aut provident inventore, earum exercitationem eos totam, error iure architecto eum laborum quod rem consequuntur cum.</p>
-            </div>
-            <div class="Nineblock">
-                <div class="block1" v-for="x in 9">
-                    <div class="blockkk"></div>
-                    <p>Lorem, ipsum.</p>
+
+    <div class="VforPractice02TopArea"></div>
+    <div class="VforPractice02SecondArea"></div>
+    <div class="VforPractice02ContentArea">
+            <div class="Colorblock"></div>
+            <div class="Text">
+                <div class="d-flex">
+                    <h1>Title</h1>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime voluptatum temporibus ea labore deserunt. Aut provident inventore, earum exercitationem eos totam, error iure architecto eum laborum quod rem consequuntur cum.</p>
                 </div>
-            </div>
-        </div>   
-</div>
+                <div class="Nineblock">
+                    <div class="block1" v-for="x in 9">
+                        <div class="blockkk"></div>
+                        <p>Lorem, ipsum.</p>
+                    </div>
+                </div>
+            </div>   
+    </div>
 <div class="footer">
 </div>
 
@@ -29,13 +30,13 @@
 
 <style lang="scss" scoped>
     .VforPractice02TopArea{
-        width: 100vw;
-        height: 10vh;
+        width: 100%;
+        height: 20%;
         background-color: black;
     }
     .VforPractice02SecondArea{
         width: 100vw;
-        height: 30vh;
+        height: 30% ;
         background-color: gray;
     }
 
@@ -54,8 +55,9 @@
             height: 100%;
             padding: 80px;
             
-            p{margin-left: 20px;}
-
+            p{margin-left: 20px;
+                font-weight: bold;}
+        }
             .Nineblock{
                 width: 100%;
                 height: 100%;
@@ -69,7 +71,7 @@
                     .blockkk{
                     width: 100%;
                     height: 100%;
-                    background-color: black;
+                    background-color: rgb(236, 130, 0);
                     margin: 0 10px;
                 }
                 }
@@ -79,7 +81,6 @@
                     }
                 }
             }
-        }
 
     }
     .footer{

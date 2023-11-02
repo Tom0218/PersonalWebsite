@@ -35,6 +35,9 @@ export default{
             <div class="Vtext">
                 <h1>V-text</h1>
                 <p>使用方法 : { { } }，兩個大括號</p>
+                <p>{{ this.name }}</p>
+                <p>{{ this.age }}</p>
+                <p>{{ this.address }}</p>
 <pre>
 <code>
 &lt;script>
@@ -66,6 +69,7 @@ export default{
     data(){
         return{
             age:18,
+            selectText:"",
         }
     }
 }
@@ -398,7 +402,7 @@ export default{
         color: white;
     }
     .mainArea{
-        width: 50vw;
+        width: 50%;
         margin: 0 25%;
 
         .Vtext{

@@ -5,110 +5,100 @@ export default{
             Email:"",
             Password:"",
             showText:"",
-            outputArr:"",
-            userData:[],
         }
     },
     methods:{
-        RegisterBtn(){
-            let userinfo={
-                account:this.Email,
-                pwd:this.Password
-            }
-            this.userData.push(userinfo)
-            localStorage.setItem("user",JSON.stringify(this.userData));
-        },
-        LogIn(){
-            let x = 0
+        closePage() {
+            let x = 1
             this.$emit('changepage',x)
-        }
+        },
+        Register() {
+            let Data = {
+                    Account : this.Email,
+                    Password : this.Password,
+            }
+            console.log(Data.Account)
+
+            if(Data.Account ==""){
+                this.showText="Email不能為空"     
+            }
+            else{
+                let DBData = JSON.parse(localStorage.getItem('user'))||[];  // 如果是空的回傳null
+                let isAlreadyRegistered = false;
+                
+                for (let i = 0; i < DBData.length; i++) {
+                    if (Data.Account === DBData[i].Account) {
+                        isAlreadyRegistered = true;
+                        this.showText = Data.Account + " 已被註冊";
+                            break; // 如果找到已註冊的帳戶，終斷迴圈
+                    }
+                }
+                if (!isAlreadyRegistered) {
+                    DBData.push(Data); // 将新用户数据添加到已有数据中
+                    localStorage.setItem("user", JSON.stringify(DBData)); // 保存更新后的用户数据到localStorage
+                    this.showText ="註冊成功";
+                }
+            }
+        }   
     }
 }
 </script>
 
 <template>
 <div class="body">
-    <div class="page">
-            <div class="mainArea">
-                <h1>Register</h1>
-                <div class="emailbox">
-                    <p >email</p>
-                    <input type="text" v-model="Email">
-                </div>
-                <div class="namebox">
-                    <p>name</p>
-                    <input >
-                </div>
-                <div class="passwordbox">
-                    <p>password</p>
-                    <input type="text" v-model="Password" >
-                </div>
-                <div class="repeatpasswordbox">
-                    <p >Repeatpassword</p>
-                    <input id="reppwd">
-                </div>
-                <p>{{ showText }}</p>
-                <div class="Signupbtnbox">
-                    <button @click="RegisterBtn">Register</button>
-                </div>
-                <button type="button" @click="LogIn()">logIn</button>
-            </div>
+    <div class="MainArea">
+        <h1>Register</h1>
+        <div class="Email Box">
+        <p>Email</p>
+        <input type="text" v-model="Email">
         </div>
+        <div class="Password Box">
+        <p>Password</p>
+        <input type="text" v-model="Password">
+        </div>
+        <div class="btnBox">
+            <button type="button" @click="Register()"> Register</button>
+            <button type="button" @click="closePage()">canecl</button>
+        </div>
+        <p>{{ this.showText }}</p>
+    </div>
 </div>
 </template>
 
 <style lang="scss" scoped>
 .body{
     height: 100%;
-    margin: 0;
-    background-color:gray;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-p{
-    font-size: 16pt;
-    margin: 10px 0;
-    font-weight: bold;
-}
-
-input{
-    height: 25px;
-    width: 300px;
-    margin: 0;
-    padding: 0;
-}
-
-a{
-    color: black;
-    text-decoration: none;
-    display: flex;
-    justify-content: end;
-    font-weight: bold;
-}
-
-h1{
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.page{
-    width: 500px;
-    height: 500px;
+    width: 100%;
     display: flex;
     justify-content: center;
-    .mainArea{
-        flex-direction: column;
+    .box{
+        display: flex;
+        margin: 0 20px;
     }
-    
+    p{
+    font-size: 12pt;
+    margin-bottom: 2px;
+    }
+    .MainArea{
+        margin-top: 8%;
+        h1{
+            text-align: center;
+        }
+        input{
+            width: 300px;
+            border-radius: 5px;
+        }
+        .btnBox{
+            display: flex;
+            justify-content: center;
+            margin-top: 5%;
+            button{
+                background-color: #475467;
+                color: white;
+                margin: 0 10px;
+                border-radius: 5px;
+            }
+        }
+    }
 }
-
-#end{
-    text-align: center;
-}
-.Signupbtnbox{
-    text-align: center;
-}
-
 </style>

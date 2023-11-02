@@ -66,10 +66,9 @@ export default{
     .MainArea{
         height: auto;
         width: 550px;
-        border: 1px black solid;
+
     }
     .code{
-        border-top: 1px black solid;
     }
     pre{
         background-color: whitesmoke;

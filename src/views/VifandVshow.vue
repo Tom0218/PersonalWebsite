@@ -99,7 +99,6 @@ export default{
 </template>
 <style lang="scss" scoped>
 .body{
-    padding-top: 5%;
     height: 100%;
     width: 100%;
     display: flex;
@@ -125,6 +124,7 @@ h1{
 .MainArea{
     width: 50%;
     margin: 0 25%;
+    margin-top: 5%;
 }
 .vifImg{
     height: 169px;
