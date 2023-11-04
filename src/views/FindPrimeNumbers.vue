@@ -33,7 +33,6 @@ export default{
 </script>
 <template>
 <div class="body">
-    <div class="page">
         <div class="gameBox">
             <h1>找質數</h1>
             <div class="top">
@@ -51,7 +50,6 @@ export default{
                 <p>{{ this.arr }}</p>
             </div>
         </div>
-    </div>
 </div> 
 </template>
 <style lang="scss" scoped>
@@ -64,17 +62,18 @@ export default{
 }
 
 p{
-    font-size: 18pt;
-    color: white;
+    font-size: 16pt;
+    color: #ccf407;
 }
 h1{
-    color: white;
+    color: #ccf407;
     text-align: center;
+    margin-top: 1%;
 }
 .gameBox{
     background-color: black;
-    width: 500px;
-    height: 500px;
+    width: 30%;
+    height: 60%;
     border-radius: 20px;
     margin-bottom: 0;
     padding: 0 20px;
@@ -85,6 +84,7 @@ h1{
         justify-content: center;
         padding: 8px;
         input{
+            width: 20%;
             height: 20px;
             margin: 0 5px;
             margin-top: 8px;
@@ -104,12 +104,18 @@ h1{
         align-items: center;
     }
     .content{
-        height: 200px;
+        height: 40%;
         border: 1px white solid;
         word-wrap:break-word;
         border-radius: 20px;
         padding: 10px;
+        overflow: auto;
     }
+    input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 }
 
 

@@ -72,7 +72,7 @@ export default{
         font-weight: bold;
     }
     .body{
-        height: 100%;
+        height: 90vh;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -92,8 +92,14 @@ export default{
         h1{
             margin-top: 50px;
         }
-        
-
     }
-   
+    input{
+        width:20%;
+        margin: 0 1%;
+    }
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 </style>

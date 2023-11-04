@@ -23,11 +23,12 @@
     height: 100%;
     width: 100%;
     background-color: #BEC0CD;
+    padding: 2%;
     .MainArea{
         height: 85vh;
         width: 70%;
         margin: 0 15%;
-        padding-top: 2%;
+        padding-top: 1%;
         .ObjectA{
             height: 100px;
             width: 100%;

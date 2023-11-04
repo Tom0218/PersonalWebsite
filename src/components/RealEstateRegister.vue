@@ -121,12 +121,12 @@ a{
 
 h1{
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .page{
     width: 500px;
-    height: 500px;
+    height: 400px;
     display: flex;
     justify-content: center;
     .mainArea{

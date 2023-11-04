@@ -1,402 +1,227 @@
-<script></script>
+<script>
+export default{
+    data(){
+        return{
+        }
+    }
+}
+</script>
 
 <template>
-    <div class="body">
-        <div class="header page">
-                <div class="headerSquare">
-                </div>
-                <img src="../../public/Snackphoto/Group 10.png" alt="" class="hanburger">
+<div class="body">
+    <div class="mainArea">
+        <div class="area1">
+            <div class="area1Box"></div>
+            <div class="area1Hamgurger"></div>
+        </div>
+        <div class="area2">
+            <div class="area2text">
+                <h1>Title</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias, dignissimos. Commodi sequi quam omnis eius, rem nobis libero assumenda distinctio porro nemo aut sit cumque laborum nostrum laudantium veniam consequatur?</p>
             </div>
-            <div class="second page">
-                <div class="secondText">
-                    <h1>Title</h1>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos pariatur vitae officia excepturi? Quas voluptatum minima quibusdam neque laborum iste quo saepe. Excepturi autem ipsum eius rerum neque voluptates ea facere dolore laborum delectus vitae obcaecati quaerat consequuntur voluptatibus asperiores dolor, totam ad doloremque est blanditiis facilis reiciendis. Quisquam, ratione.</p>
-                </div>
-                <div class="secondImg">
+            <div class="area2Img"></div>
+        </div>
+        <div class="area3">
+            <h1 >OnSale</h1>
+            <div class="area3ImgArea">
+                <div class="area3Img"  v-for="x in 3">
 
+                    <button>buy it!</button>
                 </div>
             </div>
-            <div class="onSale page">
-                
-                <h1 class="onsaleText">On sale</h1>
-                <div class="onSaleImgs">
-                    <div class="saleImg1">
-                        <button type="button" class="saleBtn1">item</button>
+        </div>
+        <div class="area4">
+            <h1>News</h1>
+            <div class="cardArea">
+                <div class="card" style="width: 16rem;">
+                    <img src="../../public/Snackphoto/6.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on thcontent.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>
-                    <div class="saleImg2">
-                        <button type="button" class="saleBtn1">item</button>
+                </div>
+
+                <div class="card" style="width: 16rem;">
+                    <img src="../../public/Snackphoto/5.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on thcontent.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>
-                    <div class="saleImg3">
-                        <button type="button" class="saleBtn1">item</button>
+                </div>
+
+                <div class="card" style="width: 16rem;">
+                    <img src="../../public/Snackphoto/7.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on thcontent.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>
                 </div>
             </div>
-            <hr />
-            <div class="news page">
-                <h1>News</h1>
-                <div class="cradsArea">
-                    <div class="crad1">
-                        <div>
-                            <img src="../../public/Snackphoto/5.png" alt="">
-                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet veritatis unde pariatur</p>
-                            <button type="button" class="cradBtn">Detail</button>
-                        </div>
-                        
-                    </div>
-                    <div class="crad2">
-                        <div>
-                            <img src="../../public/Snackphoto/6.png" alt="">
-                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet veritatis unde pariatur</p>
-                            <button type="button" class="cradBtn">Detail</button>
-                        </div>
-                    </div>
-                    <div class="crad3">
-                        <div>
-                            <img src="../../public/Snackphoto/7.png" alt="">
-                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet veritatis unde pariatur</p>
-                            <button type="button" class="cradBtn">Detail</button>
-                        </div>
-                    </div>
+            <button type="button">more</button>
+        </div>
+        <div class="area5">
+            <div class="area5Img"></div>
+            <div class="area5Text">
+                <h1>Title</h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium optio magnam repudiandae officia explicabo dolores, sit nemo voluptas quos cupiditate, a vero libero neque! Doloremque earum commodi perferendis illum libero?
+                </p> 
                 </div>
-                <button type="button" class="newBtn">More</button>
-            </div>
-            <div class="arrival page">
-                <img src="../../public/Snackphoto/8.png" alt="">
-                <div class="arrivalText">
-                    <h1>New Arrival</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore debitis dolores architecto eos? Perspiciatis quasi non obcaecati esse tempore. Reiciendis natus ad accusamus maiores ab obcaecati, sapiente quos adipisci, commodi recusandae blanditiis molestiae consequatur beatae aut ipsam reprehenderit et consequuntur iusto aliquam culpa nemo eum perferendis. Dignissimos nisi recusandae numquam autem tempore dolor? Provident rerum eum eveniet laudantium sequi ab?</p>
-                </div>
-            </div>
-            <div class="footer page">
-                <p>Copyright©2023 by kouhei</p>
-            </div>
+        </div>
+        <div class="area6">
+        </div>
     </div>
+</div>
 </template>
 
 
 
 <style lang="scss" scoped>
-$mainColor: orange;
+$color: #ECE3CE;
+$color1: #739072;
+$color2: #4F6F52;
+$color3: #3A4D39;
+
+p{
+    color: $color;
+    font-weight: bold;
+}
+
+h1{
+    color: $color;
+    text-align: center;
+}
+
+h5{
+    color: $color;
+}
 
 .body{
     height: auto;
-    width: 100%;
-    background-color: whitesmoke;
-}
-p{
-    font-weight: bold;
-    font-size: 16pt;
-}
-
-.page {
-    width: 90%;
-    margin: 0 5%;
-    display: flex;
-}
-
-.header {
-    height: 30vh;
-    position: relative;
-
-    .headerSquare {
-        width: 100px;
-        height: 100px;
-        border-radius: 10px;
-        background-color: $mainColor;
-        margin-top: 2%;
-    }
-
-    .hanburger {
-        position: absolute;
-        right: 0;
-        top: 60px;
-        width: 50px;
-        height: 50px;
-    }
-}
-
-.second {
-    height: 60vh;
-    width: 70%;
-    margin: 0 15%;
-    justify-content: space-between;
-
-    .secondText {
-        height: 100%;
-        width: 40%;
-
-        h1 {
-            margin-left: 10%;
-        }
-    }
-
-    .secondImg {
-        height: 100%;
-        width: 50%;
-        background-image: url("../../public/Snackphoto/3.png");
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: 100% 0%;
-    }
-}
-
-.onSale {
-    height: 60vh;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 50px;
-    background-color: $mainColor;
-    margin-top: 10%;
-
-    .onsaleText{
-        background-color: orange;
-        color: white;
-        border-radius: 5px;
-        margin-top: 10px;
-
-    }
-
-    .onSaleImgs {
-        width: 100%;
-        height: 90%;
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-
-        .saleImg1 {
-            width: 30%;
-            height: 95%;
-            background-image: url("../../public/Snackphoto/2.png");
-            background-size: contain;
-            background-position: 50% 50%;
-            background-repeat: no-repeat;
+    background-color: #232D3F;
+    .mainArea{
+        width: 70%;
+        height: auto;
+        margin: 0 15%;
+        .area1{
+            height: 15vh;
+            background-color: $color2;
             position: relative;
-            display: flex;
-            justify-content: center;
-
-            .saleBtn1 {
-                width: 50%;
-                height: 15%;
-                color: white;
-                font-size: 20pt;
-                border: 0;
-                border-radius: 10px;
-                background-color: $mainColor;
+            .area1Box{
+                height: 70%;
+                width: 8%;
+                background-color: $color;
                 position: absolute;
-                bottom: 20px;
+                bottom: 0;
+                left: 10%;
             }
-        }
-
-        .saleImg2 {
-            width: 30%;
-            height: 95%;
-            background-image: url("../../public/Snackphoto/4.png");
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: 50% 50%;
-            position: relative;
-            display: flex;
-            justify-content: center;
-
-            .saleBtn1 {
-
-                width: 50%;
-                height: 15%;
-                color: white;
-                font-size: 20pt;
-                border: 0;
-                border-radius: 10px;
-                background-color: $mainColor;
+            .area1Hamgurger{
+                height: 50%;
+                width: 10%;
+                background-image: url(../../public/Snackphoto/Group\ 10.png);
+                background-repeat: no-repeat;
                 position: absolute;
-                bottom: 20px;
-
+                bottom: 0;
+                right:10%;
             }
         }
-
-        .saleImg3 {
-            width: 30%;
-            height: 95%;
-            background-image: url("../../public/Snackphoto/3.png");
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: 50% 50%;
-            position: relative;
+        .area2{
+            height: 70vh;
+            background-color: $color2;
+            padding: 5%;
             display: flex;
-            justify-content: center;
-
-            .saleBtn1 {
+            .area2text{
                 width: 50%;
-                height: 15%;
-                color: white;
-                font-size: 20pt;
-                border: 0;
-                border-radius: 10px;
-                background-color: $mainColor;
-                position: absolute;
-                bottom: 20px;
+                padding: 0 2%;
+            }
+            .area2Img{
+                height: 100%;
+                width: 50%;
+                background-image: url(../../public/Snackphoto/1.png);
+                background-size: contain;
             }
         }
-    }
-}
-
-.news {
-    height: 80vh;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    border-radius: 20px;
-    background-color: orange;
-    margin-top: 3%;
-    
-
-    .cradsArea {
-        height: 60vh;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        padding: 20px;
-
-        .crad1 {
-            height: 100%;
-            width: 30%;
-            background-color: #fff;
-            border-radius: 20px;
-            display: flex;
-            justify-content: center;
-
-            img {
+        .area3{
+            width: 100%;
+            height: 60vh;
+            background-color: $color2;
+            padding-bottom: 5%;
+            .area3ImgArea{
                 width: 100%;
-                border-radius: 20px;
+                height: 83%;
+                display: flex;
+                justify-content: space-around;
+                .area3Img{
+                    width: 30%;
+                    height: 100%;
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    background-image: url(../../public/Snackphoto/3.png);
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    background-position: 50% 50%;
+                    button{
+                        position: absolute;
+                        bottom: 2%;
+                        width: 50%;
+                        height: 15%;
+                        background-color: rgb(137, 4, 4);
+                        color: $color;
+                        font-weight: bold;
+                    }
+                }
             }
-
-            p {
-                font-size: 14pt;
-                margin: 2% 10%;
-            }
-
-            .cradBtn {
-                width: 33%;
-                height: 10%;
-                font-size: 16pt;
-                margin-left: 35%;
-                border-radius: 5px;
-                color: white;
-                background-color: #030303;
-            }
+            
 
         }
+        .area4{
+            background-color: $color1;
 
-        .crad2 {
-            height: 100%;
-            width: 30%;
-            background-color: #fff;
-            border-radius: 20px;
+            .cardArea{
+                display: flex;
+                justify-content: space-around;
+                .card{
+                    background-color: $color3;
+                }
+            }
+            button{
+                width: 20%;
+                height: 50px;
+                margin: 0 40%;
+                margin-top: 2%;
+                background-color: $color;
+                color: $color3;
+                font-weight: bolder;
+            }
+            
+        }
+        .area5{
+            height: 60vh;
+            background-color: $color1;
+            padding: 5%;
             display: flex;
-            justify-content: center;
-
-            img {
-                width: 100%;
-                border-radius: 20px;
+            .area5Img{
+                width: 50%;
+                height: 100%;
+                background-image: url(../../public/Snackphoto/8.png);
+                background-size: contain;
+                background-repeat: no-repeat;
             }
-
-            p {
-                font-size: 14pt;
-                margin: 2% 10%;
+            .area5Text{
+                width: 50%;
+                height: 100%;
+                padding: 2%;
             }
-
-            .cradBtn {
-                width: 33%;
-                height: 10%;
-                font-size: 16pt;
-                color: white;
-                margin-left: 35%;
-                border-radius: 5px;
-                background-color: #030303;
-            }
-
         }
-
-        .crad3 {
-            height: 100%;
-            width: 30%;
-            background-color: #fff;
-            border-radius: 20px;
-            display: flex;
-            justify-content: center;
-
-            img {
-                width: 100%;
-                border-radius: 20px;
-            }
-
-            p {
-                font-size: 14pt;
-                margin: 2% 10%;
-            }
-
-            .cradBtn {
-                width: 33%;
-                height: 10%;
-                font-size: 16pt;
-                color: white;
-                border-radius: 5px;
-                background-color: #030303;
-                margin-left: 35%;
-            }
+        .area6{
+            height: 10vh;
+            background-color: $color2;
 
         }
     }
-
-    .newBtn {
-        width: 25%;
-        height: 10%;
-        background-color: orangered;
-        border: 0;
-        color: white;
-        font-size: 24pt;
-        box-shadow: 5px 5px 5px black;
-        margin-bottom: 10px;
-        border-radius: 5px;
-    }
-}
-
-.arrival{
-    height: 65vh;
-    margin-top: 20%;
-    margin-bottom: 10%;
-    justify-content: space-between;
-    
-
-    img{
-        width: 50%;
-        height: 80%;
-    }
-
-    .arrivalText{
-        width: 35%;
-        height: 80%;
-        background-color: #fccdb9;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        p{
-            margin: 1% 10%;
-        }
-    }
-
-}
-
-.footer{
-    height: 10vh;
-    width: 100%;
-    margin: 0;
-    background-color: $mainColor;
-    display: flex;
-    justify-content: center;
-    font-size: 20pt;
 }
 
 </style>

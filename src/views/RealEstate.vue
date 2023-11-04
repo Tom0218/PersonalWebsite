@@ -25,26 +25,24 @@ export default{
 
 <div class="header">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <div class="MainArea">
             <div class="square"></div>
-            <div class="d-flex TopRight">
-                <div class="hyperlink " @click="gohome()">
+            <div class="linkArea">
+                <div class="leftLink " @click="gohome()">
                     <RouterLink to="/RealEstate">会社案内</RouterLink>
-                    <span>|</span>
+                    <p>|</p>
                     <a href="">店舗．アクセス</a>
                 </div>
-                <div class="phoneNumber">
+                <div class="phone">
                     <i class="fa-solid fa-phone" ></i>
                     <span>010-123456789</span>
                 </div>
-                <div class="headerLink">
+                <div class="rightLink">
                     <div class="d-flex">
-                    <RouterLink to="/RealEstate/RealEstateLogInPage" @click="golocationSearch()">ログイン</RouterLink>
+                    <RouterLink to="/RealEstate/RealEstateLogInPage" @click="golocationSearch()" class="link">ログイン</RouterLink>
                     <p>｜</p>
-                    <RouterLink to="/RealEstate/RealEstateAsk" @click="golocationSearch()">お問い合わせ</RouterLink>
+                    <RouterLink to="/RealEstate/RealEstateAsk" @click="golocationSearch()" class="link">お問い合わせ</RouterLink>
                 </div>
             </div>
-        </div>
     </div>
 </div>
 <div v-if="this.page ==1">
@@ -100,57 +98,52 @@ export default{
 
 </template>
 <style lang="scss" scoped>
+a{
+    font-weight: bold;
+    text-decoration: none;
+}
+p{
+    margin: 0 10px;
+}
 .header{
-    height: 15%;
+    width: 100vw;
+    height: 15vh;
     margin: 0;
-    background-color: white;
-    a{
-        font-weight: bold;
-        text-decoration: none;
-        color: white;
-    }
-    .MainArea{
+    background-color: #F5F7F8;
         display: flex;
-        height: 100%;
+        height: 15vh;
         width: 100%;
-        align-items: center;.square{
+        align-items: center;
+        .square{
             background-color: #475467;
-            height: 70px;
-            width: 70px;
+            height: 60%;
+            width: 4%;
             margin-left: 6%;
         }
-        .hyperlink{
+        .linkArea{
+            height: 100%;
+            width: 100%;
             display: flex;
-            justify-content: center;
-            align-items: end;
-            margin-left: 200px;
-            a{
-                color: black;
+            align-items: center;
+            .leftLink{
+                display: flex;
+                margin-left: 2%;
+
             }
+            .rightLink{
+                margin-left: 4%;
+                background-color: #475467;
+                border-radius: 10px;
+                padding: 0 1%;
+                .link{
+                    color: white;
+                    font-weight: bold;
                 }
-        .phoneNumber{
-            display: flex;
-            justify-content: center;
-            align-items: end;
-            margin-left: 400px;
-        }
-        .headerLink{
-            border-radius: 5px;
-            background-color: #475467;
-            height: 25px;
-            margin-left: 10px;
-            p{
-                color: white;
+            }
+            .phone{
+                margin-left: 35%;
             }
         }
-        span{
-            margin: 0 10px;
-        }
-    }
-
-
-
-
 }
 .imgArea{
     a{
@@ -158,10 +151,11 @@ export default{
     font-weight: bold;
     text-decoration: none;
     text-align: center;
-}
+    }
 
-.carousel-inner{
-    height: 50vh;
+    .carousel-inner{
+        height: 55vh;
+    }
 }
 .footer{
     height: 30vh;
@@ -184,6 +178,5 @@ export default{
             justify-content: center;
         }
     } 
-}
 }
 </style>

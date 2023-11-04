@@ -1,93 +1,107 @@
-<script>
-
-</script>
-
+<script></script>
 
 <template>
-
-    <div class="VforPractice02TopArea"></div>
-    <div class="VforPractice02SecondArea"></div>
-    <div class="VforPractice02ContentArea">
-            <div class="Colorblock"></div>
-            <div class="Text">
-                <div class="d-flex">
-                    <h1>Title</h1>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime voluptatum temporibus ea labore deserunt. Aut provident inventore, earum exercitationem eos totam, error iure architecto eum laborum quod rem consequuntur cum.</p>
-                </div>
-                <div class="Nineblock">
-                    <div class="block1" v-for="x in 9">
-                        <div class="blockkk"></div>
-                        <p>Lorem, ipsum.</p>
+    <div class="body">
+            <div class="area1 "></div>
+            <div class="area2"></div>
+            <div class="area3">
+                <div class="leftBox"></div> 
+                <div class="rightBox">
+                    <div class="rTopBox">
+                        <div class="rtbTitle"><h2>Title</h2></div>
+                        <div class="rtbText">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo cumque animi pariatur nihil est quis. Illo distinctio non eligendi ipsa!</div>
+                    </div>
+                    <div class="rBottomBox">
+                        <div class ="nineBox1" v-for="x in 9">
+                            <div class="Box"></div>
+                            <p>Lorem, ipsum.</p>
+                        </div>
                     </div>
                 </div>
-            </div>   
+            </div>
+            <div class="area4"></div>
     </div>
-<div class="footer">
-</div>
 
 </template>
 
-
 <style lang="scss" scoped>
-    .VforPractice02TopArea{
-        width: 100%;
-        height: 20%;
-        background-color: black;
-    }
-    .VforPractice02SecondArea{
+    .body{
+        height: auto;
         width: 100vw;
-        height: 30% ;
-        background-color: gray;
-    }
-
-    .VforPractice02ContentArea{
-        width: 100vw;
-        height: 100vh;
-        margin-top: 50px;
-        display: flex;
-        .Colorblock{
-            width: 20%;
-            height: 100%;
-            background-color: gray;
+        background-color: #F5F7F8;
+        .area1{
+            height: 10vh;
+            width: 70%;
+            margin: 0 15%;
+            background-color: rgb(69, 71, 75);
         }
-        .Text{
-            width: 80%;
-            height: 100%;
-            padding: 80px;
-            
-            p{margin-left: 20px;
-                font-weight: bold;}
+        .area2{
+            height: 25vh;
+            width: 70%;
+            margin: 0 15%;
+            background-color: rgb(73, 94, 87);
         }
-            .Nineblock{
-                width: 100%;
+        .area3{
+            display: flex;
+            height: 90vh;
+            width: 70%;
+            margin: 0 15%;
+            background-color: rgb(244, 206, 20);
+            .leftBox{
                 height: 100%;
-                margin-bottom: 0;
-                display: flex;
-                flex-wrap: wrap;
-                .block1{
-                    width: 30%;
-                    height: 28%;
-                    margin: 0 10px;
-                    .blockkk{
+                width: 30%;
+                background-color: #ffab02;
+            }
+            .rightBox{
+                height: 100%;
+                width: 70%;
+                padding: 2%;
+                .rTopBox{
+                    height: 20%;
                     width: 100%;
-                    height: 100%;
-                    background-color: rgb(236, 130, 0);
-                    margin: 0 10px;
+                    display: flex;
+                    align-items: center;
+                    .rtbText{
+                        padding: 0 2%;
+                    }
                 }
-                }
-                .block1{
-                    p{
-                        text-align: center;
+                .rBottomBox{
+                    height: 80%;
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-around;
+                    .nineBox1{
+                        width: 30%;
+                        height: 30%;
+                        position: relative;
+                        padding-bottom: 4%;
+
+                        p{
+                            position: absolute;
+                            bottom: 0;
+                            right: 20%;
+                            margin-bottom: 0;
+                        }
+                        .Box{
+                            width: 100%;
+                            height: 100%;
+                            background-color: rgb(73, 94, 87);
+                            padding-bottom: 2%;
+                        }
                     }
                 }
             }
+        }
+        .area4{
+            height: 20vh;
+            width: 70%;
+            margin: 0 15%;
+            background-color: rgb(69, 71, 75);
+        }
 
-    }
-    .footer{
-        height: 10vh;
-        width: 100vw;
-        background-color: black;
-        margin-top: 50px;
+        
+    
     }
 
 

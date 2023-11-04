@@ -88,12 +88,12 @@ hr{
     margin-bottom: 15px;
 }
 .body{
-    height: 85vh;
+    height: auto;
     width: 100%;
     background-color: #BEC0CD;
     .MainArea{
         height: 100%;
-        width: 50%;
+        width: 60%;
         margin: 0 25%;
         padding-top: 2%;
         

@@ -82,11 +82,12 @@ fetch("https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorizati
 </template>
 <style lang="scss" scoped>
 .body{
-    height: 100%;
+    height: 100vh;
     background-color:black;
     margin: 0;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 p{
     color: white;
@@ -100,12 +101,11 @@ h1{
 
 .page{
     height: 400px;
-    width: 600px;
+    width: 500px;
     display: flex;
     justify-content: center;
     background-color: rgb(135, 5, 210);
     border-radius: 20px;
-    margin-top: 10%;
 }
 
 .content{

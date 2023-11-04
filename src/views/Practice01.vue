@@ -3,7 +3,6 @@
 
 <template>
 <div class="body">
-    <div class="MainArea">
         <div class="headerShow">
         </div>
         <div class="box" >
@@ -28,68 +27,68 @@
         </div>
         <div class="bottom">
         </div>
-    </div>
 </div>
 </template>
 
 <style lang="scss" coped>
     .body{
         height: auto;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        margin-top: 5%;
+        width: 70%;
+        margin: 0 15%;
+        background-color:rgb(245, 247, 248);
 
     }
-    .MainArea{
-        margin: 0;
-        height: 100%;
-        width: 70%;
-        
-    }
     .headerShow{
-        background-color: rgb(48, 48, 48);
+        background-color: #F4CE14;
         width: 100%;
-        height: 25%;
+        height: 20vh;
     }
     .box{
-        height: 60%;
+        height: 40vh;
         width: 100%;
         display: flex;
-        margin-top: 10%;
-        justify-content: space-between;
+        justify-content: space-around;
         margin-bottom: 0;
+        margin-top: 10%;
+
         .box1{
             width: 30%;
             height: 100%;
-            background-color: rgb(48, 48, 48);
             display: flex;
-            border: 10px black solid;
+            img{
+            width:100%;
+            background-position: 50% 50%;
+        
+            }
+
         }
     }
     .content{
-        height: 60%;
+        height: 60vh;
         width: 100%;
         display: flex;
-        margin-top: 5%;
+        margin-top: 10%;
         .pic{
             height: 100%;
-            width: 55%;
-            background-color:rgb(48, 48, 48);
+            width: 50%;
             margin-top: 0;
+            background-size: contain;
+            img{
+                height: 300px;
+                width: 100%;
+            }
         }
         .txt{
             width: 50%;
             height: 100%;
-            margin-top: 130px;
             margin-left: 50px;
             }
     }
     .bottom{
-        margin-top: 100px; 
-        widows: 100%;
-        height: 20%;
-        background-color: rgb(48, 48, 48);
+        width: 100%;
+        height: 20vh;
+        background-color: #495E57;
+
     }
     
 </style>

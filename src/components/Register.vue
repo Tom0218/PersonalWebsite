@@ -45,60 +45,104 @@ export default{
 </script>
 
 <template>
-<div class="body">
-    <div class="MainArea">
-        <h1>Register</h1>
-        <div class="Email Box">
-        <p>Email</p>
-        <input type="text" v-model="Email">
+    <div class="body" >
+    <div class="mainArea">
+            <div class="Gamebox">
+                <h1>Sign up</h1>
+                <p>Email</p>
+                <input type="text" v-model="Email">
+                <p>Password</p>
+                <input type="text" v-model="Password">
+                <div class="line-5">
+                    <!-- <input type="checkbox" class="chekBox">
+                    <small>Keep login</small> -->
+                    <button type="button" class="btn" @click="Register()"> Register</button>
+            <button type="button" class="btn" @click="closePage()">canecl</button>
+                </div>
+                <p>{{ this.showText }}</p>
+            </div>
         </div>
-        <div class="Password Box">
-        <p>Password</p>
-        <input type="text" v-model="Password">
         </div>
-        <div class="btnBox">
-            <button type="button" @click="Register()"> Register</button>
-            <button type="button" @click="closePage()">canecl</button>
-        </div>
-        <p>{{ this.showText }}</p>
-    </div>
-</div>
+    ---------------------------------------------
+
 </template>
 
 <style lang="scss" scoped>
 .body{
     height: 100%;
-    width: 100%;
+    margin: 0;
+    background-color: #232D3F;
     display: flex;
     justify-content: center;
-    .box{
-        display: flex;
-        margin: 0 20px;
-    }
-    p{
-    font-size: 12pt;
-    margin-bottom: 2px;
-    }
-    .MainArea{
-        margin-top: 8%;
-        h1{
-            text-align: center;
-        }
+    align-items: center;
+}
+p{
+    font-size: 16pt;
+    margin: 10px 0;
+    font-weight: bold;
+    color: #ccf407;
+}
+h1{
+    text-align: center;
+    margin-bottom: 30px;
+    color: #ccf407;
+}
+
+.mainArea{
+    height: 400px;
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    .Gamebox{
+        width: 60%;
         input{
-            width: 300px;
-            border-radius: 5px;
+            height: 25px;
+            width: 100%;
+            margin: 0;
+            padding: 2px;
+
         }
-        .btnBox{
+        .line-5{
+            width: 100%;
             display: flex;
-            justify-content: center;
-            margin-top: 5%;
-            button{
-                background-color: #475467;
-                color: white;
-                margin: 0 10px;
-                border-radius: 5px;
-            }
+            align-items: center;
+            position: relative;
+            margin-top: 20px;
+        }       
+        button{
+            width: 100%;
+            border: none;
+            font-size: 16pt;
+            border-radius: 10px;
+            margin: 0 2%;
         }
+        #check1{
+            text-align: center;
+            color: #ccf407;
+        }     
+
     }
+.btn,
+.btn:hover,
+.btn:focus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    // width: 100px;
+    height: 40px;
+    font-weight: bold;
+    // border-radius: 50%;
+    border: none;
+    background: #232D3F;
+    color: #ccf407;
+    // font-size: 2rem;
+    transition: box-shadow 400ms cubic-bezier(0.2, 0, 0.7, 1), transform 5s cubic-bezier(0.2, 0, 0.7, 1);
+}
+.btn:hover {
+    // transform: rotate(45deg);
+    box-shadow: 0 0 1px 5px #ccf407,;
+}
 }
 </style>

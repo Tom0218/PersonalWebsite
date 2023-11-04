@@ -90,7 +90,7 @@ export default{
 
 .body{
     margin: 0;
-    height:90vh;
+    height:85vh;
     background: #BEC0CD;
 }
 h1{

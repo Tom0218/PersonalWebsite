@@ -76,9 +76,10 @@ hr{
     height: 1px;
 }
 .body{
-    height: 85vh;
+    height: auto;
     width:100%;
     background-color: #BEC0CD;
+    padding: 2%;
 }
 .MainArea{
     height: 100%;

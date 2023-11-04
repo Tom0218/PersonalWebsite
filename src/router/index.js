@@ -81,11 +81,6 @@ const router = createRouter({
           path: 'RealEstateAsk',
           component: () => import('../components/RealEstateAsk.vue') 
         },
-        // {
-        //   path: 'Note',
-        //   component: () => import('../views//Note.vue') 
-        // },
-        
       ]
     },
     {
@@ -147,6 +142,21 @@ const router = createRouter({
       path: '/ExpenseTrackerMain',
       name: 'ExpenseTrackerMain',
       component: () => import('../components//ExpenseTrackerMain.vue')
+    },
+    {
+      path: '/Note',
+      name: 'Note',
+      component: () => import('../views//Note.vue') 
+    },
+    {
+      path: '/About',
+      name: 'About',
+      component: () => import('../views//About.vue') 
+    },
+    {
+      path: '/weatherAPIV2',
+      name: 'weatherAPIV2',
+      component: () => import('../views//weatherApiV2.vue') 
     },
   ]
 })
