@@ -43,9 +43,10 @@ export default{
         <RouterLink to="/Login" class=" btncss2" >登入 & 註冊</RouterLink>
         <RouterLink to="/RealEstate" class=" btncss2" >房地產管理系統</RouterLink>
         <RouterLink to="/WeatherAPI" class=" btncss2" >天氣API</RouterLink>
+        <RouterLink to="/weatherAPIV2" class="btncss2" >天氣API 2.0</RouterLink>
         <RouterLink to="/WaterFall" class=" btncss2" >瀑布流</RouterLink>
         <RouterLink to="/ExpenseTracker" class="btncss2" >記帳</RouterLink>
-        <RouterLink to="/weatherAPIV2" class="btncss2" >weatherAPIV2</RouterLink>
+        
         
     </div>
 </div>

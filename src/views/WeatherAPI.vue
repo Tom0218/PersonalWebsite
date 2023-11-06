@@ -10,20 +10,20 @@ export default{
         }
     },
     methods:{
-        cityChange(){
-        for (let i=0;i<22;i++){
-        if(arr.records.location[i].locationName==this.city){
-            // console.log(arr.records.location[i].)
-            this.cloud = arr.records.location[i].weatherElement[0].time[0].parameter.parameterName
-            
-            this.tempLow =  arr.records.location[i].weatherElement[2].time[0].parameter.parameterName
-            
-            this.tempHigh =  arr.records.location[i].weatherElement[4].time[0].parameter.parameterName
+        cityChange() {
+            for (let i=0;i<22;i++){
+                if(arr.records.location[i].locationName==this.city){
+                    // console.log(arr.records.location[i].)
+                    this.cloud = arr.records.location[i].weatherElement[0].time[0].parameter.parameterName
+                    
+                    this.tempLow =  arr.records.location[i].weatherElement[2].time[0].parameter.parameterName
+                    
+                    this.tempHigh =  arr.records.location[i].weatherElement[4].time[0].parameter.parameterName
 
-            this.rainy = arr.records.location[i].weatherElement[1].time[0].parameter.parameterName
-            break
-        }
-    }
+                    this.rainy = arr.records.location[i].weatherElement[1].time[0].parameter.parameterName
+                    break
+                }
+            }
         }
     }
 }
