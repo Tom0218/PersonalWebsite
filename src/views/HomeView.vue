@@ -4,6 +4,8 @@ import { RouterLink,RouterView } from 'vue-router'
 export default{
   data(){
     return{
+
+      name: 'home',//11/23
     }
     },
     components :{
@@ -46,9 +48,11 @@ export default{
         <RouterLink to="/weatherAPIV2" class="btncss2" >天氣API 2.0</RouterLink>
         <RouterLink to="/WaterFall" class=" btncss2" >瀑布流</RouterLink>
         <RouterLink to="/ExpenseTracker" class="btncss2" >記帳</RouterLink>
-        
+        <RouterLink to="/Questionnaire" class=" btncss2" >動態問卷</RouterLink>
+        <RouterLink to="/Test" class="btncss2" >測試</RouterLink>
         
     </div>
+   
 </div>
 
 
@@ -139,6 +143,7 @@ export default{
   height: 100vh;
   background-color: #232D3F;
   display: flex;
+  justify-content: center;
   align-items: center;
   .linkArea{
     width: 70%;

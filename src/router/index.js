@@ -158,6 +158,16 @@ const router = createRouter({
       name: 'weatherAPIV2',
       component: () => import('../views//weatherApiV2.vue') 
     },
+    {
+      path: '/Questionnaire',
+      name: 'Questionnaire',
+      component: () => import('../views//Questionnaire.vue') 
+    },
+    {
+      path: '/Test',
+      name: 'Test',
+      component: () => import('../views//Test.vue') 
+    },
   ]
 })
 
