@@ -121,7 +121,6 @@ components: {
     <i class="fa-solid fa-xmark closeWindows" @click="AddObj()"></i>
     <AddObject @dog1 = "addNItem" @delpage = "closePage"/>
     </div>
-        <slot></slot>
         </div>
     </div>
 </div>

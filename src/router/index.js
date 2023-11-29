@@ -136,37 +136,60 @@ const router = createRouter({
     {
       path: '/ExpenseTrackerRegister',
       name: 'ExpenseTrackerRegister',
-      component: () => import('../components//ExpenseTrackerRegister.vue')
+      component: () => import('../components/ExpenseTrackerRegister.vue')
     },
     {
       path: '/ExpenseTrackerMain',
       name: 'ExpenseTrackerMain',
-      component: () => import('../components//ExpenseTrackerMain.vue')
+      component: () => import('../components/ExpenseTrackerMain.vue')
     },
     {
       path: '/Note',
       name: 'Note',
-      component: () => import('../views//Note.vue') 
+      component: () => import('../views/Note.vue') 
     },
     {
       path: '/About',
       name: 'About',
-      component: () => import('../views//About.vue') 
+      component: () => import('../views/About.vue') 
     },
     {
       path: '/weatherAPIV2',
       name: 'weatherAPIV2',
-      component: () => import('../views//weatherApiV2.vue') 
+      component: () => import('../views/weatherApiV2.vue') 
     },
     {
       path: '/Questionnaire',
       name: 'Questionnaire',
-      component: () => import('../views//Questionnaire.vue') 
+      component: () => import('../views/Questionnaire.vue') 
     },
+    {
+      path: '/QuestionnaireInsidePage',
+      name: 'QuestionnaireInsidePage',
+      component: () => import('../components/QuestionnaireInsidePage.vue') 
+    },
+
+    {
+      path: '/QuestionnaireCreate',
+      name: 'QuestionnaireCreate',
+      component: () => import('../components/QuestionnaireCreate.vue'),
+      children:[
+        {
+          path: 'QuestionnaireCreateQuestion',
+          component: () => import('../components/QuestionnaireCreateQuestion.vue')
+        },
+
+        {
+          path: 'QuestionnaireCreateMakeSurePage',
+          component: () => import('../components/QuestionnaireCreateMakeSurePage.vue')
+        },
+      ]
+    },
+    
     {
       path: '/Test',
       name: 'Test',
-      component: () => import('../views//Test.vue') 
+      component: () => import('../views/Test.vue') 
     },
   ]
 })

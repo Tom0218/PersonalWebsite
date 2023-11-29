@@ -1,24 +1,32 @@
 <script>
 import qnInsidePage from '../components/QuestionnaireInsidePage.vue';
-
+import CreateQn from '../components/QuestionnaireCreate.vue';
 export default {
     components:{
-        qnInsidePage
+        qnInsidePage,
+        CreateQn
     },
+
     data(){
         return{
-            qnId:"",
+            allQn:[], //所有問卷
             qnTitle:"",
-            published:"",
             startDate:"",
             endDate:"",
-            qnList:[], 
+            key:"", //index
+            datas:this.allQn,//要呈現的資料
+            perpage: 10, //一頁的資料數
+            currentPage: 1,
+            selectedqnIds:[],
+            selectQnIndexArr:[],
+            
+            
         }
     },
     methods:{
+
+// ==================================================================search fn
         fetchData() {
-            console.log(this.startDate)
-            console.log(this.endDate)
             //將要查詢的字串附加到url
             const url = 'http://localhost:8081/api/quiz/search';
             //帶入值
@@ -28,35 +36,136 @@ export default {
                 end_date:this.endDate,
             });
             const urlWithParams = `${url}?${queryParams}`;
+
             fetch(urlWithParams,{
                 method:"GET",
                 headers:new Headers({
                     "Content-Type":"application/json",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin":"*"
+
                 })
                 })
                 .then((res) =>res.json())
                 .catch((error) =>console.error("Error:",error))
-                .then((response)=>{
-                    this.qnList = response.quizVoList;
-                    console.log(this.qnList);
-                    // this.qnList.forEach((quiz) => {
-                    //     this.qnId = quiz.questionnaire.id;
-                    //     this.qnTitle = quiz.questionnaire.title;
-                    //     this.published = quiz.questionnaire.published;
-                    //     this.startDate = quiz.questionnaire.startDate;
-                    //     this.endDate = quiz.questionnaire.endDate;
-                    // });
+                .then((data)=>{
+                    this.allQn = data;
+                    console.log(data)
+                    this.allQn = this.allQn.quizVoList;
                 })
         },
+// ==================================================================search fn
 
-    },
+        //===========================================================分頁方法
+        setPage(page) {
+        if(page <= 0 || page > this.totalPage) {
+            return
+        }
+        this.currentPage = page
+        },
+              //===========================================================分頁方法
+        
+        //===========================================================計算索引值
+        catchIndex(index){
+            var pageIndex = (this.currentPage-1)*10 + index;
+            this.selectQnIndexArr.push({qnId:this.allQn[pageIndex].questionnaire.id, currentPage:this.currentPage, index:index}); 
+            console.log(this.selectQnIndexArr);
+        },
+        //==============================================================計算索引值
 
+        //==============================================================deleteQuestionnaire
+        deleQn() {
+            let stopDel = false; //終止方法的可愛變數          
+            var qnIdList = [] ; // 後端需要的qnidList   
+            var qnIdsIndex = [];   //前端要得索引值
+
+            //判斷我要去刪掉陣列問卷的哪幾個
+            for (let i = 0; i < this.selectQnIndexArr.length; i++) {
+                let indexNum = 0;
+                let countpage = this.selectQnIndexArr[i].currentPage
+                let qnIndex =  this.selectQnIndexArr[i].index
+                // console.log("第"+countpage+"頁");
+                // console.log("qnIndex:"+qnIndex);
+
+                
+                indexNum = ((countpage-1)*this.perpage) + qnIndex
+                qnIdsIndex.push(indexNum)
+                qnIdList.push(this.allQn[indexNum].questionnaire.id)
+            }
+            console.log("被選中之問卷的索引值 :"+ qnIdsIndex);
+            console.log("被選中之問卷的ids :"+ qnIdList);
+
+            //判斷這幾個裡面有沒有已經出版在進行中的資料
+            for (let i = 0; i < qnIdList.length; i++) {
+                const qnStartDate =this.allQn[qnIdsIndex[i]].questionnaire.startDate;
+                const qnIsPublished = this.allQn[qnIdsIndex[i]].questionnaire.published;
+                const currentDate = new Date(); // 當下時間
+                const jsonDateOnlyString = currentDate.toISOString().split('T')[0]; // 當下時間轉json格式並只取日期
+
+                if (qnIsPublished ==true && qnStartDate <= jsonDateOnlyString) {
+                    stopDel=true;
+                    alert("你刪除的問卷當中有包含已開始的問卷所以禁止刪除");
+                    return ;
+                }
+            };   
+            var data = { 
+                qnIdList: qnIdList,
+            };
+            var url = "http://localhost:8081/api/quiz/deleteQuestionnaire";
+
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: new Headers({
+                    "Content-Type": "application/json",
+                }),
+            })
+            .then((res) => res.json())
+            .then((response) => {
+                console.log("Success:", response);
+                // 在成功完成 API 請求後執行 fetchData()
+                this.fetchData();
+            })
+            .catch((error) => console.error("Error:", error));
+        },
+      //==============================================================deleteQuestionnaire
+
+// =============================================================================checkboxgeQnId fn
+        handleCheckboxChange(questionnaireId) {
+            const selectQnIds = this.selectedqnIds.indexOf(questionnaireId);
+            if ( selectQnIds !== -1) {
+                this.selectedqnIds.splice(selectQnIds, 1);
+            } else { 
+                this.selectedqnIds.push(questionnaireId);// 如果 ID 不存在于数组中，添加到数组
+            }
+            console.log('Selected Questionnaire Ids:',this.selectedqnIds); // 输出更新后的数组
+            
+        },
+// =============================================================================checkboxgeQnId fn
+        
+
+},
         mounted() {
             this.fetchData(); // 将方法调用放在函数体内
-
+        },
+        computed: {
+            //===========================================================分頁
+            totalPage() {
+                return Math.ceil(this.allQn.length / this.perpage)
+                //Math.ceil()取最小整數
+            },
+            pageStart() {
+                return (this.currentPage - 1) * this.perpage
+                //取得該頁第一個值的index
+            },
+            pageEnd() {
+                return this.currentPage * this.perpage
+                //取得該頁最後一個值的index
+            }
+            //===========================================================分頁
         }
-    }
 
+}
 
 </script>
 
@@ -65,34 +174,39 @@ export default {
     <div class="aa">
         <div class="top">
                 <div class="searchTitle">
-                    <h1>問卷標題</h1>
+                    <h2>問卷標題</h2>
                     <input type="text" v-model="qnTitle" >
                 </div>
-        <!-- ------------------------------------------------date -->
                 <div class="date" >
-                    <h1>開始/結束</h1>
+                    <h2>開始/結束</h2>
                     <input type="date" id="startDate" v-model="startDate">
                     <input type="date" id="endDate" v-model="endDate">
-                </div>
-                <button @click='fetchData()'>search</button>
-        <!-- -----------------------------------------------date -->
+                </div>             
         </div>
-
-        <button type="button" >新增問卷</button>
-
+        <div class="btnArea">
+            <button @click='fetchData()'>search</button>
+            <button><RouterLink to="/QuestionnaireCreate" id="addqn">新增問卷</RouterLink></button>
+            <button type="button" 
+            @click=deleQn
+            >刪除問卷</button>
+        </div>
         <div class="bottom">
             <table>
                 <tr>
-                    <td>#</td>
+                    <td></td>
+                    <td>編號</td>
                     <td>問卷</td>
                     <td>狀態</td>
                     <td>開始時間</td>
                     <td>結束時間</td>
                     <td>觀看統計</td>
                 </tr>
-                <tr v-for="(quiz,index) in qnList" :key="index">
+                <tr v-for="(quiz,index) in allQn.slice(pageStart, pageEnd)" :key="index">
+                    <td>
+                        <input type="checkbox" v-model="quiz.checkbox" @change="handleCheckboxChange(quiz.questionnaire.id)" @click="catchIndex(index)">
+                    </td>
                     <td>{{ quiz.questionnaire.id }}</td>
-                    <td @click='goQuestion()'>{{ quiz.questionnaire.title }}</td>
+                    <td @click='goQuestion(index)' :key="index">{{ quiz.questionnaire.title }}</td>
                     <td>{{ quiz.questionnaire.published }}</td>
                     <td>{{ quiz.questionnaire.startDate }}</td>
                     <td>{{ quiz.questionnaire.endDate }}</td>
@@ -101,15 +215,42 @@ export default {
             </table>
         </div>
     </div>
+    <!-- ==========================================================================分頁 -->
+        <ul class="pagination">
+            <li class="page-item" @click.prevent="setPage(currentPage-1)">
+                <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" :class="{'active': (currentPage === (n))}"
+                v-for="(n, index) in totalPage" :key="index" @click.prevent="setPage(n)">
+                <a class="page-link" href="#">{{ n }}</a>
+            </li>
+            <li class="page-item" @click.prevent="setPage(currentPage+1)">
+                <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+        <!-- ==========================================================================分頁 -->
 </div>
-<div>
-</div>
-<!-- <qnInsidePage/> -->
+<!-- <qnInsidePage
+    :qnIndex ="key" :qnArr="allQn"
+/> -->
 
 </template>
 
 <style lang="scss" scoped>
-h1{
+
+a{
+    text-decoration: none;
+}
+
+button{
+    margin: 2%;
+}
+
+h2{
     margin: 0%;
     color: white;
     font-weight: bold;
@@ -126,34 +267,42 @@ p{
 }
 
 table{
+    height: 100%;
     width: 100%;
     text-align: left;
 }
 
 tr{
+    height: auto;
     display: flex;
     justify-content: space-between;
     border: 1px white solid;
 }
 
 td{
-    width: 170px;
+    height: auto;
+    width: 15%;
     color: white;
     text-align: center;
 
 }
+
+ul{
+    height: auto;
+    display: flex;
+    justify-content: center;
+    margin-top: 1%;
+}
+
+
 .body{
     width:100%;
     height: 100vh;
-    display: flex;
-    justify-content: center;
     .aa{
         width: 80%;
-        height: 60%;
-        margin-top: 10%;
-        border: 1px solid white;
-        display: flex;
-        flex-direction: column;
+        margin: 0 10%;
+        height: 73%;
+        
         .searchTitle{
             display: flex;
             justify-content: center;
@@ -161,7 +310,6 @@ td{
             input,p{
                 margin: 0 10px;
             }
-        
         }
         .date{
             display: flex;
@@ -171,7 +319,12 @@ td{
                 margin: 0 10px;
             }
         }
+        .btnArea{
+            display: flex;
+            justify-content: center;
+        }
+
+        
     }
-    
 }
 </style>

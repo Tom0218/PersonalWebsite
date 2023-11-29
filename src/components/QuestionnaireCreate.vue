@@ -1,0 +1,142 @@
+<script>
+import makeSurePage from '../components/QuestionnaireCreateMakeSurePage.vue';
+import setQuestionPage from '../components/QuestionnaireCreateQuestion.vue';
+import {RouterLink } from 'vue-router'
+
+export default{
+    components:{
+        RouterLink,
+        setQuestionPage,
+        makeSurePage,
+
+    },
+
+    data(){
+        // ======================================預設startdate
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().split('T')[0];
+    // ======================================預設startdate
+    // ======================================預設enddate
+        const endDate = new Date(currentDate);
+        endDate.setDate(endDate.getDate() + 7);
+        const formattedEndDate = endDate.toISOString().split('T')[0];
+        // ======================================預設enddate
+        return{
+            QuestionaireTitle:"",
+            QuestionnaireDescription:"",
+            published:false,
+            startDate: formattedDate,
+            endDate: formattedEndDate,
+            page:1,
+            Questionnaire:[],
+            quList: [],
+        };
+    },
+
+    methods:{
+
+        next(){
+            this.Questionnaire.push({
+                title: this.QuestionaireTitle,   
+                description: this.QuestionnaireDescription,
+                published:this.published,
+                startDate: this.startDate,
+                endDate: this.endDate
+            })
+            this.page = 2 ;
+            console.log(this.Questionnaire);
+        },
+
+        getQuList(x,y){
+            console.log("question_list");
+            console.log(x);
+            this.page = y;
+            this.quList = x;
+        },
+
+        back(x){
+            this.page = x;
+        }
+
+
+    },
+}
+</script>
+
+<template>
+<div class="body">
+    <div class="setQuestionnaire" v-if="page==1">
+        <div class="qnTile Box">
+            <h2>問卷名稱</h2>
+            <input type="text" class="qnTileInputBox" v-model="QuestionaireTitle">
+        </div>
+
+        <div class="qnDesp Box">
+            <h2>問卷說明</h2>
+            <input type="text" class="qnDesInputBox" v-model="QuestionnaireDescription">
+        </div>
+        <div class="date Box" >
+            <h2>開始日期/結束日期</h2>
+            <input type="date" id="startDate" v-model="startDate">
+            <input type="date" id="endDate"  v-model="endDate">
+        </div>   
+        <div class="btnBox">
+            
+            <button><RouterLink to="/Questionnaire">取消</RouterLink></button>
+            <button @click="next">下一步</button>
+            
+        </div>
+    </div>
+
+    <div v-else-if="page ==2">
+    <setQuestionPage
+        @beta="getQuList"
+        @daines="back"
+    />
+    </div>
+
+    <div v-else="this.page ==3">
+    <makeSurePage
+    :alpha = "this.Questionnaire"
+    :charli = "this.quList"
+
+    />
+    </div>
+</div>
+
+
+
+</template>
+
+<style lang="scss" scoped>
+a{
+    text-decoration: none;
+}
+
+h2{
+    margin: 0;
+}
+
+button{
+    margin: 0 1%;
+}
+.body{
+    width: 100vw;
+    height: 100vh;
+    background-color: green;
+
+    .Box{
+        display: flex;
+        margin: 2% 0;
+    }
+
+    .setQuestionnaire{
+        width: 60%;
+        height: 60%;
+        border: 1px white solid;
+        .qnDesInputBox{
+            height: 100px;
+        }
+    }
+}
+</style>

@@ -8,9 +8,8 @@ export default{
     data(){
         return{
             page: 1,
-
             data:{
-                name: "",
+                name:"",
                 phone: "",
                 email: "",
                 age: "",
@@ -18,6 +17,7 @@ export default{
             },
         }
     },
+
     methods:{
 ///////////////////////////////傳送後跳出確認視窗
         send() {
@@ -27,8 +27,13 @@ export default{
         getedit(x) {
             this.page = 1
             x = this.data
-        }
+        },
     },
+
+    props:[
+            "qnIndex",
+            "qnArr"
+        ]
 }
 </script>
 
@@ -57,32 +62,13 @@ export default{
                     <p>年齡</p>
                     <input type="number"  v-model="data.age" >
                 </div>
+                
             </div>
+            <div class="questionArr">
+                {{ qnArr }}
+            </div>    
         </div>
 
-        <div class="radioArea">
-            <p>請投給以下一位</p>
-            <div class="radio">
-                <input type="radio" value="ㄈㄅㄌ(建國中學)" name="man" v-model="data.radioText">
-                <label for="">ㄈㄅㄌ(建國中學)</label>
-            </div >
-            <div class="radio">
-                <input type="radio" value="小美(金甌女中)"  name="man" v-model="data.radioText">
-                <label for="">小美(金甌女中)</label>
-            </div>
-            <div class="radio">
-                <input type="radio" value="大壯(金門高中)"  name="man" v-model="data.radioText">
-                <label for="">大壯(金門高中)</label>
-            </div>
-            <div class="radio">
-                <input type="radio" value="小咖樂咪(基隆高中)"  name="man" v-model="data.radioText">
-                <label for="">小咖樂咪(基隆高中)</label>
-            </div>
-        </div>
-        <div class="buttonArea">
-            <button type="button" @click="cencel()">回首頁</button>
-            <button type="button" @click="send()">送出</button>
-        </div>
         <div class="popup" v-if="this.page===2">
             <div>
                 <!-- <FmakeSurePage
@@ -152,17 +138,12 @@ input[type=number]::-webkit-inner-spin-button {
         box-shadow: 3px 2px 0px 2px;
         padding: 0 1%;
     }
-    .radioArea{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
     .buttonArea{
         display: flex;
         justify-content: center;
     }
-    .radio{
-        width: 20%;
+    .questionArr{
+        display: flex;
     }
 }
 .d-flex{
