@@ -21,7 +21,7 @@ export default{
         }
     },
     methods:{
-        // =============================================================add n edit
+        // add n edit
         addQuetion(){
             if( this.addbutton == "編輯"){
                 console.log("問卷索引值:"+this.key)
@@ -50,9 +50,8 @@ export default{
             this.questionOption = "";
             console.log(this.questionList)
         },
-    // =============================================================add n edit
 
-// =============================================================Edit
+        //Edit
         eidt(index){
             this.addbutton = "編輯"
             this.qId = this.questionList[index].quId;
@@ -63,39 +62,36 @@ export default{
             this.key = index
             console.log("問卷索引值:"+index)
         },
-// =============================================================Edit
-// ================================================================delQn
+        
+        //delQn
         delQu(){
             this.selectedIndexes.forEach(item => {
                 this.questionList.splice(item,1);
             });
         },
-// ================================================================delQn
 
-// ================================================================quindex
-handleCheckboxChange(index) {
-      // checkbox 更動時的處理邏輯
-        if (this.questionList[index].checkbox) {
-            // 如果 checkbox 被選中，將索引存入陣列
-            this.selectedIndexes.push(index);
-        } else {
-            // 如果 checkbox 取消選中，從陣列中刪除索引
-            const indexToDelete = this.selectedIndexes.indexOf(index);
-            if (indexToDelete !== -1) {
-            this.selectedIndexes.splice(indexToDelete, 1);
-            }
-        }
-        // console.log(this.selectedIndexes)
-    },
-// ================================================================quindex
-
-
+        //quindex
+        handleCheckboxChange(index) {
+            // checkbox 更動時的處理邏輯
+                if (this.questionList[index].checkbox) {
+                    // 如果 checkbox 被選中，將索引存入陣列
+                    this.selectedIndexes.push(index);
+                } else {
+                    // 如果 checkbox 取消選中，從陣列中刪除索引
+                    const indexToDelete = this.selectedIndexes.indexOf(index);
+                    if (indexToDelete !== -1) {
+                    this.selectedIndexes.splice(indexToDelete, 1);
+                    }
+                }
+                // console.log(this.selectedIndexes)
+            },
     }
 }
 </script>
 
 <template>
     <div class="body">
+    <div class="mainArea">
         <div class="setQuestion">
             <div class="question Box">
                 <h2>問題</h2>
@@ -150,6 +146,7 @@ handleCheckboxChange(index) {
             <button @click="$emit('beta',this.questionList,3)">送出</button>
         </div>
     </div>
+    </div>
 </template>
 <style lang="scss" scoped>
 #necessary{
@@ -158,12 +155,13 @@ handleCheckboxChange(index) {
 }
 
 h2{
-    margin: 0 1%;
+    margin: 0 2%;
     color: white;
 }
 
 button{
     margin: 0 1%;
+    width: 100px;
 }
 
 p{
@@ -198,17 +196,26 @@ table{
         margin: 2% 0;
     }
     .setQuestion{
-            width: 60%;
-            height: 60%;
+            width: 70%;
+            height: 80%;
             border: 1px white solid;
             .optionInputBox{
-                width: 40%;
+                width: 60%;
                 height: 100px;
                 margin-left: 2%;
             }
             .questionList{
                 width: 100%;
             }
+        }
+        .mainArea{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .btnBox{
+            display: flex;
         }
 }
 </style>

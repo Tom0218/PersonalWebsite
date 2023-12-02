@@ -1,16 +1,17 @@
 <script>
 import qnInsidePage from '../components/QuestionnaireInsidePage.vue';
-import CreateQn from '../components/QuestionnaireCreate.vue';
+
 export default {
     components:{
         qnInsidePage,
-        CreateQn
     },
 
     data(){
         return{
             allQn:[], //所有問卷
+            qnId:0,
             qnTitle:"",
+            qnDescription:"",
             startDate:"",
             endDate:"",
             key:"", //index
@@ -18,14 +19,13 @@ export default {
             perpage: 10, //一頁的資料數
             currentPage: 1,
             selectedqnIds:[],
-            selectQnIndexArr:[],
-            
-            
+            selectQnIndexArr:[],  
+            nowDate:"",     
         }
     },
-    methods:{
 
-// ==================================================================search fn
+    methods:{
+        //search 
         fetchData() {
             //將要查詢的字串附加到url
             const url = 'http://localhost:8081/api/quiz/search';
@@ -50,30 +50,27 @@ export default {
                 .catch((error) =>console.error("Error:",error))
                 .then((data)=>{
                     this.allQn = data;
-                    console.log(data)
                     this.allQn = this.allQn.quizVoList;
+                    console.log(this.allQn)
                 })
         },
-// ==================================================================search fn
 
-        //===========================================================分頁方法
+        //分頁方法
         setPage(page) {
         if(page <= 0 || page > this.totalPage) {
             return
         }
         this.currentPage = page
         },
-              //===========================================================分頁方法
         
-        //===========================================================計算索引值
+        //計算索引值
         catchIndex(index){
             var pageIndex = (this.currentPage-1)*10 + index;
             this.selectQnIndexArr.push({qnId:this.allQn[pageIndex].questionnaire.id, currentPage:this.currentPage, index:index}); 
             console.log(this.selectQnIndexArr);
         },
-        //==============================================================計算索引值
 
-        //==============================================================deleteQuestionnaire
+        //deleteQuestionnaire
         deleQn() {
             let stopDel = false; //終止方法的可愛變數          
             var qnIdList = [] ; // 後端需要的qnidList   
@@ -105,6 +102,7 @@ export default {
                 if (qnIsPublished ==true && qnStartDate <= jsonDateOnlyString) {
                     stopDel=true;
                     alert("你刪除的問卷當中有包含已開始的問卷所以禁止刪除");
+                    location.reload(true);
                     return ;
                 }
             };   
@@ -128,9 +126,8 @@ export default {
             })
             .catch((error) => console.error("Error:", error));
         },
-      //==============================================================deleteQuestionnaire
 
-// =============================================================================checkboxgeQnId fn
+        //checkboxgeQnId fn
         handleCheckboxChange(questionnaireId) {
             const selectQnIds = this.selectedqnIds.indexOf(questionnaireId);
             if ( selectQnIds !== -1) {
@@ -139,30 +136,59 @@ export default {
                 this.selectedqnIds.push(questionnaireId);// 如果 ID 不存在于数组中，添加到数组
             }
             console.log('Selected Questionnaire Ids:',this.selectedqnIds); // 输出更新后的数组
-            
+            console.log(this.nowDate > 2023-12-3)
         },
-// =============================================================================checkboxgeQnId fn
-        
 
+        isPublished() {
+                    // 获取当前日期
+                        this.nowDate = new Date().toISOString().split('T')[0];
+                        
+            //检查当前日期是否大于或等于发布日期
+        },
+
+        //edit Question
+        editQuestion(index){
+            var pageIndex = ((this.currentPage-1)*this.perpage+index); 
+            this.qnId = this.allQn[pageIndex].questionnaire.id;
+            this.qnTitle =  this.allQn[pageIndex].questionnaire.title;
+            this.qnDescription =  this.allQn[pageIndex].questionnaire.description;
+            this.startDate =  this.allQn[pageIndex].questionnaire.startDate;
+            this.endDate = this.allQn[pageIndex].questionnaire.endDate;
+            this.$router.push({
+            name: 'QuestionnaireCreate',
+            query: {
+                qnId:this.qnId,
+                qnTitle:this.qnTitle,
+                qnDescription:this.qnDescription,
+                startDate:this.startDate,
+                endDate:this.endDate
+            }
+            });
+        }
 },
         mounted() {
             this.fetchData(); // 将方法调用放在函数体内
+            this.isPublished();
         },
+
         computed: {
-            //===========================================================分頁
+
+            //Math.ceil()取最小整數
             totalPage() {
                 return Math.ceil(this.allQn.length / this.perpage)
-                //Math.ceil()取最小整數
+                
             },
+
+             //取得該頁第一個值的index
             pageStart() {
-                return (this.currentPage - 1) * this.perpage
-                //取得該頁第一個值的index
+                return (this.currentPage - 1) * this.perpage      
             },
+
+            //取得該頁最後一個值的index
             pageEnd() {
                 return this.currentPage * this.perpage
-                //取得該頁最後一個值的index
-            }
-            //===========================================================分頁
+            },
+
         }
 
 }
@@ -206,11 +232,14 @@ export default {
                         <input type="checkbox" v-model="quiz.checkbox" @change="handleCheckboxChange(quiz.questionnaire.id)" @click="catchIndex(index)">
                     </td>
                     <td>{{ quiz.questionnaire.id }}</td>
-                    <td @click='goQuestion(index)' :key="index">{{ quiz.questionnaire.title }}</td>
-                    <td>{{ quiz.questionnaire.published }}</td>
+                    <td @click='editQuestion(index)' :key="index" >{{ quiz.questionnaire.title }} </td>
+                    <!-- <td @click='editQuestion(index)' :key="index" >{{ quiz.questionnaire.title }} </td> -->
+                    <td>{{ quiz.questionnaire.published?'已發佈':'未發佈' }}</td>
+                    <td v-if="quiz.questionnaire.startDate > nowDate && quiz.questionnaire.published==true">尚未開始</td>
+                    <td v-if="quiz.questionnaire.endDate < nowDate ">已結束</td>
                     <td>{{ quiz.questionnaire.startDate }}</td>
                     <td>{{ quiz.questionnaire.endDate }}</td>
-                    <td>觀看</td>
+                    <td @click="goResult">觀看</td>
                 </tr>
             </table>
         </div>
@@ -234,10 +263,6 @@ export default {
         </ul>
         <!-- ==========================================================================分頁 -->
 </div>
-<!-- <qnInsidePage
-    :qnIndex ="key" :qnArr="allQn"
-/> -->
-
 </template>
 
 <style lang="scss" scoped>
@@ -269,7 +294,6 @@ p{
 table{
     height: 100%;
     width: 100%;
-    text-align: left;
 }
 
 tr{
@@ -284,6 +308,7 @@ td{
     width: 15%;
     color: white;
     text-align: center;
+    font-size: 16pt;
 
 }
 
@@ -296,8 +321,11 @@ ul{
 
 
 .body{
-    width:100%;
-    height: 100vh;
+    padding: 2%;
+    width:90vw;
+    margin: 0 5%;
+    min-height: 100vh;
+    overflow-y: auto;
     .aa{
         width: 80%;
         margin: 0 10%;

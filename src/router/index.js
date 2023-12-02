@@ -164,12 +164,6 @@ const router = createRouter({
       component: () => import('../views/Questionnaire.vue') 
     },
     {
-      path: '/QuestionnaireInsidePage',
-      name: 'QuestionnaireInsidePage',
-      component: () => import('../components/QuestionnaireInsidePage.vue') 
-    },
-
-    {
       path: '/QuestionnaireCreate',
       name: 'QuestionnaireCreate',
       component: () => import('../components/QuestionnaireCreate.vue'),
@@ -185,7 +179,29 @@ const router = createRouter({
         },
       ]
     },
-    
+
+    {
+      path:'/QuestionnaireFront',
+      name: 'QuestionnaireFront',
+      component: () => import('../views/QuestionnaireFront.vue'),
+      props: true
+    }, 
+    {
+      path: '/QuestionnaireInsidePage',
+    name: 'QuestionnaireInsidePage',
+    component: () => import('../components/QuestionnaireInsidePage.vue') 
+    },
+    {
+      path: '/QuestionnaireEditPage',
+    name: 'QuestionnaireEditPage',
+    component: () => import('../components/QuestionnaireEditPage.vue') 
+    },
+
+    {
+      path: '/QuestionnaireFrontMakeSurePage',
+      name: 'QuestionnaireFrontMakeSurePage',
+      component: () => import('../components/QuestionnaireFrontMakeSurePage.vue') 
+    },
     {
       path: '/Test',
       name: 'Test',

@@ -8,37 +8,47 @@ export default{
         RouterLink,
         setQuestionPage,
         makeSurePage,
-
     },
 
     data(){
-        // ======================================預設startdate
+        // 預設startdate
         const currentDate = new Date();
         const formattedDate = currentDate.toISOString().split('T')[0];
-    // ======================================預設startdate
-    // ======================================預設enddate
+
+        //預設enddate
         const endDate = new Date(currentDate);
         endDate.setDate(endDate.getDate() + 7);
         const formattedEndDate = endDate.toISOString().split('T')[0];
-        // ======================================預設enddate
+
+         //預設enddate
         return{
-            QuestionaireTitle:"",
-            QuestionnaireDescription:"",
             published:false,
             startDate: formattedDate,
             endDate: formattedEndDate,
             page:1,
             Questionnaire:[],
             quList: [],
+            qnId:0,
+            qnTitle:"",
+            qnDescription:"",
         };
+    },
+
+    mounted(){
+        this.qnId  = this.$route.query.qnId;
+        this.qnTitle  = this.$route.query.qnTitle;
+        this.qnDescription  = this.$route.query.qnDescription;
+        this.startDate  = this.$route.query.startDate;
+        this.endDate  = this.$route.query.endDate;
     },
 
     methods:{
 
         next(){
             this.Questionnaire.push({
-                title: this.QuestionaireTitle,   
-                description: this.QuestionnaireDescription,
+                qnId:this.qnId,
+                title: this.qnTitle,   
+                description: this.qnDescription,
                 published:this.published,
                 startDate: this.startDate,
                 endDate: this.endDate
@@ -56,24 +66,27 @@ export default{
 
         back(x){
             this.page = x;
-        }
+        },
 
+        goSetQuestion(x){
+            this.page = x;
+        }
 
     },
 }
 </script>
 
 <template>
-<div class="body">
-    <div class="setQuestionnaire" v-if="page==1">
+<div class="body" v-if="page==1">
+    <div class="setQuestionnaire" >
         <div class="qnTile Box">
             <h2>問卷名稱</h2>
-            <input type="text" class="qnTileInputBox" v-model="QuestionaireTitle">
+            <input type="text" class="qnTileInputBox" v-model="qnTitle">
         </div>
 
         <div class="qnDesp Box">
             <h2>問卷說明</h2>
-            <input type="text" class="qnDesInputBox" v-model="QuestionnaireDescription">
+            <input type="text" class="qnDesInputBox" v-model="qnDescription">
         </div>
         <div class="date Box" >
             <h2>開始日期/結束日期</h2>
@@ -81,49 +94,54 @@ export default{
             <input type="date" id="endDate"  v-model="endDate">
         </div>   
         <div class="btnBox">
-            
             <button><RouterLink to="/Questionnaire">取消</RouterLink></button>
             <button @click="next">下一步</button>
-            
         </div>
     </div>
+</div>
 
-    <div v-else-if="page ==2">
+<div v-else-if="page ==2">
     <setQuestionPage
         @beta="getQuList"
         @daines="back"
     />
-    </div>
+</div>
 
-    <div v-else="this.page ==3">
+<div v-else="this.page ==3">
     <makeSurePage
     :alpha = "this.Questionnaire"
     :charli = "this.quList"
-
+    @goSetQuestion="goSetQuestion"
     />
-    </div>
 </div>
-
-
 
 </template>
 
 <style lang="scss" scoped>
+
+input{
+    margin: 0 1%s;
+}
+
 a{
     text-decoration: none;
 }
 
 h2{
-    margin: 0;
+    margin: 0 1%;
+    color: white;
 }
 
 button{
     margin: 0 1%;
 }
 .body{
+    padding: 2%;
     width: 100vw;
-    height: 100vh;
+    height: 98vh;
     background-color: green;
+    display: flex;
+    justify-content: center;
 
     .Box{
         display: flex;
@@ -135,7 +153,8 @@ button{
         height: 60%;
         border: 1px white solid;
         .qnDesInputBox{
-            height: 100px;
+            height: 40px;
+            width: 80%;
         }
     }
 }

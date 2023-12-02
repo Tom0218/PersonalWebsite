@@ -42,7 +42,7 @@ export default{
     .Btn{
         color: #ccf407;
         font-size: 16pt;
-        margin:  20px;
+        margin:  0 20px;
         text-decoration: none;
         text-align: center;
     }

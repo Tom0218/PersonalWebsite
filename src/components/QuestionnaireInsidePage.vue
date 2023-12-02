@@ -1,90 +1,232 @@
 <script>
-//import FmakeSurePage from '../components/QuestionnaireInsidePage.vue';
 
 export default{
-    components:{
-        //FmakeSurePage,
+
+data(){
+    return{
+        questionnaireId:0,
+        qnTitle:"",
+        qnDescription:"",
+        quList:[],
+        name:"",
+        phone:"",
+        email:"",
+        age:"",
+        selectedAnswers: {}, // 存放单选题答案的对象
+        selectedOptions: [], // 存放多选题选项的对象
+        shortAnswers: {}, // 存放短述题答案的对象
+        ansObj:{},  
+    }
+},
+
+mounted() {
+    this.questionnaireId = this.$route.query.qnId; //qnId
+    this.qnTitle = this.$route.query.qnTitle; //qntitle
+    this.qnDescription = this.$route.query.qnDescription;//qndescription
+    this.getQuestion(); // 內頁資料更新
+    this.name = this.$route.query.name;
+    this.email = this.$route.queryemail;
+    this.age = this.$route.queryage;
+    this.phone = this.$route.queryphone;
+    this.ansObj = this.$route.queryansObj;
+    this.questionnaireId = this.$route.queryqnId
     },
-    data(){
-        return{
-            page: 1,
-            data:{
-                name:"",
-                phone: "",
-                email: "",
-                age: "",
-                radioText: "",
+
+
+methods:{
+
+    //api獲取quList
+    getQuestion() {
+        console.log("fetch裡的qnId是:"+this.questionnaireId)
+        const url = 'http://localhost:8081/api/quiz/searchQuestionList';
+        const queryParams = new URLSearchParams({
+            qnId: this.questionnaireId
+        });
+        const urlWithParams = `${url}?${queryParams}`;
+
+        fetch(urlWithParams, {
+            method: 'GET',
+            headers: {
+                "Accept": "application/json", // 指定接受的回應類型
             },
+        })
+        .then(response => response.json())
+        .then(data => {
+            // 將 data 添加到 quList
+            this.quList = data.questionList;
+            console.log("下面是fetch的question")
+            console.log(this.quList);
+        })
+        .catch(error => console.error('Error:', error));
+    },
+
+    //router.push傳送答案陣列
+    send(){
+        this.ansObj = this.quList.reduce((result, question, index) => {
+        const answer = this.getAnswer(question, index);
+        result[question.quId] = {
+        qTitle: question.qTitle,
+        optionType: question.optionType,
+        quId: question.quId,
+        answer: answer,
+        };
+            return result;
+        }, {});
+        console.log(this.ansObj)
+
+      // 打印问题与答案字符串
+        this.$router.push({
+            name: 'QuestionnaireFrontMakeSurePage',
+            query: {
+            qnId:this.questionnaireId,
+            qnTitle:this.qnTitle,
+            qnDescription:this.qnDescription,
+            quList:this.quList,
+            name:this.name,
+            phone: this.phone,
+            email: this.email,
+            age: this.age,
+            ansObj:JSON.stringify(this.ansObj),
         }
+        })
     },
 
-    methods:{
-///////////////////////////////傳送後跳出確認視窗
-        send() {
-            this.page= 2;
-        },
-///////////////////////////////傳送後跳出確認視窗
-        getedit(x) {
-            this.page = 1
-            x = this.data
-        },
+    //上一頁
+    goback(){
+        this.$router.push({
+            name: 'QuestionnaireFront',
+        })
     },
 
-    props:[
-            "qnIndex",
-            "qnArr"
-        ]
+    //答案物件測試
+    displayResults() {
+    const resultsObject = this.quList.reduce((result, question, index) => {
+        const answer = this.getAnswer(question, index);
+        result[question.quId] = {
+        qTitle: question.qTitle,
+        optionType: question.optionType,
+        quId: question.quId,
+        answer: answer,
+        };
+        return result;
+    }, {});
+
+    // 输出结果对象
+    console.log(resultsObject);
+    },
+
+    //答案物件測試
+    getAnswer(question, index) {
+    switch (question.optionType) {
+        case '單選題':
+        return this.selectedAnswers[question.quId] || '';
+        case '多選題':
+        return this.selectedOptions
+        case '短述題':
+        return this.shortAnswers[question.quId] || '';
+        default:
+        return '';
+    }
+    },
+},
+    
+
+
 }
-</script>
 
+</script>
 
 <template>
 <div class="body">
     <div class="mainArea">
-        <h1 class="flicker">青春洋溢高中生人氣投票站</h1>
-        <div >
-            <div class="textArea"><p>投給你最喜歡的高中生，為她加油打氣，一人一票，本票所秉持公平公正公開三大原則</p>
+        <h3 class="flicker">{{this.qnTitle}}</h3>
+        <div>
+            <div class="textArea">
+                <p> {{ this.qnDescription }}</p>
             </div>
             <div>
-                <div class="d-flex align-middle">
-                    <p>姓名</p>
-                    <input type="text " v-model="data.name">
+                <div class="d-flex">
+                    <div class="d-flex align-middle">
+                        <p>姓名</p>
+                        <input type="text " v-model="name">
+                    </div>
+                    <div class="d-flex align-middle">
+                        <p>手機</p>
+                        <input type="text" v-model="phone">
+                    </div>
+                    <div class="d-flex align-middle">
+                        <p>信箱</p>
+                        <input type="text" v-model="email">
+                    </div>
+                    <div class="d-flex align-middle">
+                        <p>年齡</p>
+                        <input type="number" v-model="age">
+                    </div>
                 </div>
-                <div class="d-flex align-middle">
-                    <p>手機</p>
-                    <input type="text" v-model="data.phone" >
-                </div>
-                <div class="d-flex align-middle">
-                    <p>信箱</p>
-                    <input type="text " v-model="data.email">
-                </div>
-                <div class="d-flex align-middle">
-                    <p>年齡</p>
-                    <input type="number"  v-model="data.age" >
-                </div>
-                
+            
+                <div class="questionArea">
+    <div class="questiontitle" v-for="(question, index) in quList" :key="index">
+        <p>{{ question.quId }}</p>
+        <p>{{ question.qTitle }}</p>
+        <p>({{ question.optionType }})</p>
+        <div class="inputbox" v-if="question.optionType === '單選題'">
+            <div v-for="(option, index) in question.option.split(';')" :key="index">
+            <div class="option">
+                <input type="radio" :name="'answer_' + question.quId" v-model="selectedAnswers[question.quId]" :value="option">
+                <p>{{ option }}</p>
             </div>
-            <div class="questionArr">
-                {{ qnArr }}
-            </div>    
-        </div>
-
-        <div class="popup" v-if="this.page===2">
-            <div>
-                <!-- <FmakeSurePage
-                    :makeSure = data
-                @edit = getedit
-                /> -->
             </div>
         </div>
-</div>
+        <div class="inputbox" v-if="question.optionType === '多選題'">
+    <div v-for="option in question.option.split(';')" :key="option">
+        <div class="option">
+        <input type="checkbox" v-model="selectedOptions" :value="option">
+        <p>{{ option }}</p>
+        </div>
+    </div>
+    </div>
+        <div class="inputbox" v-if="question.optionType === '短述題'">
+            <input id="shortans" type="text" v-model="shortAnswers[question.quId]">
+        </div>
+        </div>
+        <!-- 显示问题与答案字符串 -->
+        <!-- <button @click="displayResults">显示问题与答案字符串</button> -->
+    </div>
+            </div> 
+            <div>             
+            <button @click="goback">cancel</button>
+            <button @click="send">send</button> 
+            </div>
+        </div>
+    </div>
 </div>
 
 </template>
 
 <style lang="scss" scoped>
-h1{
-    text-align: center;
+
+#shortans{
+    width: 200px;
+}
+
+.questiontitle{
+    display: flex;
+    margin: 10px;
+}
+
+input{
+    margin: 0 10px;
+    // width: 100%;
+}
+
+.inputbox{
+    display: flex;
+}
+
+.option{
+    width: 100%;
+    display: flex;
+    margin: 0 10px;
 }
 
 p{
@@ -92,14 +234,6 @@ p{
     margin: 0;
     margin-right: 1%;
     font-weight: bold;
-    color: white;
-    text-align: center;
-}
-
-label{
-    font-weight: bold;
-    font-size: 16pt;
-    margin-left: 1%;
     color: white;
 }
 
@@ -112,9 +246,7 @@ button{
     
 }
 
-div{
-    margin: 1% 0;
-}
+
 /////////////////////////////////////////////////////////////隱藏type=nunber的箭頭
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
@@ -123,14 +255,14 @@ input[type=number]::-webkit-inner-spin-button {
 }
 ////////////////////////////////////////////////////////////
 .body{
-    width: 100%;
-    height: 100%;
+    width: 70vw;
+    margin: 0 15%;
+    min-height: 100vh;
+    overflow-y: auto;
     border: 1px solid black;
-    background-color: purple;
+    background-color: green;
     display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
+    padding: 2%;
 
     .textArea{
         background-color: rgb(199, 0, 199);
@@ -156,9 +288,9 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .mainArea{
-    width: 70%;
-    margin: 15%;
-    height: 90%;
+    width: 100%;
+    // margin:0 15%;
+    height: 100%;
 }
 .d-flex input {
     vertical-align: middle;
