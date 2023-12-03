@@ -24,6 +24,7 @@ export default{
         console.log("endDate:"+this.questionnaire[0].endDate)
         console.log("pusblished"+this.questionnaire[0].published)
         console.log(this.quList)
+        console.log(this.questionnaire)
         
     },
 
@@ -81,17 +82,14 @@ export default{
                 };
 
             //create not publish
-            if(this.questionnaire[0].qnId == -1){
-
                 var url = "http://localhost:8081/api/quiz/create";
                 var Qn = {
                 "questionnaire": {
-                    "id":this.qnId,
-                    "title": this.title,
-                    "description":this.description,
-                    "published":this.published,
-                    "startDate": this.startDate,
-                    "endDate": this.endDate
+                    "title": this.questionnaire[0].title,
+                    "description":this.questionnaire[0].description,
+                    "published":Boolean(this.questionnaire[0].published),
+                    "startDate": this.questionnaire[0].startDate,
+                    "endDate": this.questionnaire[0].endDate
                 },
                 "question_list": []
                 };   
@@ -99,14 +97,13 @@ export default{
                 for (let i = 0; i < this.quList.length; i++) {
                     Qn.question_list.push({
                     "quId": questionList[i].quId,
-                    "qTitle": questionList[i].qtitle,
-                    "optionType": questionList[i].qOptionType,
+                    "qTitle": questionList[i].qTitle,
+                    "optionType": questionList[i].optionType,
                     "necessary": questionList[i].necessary,
-                    "option": questionList[i].qOption
+                    "option": questionList[i].option
                     });
                 }
                 console.log(Qn)
-                console.log(question_list)
                 fetch(url, {
                     method: "POST",
                     body: JSON.stringify(Qn),
@@ -116,63 +113,55 @@ export default{
                 })
                 .then((res) => res.json())
                 .then((response) => {
-                    console.log("Success:",response);
+                    console.log(response);
+                    alert(response.rtncode)
                     // 在成功完成 API 請求後執行 fetchData()
                 })
                 .catch((error) => console.error("Error:", error));
-            }
-             //create not publish    
-                
+            
         },
 
+        //存DB且發佈
         saveAndpub(){
-            var qn = this.questionnaire;
             var questionList = this.quList;
-
-            qn.forEach(item=>{
-                if(item == null){
-                    alert("內容不得為空");
-                    return
-                }
-            });
-
+            //create not publish
             var url = "http://localhost:8081/api/quiz/create";
-
-        var Qn = {
-        "questionnaire": {
-            "title": qn[0].title,
-            "description":qn[0].description,
-            "published": true,
-            "startDate":  qn[0].startDate,
-            "endDate": qn[0].endDate
-        },
-        "question_list": []   
-        };
-
-        for (let i = 0; i < this.quList.length; i++) {
-            Qn.question_list.push({
-            "quId": questionList[i].quId,
-            "qTitle": questionList[i].qtitle,
-            "optionType": questionList[i].qOptionType,
-            "necessary": questionList[i].necessary,
-            "option": questionList[i].qOption
-            });
+                var Qn = {
+                "questionnaire": {
+                    "title": this.questionnaire[0].title,
+                    "description":this.questionnaire[0].description,
+                    "published":true,
+                    "startDate": this.questionnaire[0].startDate,
+                    "endDate": this.questionnaire[0].endDate
+                },
+                "question_list": []
+                };   
+                        
+                for (let i = 0; i < this.quList.length; i++) {
+                    Qn.question_list.push({
+                    "quId": questionList[i].quId,
+                    "qTitle": questionList[i].qTitle,
+                    "optionType": questionList[i].optionType,
+                    "necessary": questionList[i].necessary,
+                    "option": questionList[i].option
+                    });
+                }
+                console.log(Qn)
+                fetch(url, {
+                    method: "POST",
+                    body: JSON.stringify(Qn),
+                    headers: new Headers({
+                    "Content-Type": "application/json",
+                    }),
+                })
+                .then((res) => res.json())
+                .then((response) => {
+                    console.log(response);
+                    alert(response.rtncode)
+                    // 在成功完成 API 請求後執行 fetchData()
+                })
+                .catch((error) => console.error("Error:", error));
         }
-        fetch(url, {
-            method: "POST",
-            body: JSON.stringify(Qn),
-            headers: new Headers({
-            "Content-Type": "application/json",
-            }),
-        })
-        .then((res) => res.json())
-        .then((response) => {
-            console.log("Success:",response);
-            // 在成功完成 API 請求後執行 fetchData()
-        })
-        .catch((error) => console.error("Error:", error));
-        }
-
     }
 }
 </script>
@@ -225,7 +214,7 @@ export default{
             <!-- <button type="button" @click="$emit('goSetQuestion',1)">上一頁</button> -->
             <!-- <button @click="goHome">回首頁</button> -->
             <button type="button" @click="save">儲存</button>
-            <!-- <button type="button" @click="saveAndpub">儲存並發布</button> -->
+            <button type="button" @click="saveAndpub">儲存並發布</button>
     </div>
     </div>
 

@@ -11,24 +11,25 @@ export default{
     },
 
     data(){
-        // 預設startdate
         const currentDate = new Date();
-        const formattedDate = currentDate.toISOString().split('T')[0];
+        const startDate = new Date(currentDate);
+        startDate.setDate(startDate.getDate() + 2);
+        const formattedStartDate = startDate.toISOString().split('T')[0];
 
-        //預設enddate
-        const endDate = new Date(currentDate);
+        // 預設enddate
+        const endDate = new Date(startDate);
         endDate.setDate(endDate.getDate() + 7);
         const formattedEndDate = endDate.toISOString().split('T')[0];
 
-         //預設enddate
+
         return{
             published:false,
-            startDate: formattedDate,
+            startDate: formattedStartDate,
             endDate: formattedEndDate,
             page:1,
             Questionnaire:[],
             quList: [],
-            qnId:0,
+            qnId:-1,
             qnTitle:"",
             qnDescription:"",
         };
@@ -36,11 +37,13 @@ export default{
 
     mounted(){
         this.qnId = this.$route.query.qnId;
-        this.qnTitle = this.$route.query.title;
-        this.qnDescription = this.$route.query.description;
-        this.startDate = this.$route.query.startDate;
-        this.endDate = this.$route.query.endDate;
-        this.published = this.$route.query.published;
+        if(this.qnId >-1){
+            this.qnTitle = this.$route.query.title;
+            this.qnDescription = this.$route.query.description;
+            this.startDate = this.$route.query.startDate;
+            this.endDate = this.$route.query.endDate;
+            this.published = this.$route.query.published;
+        }
         // console.log("qnId:"+this.qnId);
         // console.log("title:"+this.$route.query.title);
         // console.log("description:"+this.qnDescription);
@@ -50,6 +53,11 @@ export default{
     },
 
     methods:{
+
+        //問題設置的上一頁
+        goBack(x){
+            this.page = x;
+        },
 
         next(){
             if(this.qnId > -1){        
@@ -74,7 +82,6 @@ export default{
                 })
                 this.page = 2 ;
                 console.log(this.Questionnaire);
-                console.log(this.startDate)
                 return
         },
 
@@ -124,13 +131,12 @@ export default{
 <div v-else-if="page ==2">
     <setQuestionPage
         :questionnaire="this.Questionnaire"
+        @daines="goBack"
     />
 </div>
 
 <div v-else="this.page ==3">
     <makeSurePage
-    :alpha = "this.Questionnaire"
-    :charli = "this.quList"
     @goSetQuestion="goSetQuestion"
     />
 </div>

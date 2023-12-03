@@ -33,8 +33,11 @@ export default{
     ],
 
     mounted(){
-        this.getQuestion()
-        console.log(this.questionnaire)
+        //判定是否為編輯模式
+        if(this.questionnaire[0].qnId > -1){
+            this.getQuestion()
+        }
+        // console.log(this.questionnaire)
         // console.log(this.questionnaire[0].qnId)
         // console.log("title:"+this.title)
         // console.log("description:"+this.description)
@@ -89,6 +92,7 @@ export default{
                 this.addbutton = "新增";
                 alert("修改模式編輯成功");
                 console.log(this.questionList)
+                this.qnId = -1;
                 return
             }   
 
@@ -103,6 +107,7 @@ export default{
                     necessary:this.necessary,
                     option:this.questionOption,
                 });
+                this.qnId = -1;
                 this.question = "";
                 this.optionType = "";
                 this.necessary = false;
@@ -112,7 +117,7 @@ export default{
             }
 
              //新增模式編輯
-            if( this.addbutton == "編輯" &&this.questionnaire[0].qnId == -1){
+            if( this.addbutton == "編輯"){
                 console.log("問卷索引值:"+this.key)
                 this.questionList[this.key].quId = this.quId
                 this.questionList[this.key].qTitle = this.question;
@@ -121,11 +126,24 @@ export default{
                 this.questionList[this.key].option = this.questionOption;
                 this.addbutton = "新增";
                 alert("新增模式編輯成功");
+                this.qnId = -1;
+                this.question = "";
+                this.optionType = "";
+                this.necessary = false;
+                this.questionOption = "";
                 console.log(this.questionList)
                 return
             }
             //新增模式新增
-            if(this.addbutton == "新增" &&this.questionnaire[0].qnId == -1){
+            if(this.addbutton == "新增"){
+                // this.quId=this.questionList.length+1;
+                // this.questionList.push({
+                //     quId:this.quId,
+                //     qTitle:this.question,
+                //     optionType:this.optionType,
+                //     necessary:this.necessary,
+                //     option:this.questionOption,
+
                 this.quId=this.questionList.length+1;
                 this.questionList.push({
                     quId:this.quId,
@@ -134,6 +152,7 @@ export default{
                     necessary:this.necessary,
                     option:this.questionOption,
                 });
+                this.qnId = -1;
                 this.question = "";
                 this.optionType = "";
                 this.necessary = false;
@@ -161,6 +180,7 @@ export default{
             this.selectedIndexes.forEach(item => {
                 this.questionList.splice(item,1);
             });
+            console.log(this.questionList)
         },
 
         //quindex
@@ -235,10 +255,8 @@ export default{
             </div>
         </div>
         <div class="btnBox">
-            <button @click="getQuestion">test</button>
             <button @click="$emit('daines',1)">上一步</button>
-            <button @click="$emit('beta',this.questionList,3)">送出</button>
-            <button @click="goMakesurePage">props送出</button>
+            <button @click="goMakesurePage">送出</button>
         </div>
     </div>
     </div>

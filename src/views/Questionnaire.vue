@@ -140,11 +140,9 @@ export default {
             console.log(this.nowDate > 2023-12-3)
         },
 
+        //獲取当前日期
         isPublished() {
-                    // 获取当前日期
-                        this.nowDate = new Date().toISOString().split('T')[0];
-                        
-            //检查当前日期是否大于或等于发布日期
+            this.nowDate = new Date().toISOString().split('T')[0];   
         },
 
         //edit Question
@@ -156,7 +154,7 @@ export default {
             this.startDate =  this.allQn[pageIndex].questionnaire.startDate;
             this.endDate = this.allQn[pageIndex].questionnaire.endDate;
             this.published=this.allQn[pageIndex].questionnaire.published;
-            // console.log("qnId:"+this.qnId)
+            console.log("qnId:"+this.qnId)
             // console.log("title:"+this.title)
             // console.log("description:"+this.description)
             // console.log("startDate:"+this.startDate)
@@ -199,7 +197,6 @@ export default {
             },
 
         }
-
 }
 
 </script>
