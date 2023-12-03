@@ -35,26 +35,47 @@ export default{
     },
 
     mounted(){
-        this.qnId  = this.$route.query.qnId;
-        this.qnTitle  = this.$route.query.qnTitle;
-        this.qnDescription  = this.$route.query.qnDescription;
-        this.startDate  = this.$route.query.startDate;
-        this.endDate  = this.$route.query.endDate;
+        this.qnId = this.$route.query.qnId;
+        this.qnTitle = this.$route.query.title;
+        this.qnDescription = this.$route.query.description;
+        this.startDate = this.$route.query.startDate;
+        this.endDate = this.$route.query.endDate;
+        this.published = this.$route.query.published;
+        // console.log("qnId:"+this.qnId);
+        // console.log("title:"+this.$route.query.title);
+        // console.log("description:"+this.qnDescription);
+        // console.log("startDate:"+this.startDate);
+        // console.log("endDate:"+this.endDate);
+        // console.log("published"+this.published);
     },
 
     methods:{
 
         next(){
+            if(this.qnId > -1){        
+                this.Questionnaire.push({
+                    qnId:this.qnId,
+                    title: this.qnTitle,   
+                    description: this.qnDescription,
+                    published:this.published,
+                    endDate: this.endDate,
+                    startDate: this.startDate,
+                })
+                console.log(this.Questionnaire);
+                this.page = 2 ;
+                return
+            }
             this.Questionnaire.push({
-                qnId:this.qnId,
-                title: this.qnTitle,   
-                description: this.qnDescription,
-                published:this.published,
-                startDate: this.startDate,
-                endDate: this.endDate
-            })
-            this.page = 2 ;
-            console.log(this.Questionnaire);
+                    title: this.qnTitle,   
+                    description: this.qnDescription,
+                    published:this.published,
+                    startDate: this.startDate,
+                    endDate: this.endDate
+                })
+                this.page = 2 ;
+                console.log(this.Questionnaire);
+                console.log(this.startDate)
+                return
         },
 
         getQuList(x,y){
@@ -102,8 +123,7 @@ export default{
 
 <div v-else-if="page ==2">
     <setQuestionPage
-        @beta="getQuList"
-        @daines="back"
+        :questionnaire="this.Questionnaire"
     />
 </div>
 
@@ -138,7 +158,8 @@ button{
 .body{
     padding: 2%;
     width: 100vw;
-    height: 98vh;
+    min-height: 100vh;
+    overflow-y: auto;
     background-color: green;
     display: flex;
     justify-content: center;

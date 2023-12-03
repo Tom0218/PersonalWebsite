@@ -9,8 +9,15 @@ export default{
 
     data(){
         return{
+            page : 1,
             key : 0, //索引值
-            qId:0,
+            qnId:-1, //若大於-1表示為編輯模式
+            title:"",
+            description:"",
+            published:false,
+            startDate:"",
+            endDate:"",
+            quId:0,
             question:"",
             optionType:"",
             necessary:false,
@@ -20,45 +27,131 @@ export default{
             selectedIndexes:[],
         }
     },
+
+    props:[
+        'questionnaire'
+    ],
+
+    mounted(){
+        this.getQuestion()
+        console.log(this.questionnaire)
+        // console.log(this.questionnaire[0].qnId)
+        // console.log("title:"+this.title)
+        // console.log("description:"+this.description)
+        // console.log("startDate:"+this.startDate)
+        // console.log("endDate:"+this.endDate)
+        // console.log("pusblished"+this.published)
+    },
+
     methods:{
+        goMakesurePage(){
+            this.page=2;
+        },
+
+         //api獲取quList
+        getQuestion() {
+                console.log("fetch裡的qnId是:"+this.questionnaire[0].qnId)
+                const url = 'http://localhost:8081/api/quiz/searchQuestionList';
+                const queryParams = new URLSearchParams({
+                    qnId: this.questionnaire[0].qnId
+                });
+                const urlWithParams = `${url}?${queryParams}`;
+    
+                fetch(urlWithParams, {
+                    method: 'GET',
+                    headers: {
+                        "Accept": "application/json", // 指定接受的回應類型
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    //將 data 添加到 quList
+                    // console.log(data)
+                    this.questionList = data.questionList;
+                    console.log("下面是fetch的question")
+                    console.log( this.questionList);
+                })
+                .catch(error => console.error('Error:', error));
+            
+        },
+
         // add n edit
         addQuetion(){
-            if( this.addbutton == "編輯"){
+            //修改模式編輯
+            if( this.addbutton == "編輯" &&this.questionnaire[0].qnId > -1){
                 console.log("問卷索引值:"+this.key)
-                this.questionList[this.key].quId = this.qId
-                this.questionList[this.key].qtitle = this.question;
-                this.questionList[this.key].qOptionType = this.optionType;
+                this.questionList[this.key].quId = this.quId
+                this.questionList[this.key].qnId = parseInt(this.questionnaire[0].qnId)
+                this.questionList[this.key].qTitle = this.question;
+                this.questionList[this.key].optionType = this.optionType;
                 this.questionList[this.key].necessary = this.necessary;
-                this.questionList[this.key].qOption = this.questionOption;
+                this.questionList[this.key].option = this.questionOption;
                 this.addbutton = "新增";
-                alert("修改成功");
+                alert("修改模式編輯成功");
+                console.log(this.questionList)
+                return
+            }   
+
+            //修改模式新增
+            if(this.addbutton == "新增"&& this.questionnaire[0].qnId > -1){
+                this.quId=this.questionList.length+1;
+                this.questionList.push({
+                    quId:this.quId,
+                    qnId:parseInt(this.questionnaire[0].qnId),
+                    qTitle:this.question,
+                    optionType:this.optionType,
+                    necessary:this.necessary,
+                    option:this.questionOption,
+                });
+                this.question = "";
+                this.optionType = "";
+                this.necessary = false;
+                this.questionOption = "";
+                alert("修改模式新增成功");
+                return
+            }
+
+             //新增模式編輯
+            if( this.addbutton == "編輯" &&this.questionnaire[0].qnId == -1){
+                console.log("問卷索引值:"+this.key)
+                this.questionList[this.key].quId = this.quId
+                this.questionList[this.key].qTitle = this.question;
+                this.questionList[this.key].optionType = this.optionType;
+                this.questionList[this.key].necessary = this.necessary;
+                this.questionList[this.key].option = this.questionOption;
+                this.addbutton = "新增";
+                alert("新增模式編輯成功");
                 console.log(this.questionList)
                 return
             }
-            this.addbutton = "新增";
-            this.qId+=1;
-            this.questionList.push({
-                quId:this.qId,
-                qtitle:this.question,
-                qOptionType:this.optionType,
-                necessary:this.necessary,
-                qOption:this.questionOption,
-            });
-            this.question = "";
-            this.optionType = "";
-            this.necessary = false;
-            this.questionOption = "";
-            console.log(this.questionList)
+            //新增模式新增
+            if(this.addbutton == "新增" &&this.questionnaire[0].qnId == -1){
+                this.quId=this.questionList.length+1;
+                this.questionList.push({
+                    quId:this.quId,
+                    qTitle:this.question,
+                    optionType:this.optionType,
+                    necessary:this.necessary,
+                    option:this.questionOption,
+                });
+                this.question = "";
+                this.optionType = "";
+                this.necessary = false;
+                this.questionOption = "";
+                console.log(this.questionList)
+                alert("新增模式新增成功");
+            }
         },
 
         //Edit
         eidt(index){
             this.addbutton = "編輯"
-            this.qId = this.questionList[index].quId;
-            this.question = this.questionList[index].qtitle;
-            this.optionType = this.questionList[index].qOptionType;
+            this.quId = this.questionList[index].quId;
+            this.qnId = parseInt(this.questionnaire[0].qnId)
+            this.question = this.questionList[index].qTitle;
+            this.optionType = this.questionList[index].optionType;
             this.necessary = this.questionList[index].necessary;
-            this.questionOption = this.questionList[index].qOption;
+            this.questionOption = this.questionList[index].option;
             this.key = index
             console.log("問卷索引值:"+index)
         },
@@ -90,7 +183,7 @@ export default{
 </script>
 
 <template>
-    <div class="body">
+    <div class="body" v-if="page==1">
     <div class="mainArea">
         <div class="setQuestion">
             <div class="question Box">
@@ -129,8 +222,8 @@ export default{
                         <input type="checkbox" v-model="item.checkbox" :key="index" @change="handleCheckboxChange(index)">
                         </td>
                         <td>{{ item.quId }}</td>
-                        <td>{{ item.qtitle }}</td>
-                        <td>{{ item.qOptionType }}</td>
+                        <td>{{ item.qTitle }}</td>
+                        <td>{{ item.optionType }}</td>
                         <td>
                             <input type="checkbox" v-model="item.necessary  ">
                         </td>
@@ -142,10 +235,18 @@ export default{
             </div>
         </div>
         <div class="btnBox">
+            <button @click="getQuestion">test</button>
             <button @click="$emit('daines',1)">上一步</button>
             <button @click="$emit('beta',this.questionList,3)">送出</button>
+            <button @click="goMakesurePage">props送出</button>
         </div>
     </div>
+    </div>
+    <div v-else-if="page==2">
+        <makeSurePage
+            :quList="this.questionList"
+            :questionnaire="this.questionnaire"
+        />
     </div>
 </template>
 <style lang="scss" scoped>
@@ -189,7 +290,8 @@ table{
 }
 .body{
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
+    overflow-y: auto;
     background-color: green;
     .Box{
         display: flex;

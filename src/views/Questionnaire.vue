@@ -14,6 +14,7 @@ export default {
             qnDescription:"",
             startDate:"",
             endDate:"",
+            published:false,
             key:"", //index
             datas:this.allQn,//要呈現的資料
             perpage: 10, //一頁的資料數
@@ -150,18 +151,26 @@ export default {
         editQuestion(index){
             var pageIndex = ((this.currentPage-1)*this.perpage+index); 
             this.qnId = this.allQn[pageIndex].questionnaire.id;
-            this.qnTitle =  this.allQn[pageIndex].questionnaire.title;
-            this.qnDescription =  this.allQn[pageIndex].questionnaire.description;
+            this.title =  this.allQn[pageIndex].questionnaire.title;
+            this.description =  this.allQn[pageIndex].questionnaire.description;
             this.startDate =  this.allQn[pageIndex].questionnaire.startDate;
             this.endDate = this.allQn[pageIndex].questionnaire.endDate;
+            this.published=this.allQn[pageIndex].questionnaire.published;
+            // console.log("qnId:"+this.qnId)
+            // console.log("title:"+this.title)
+            // console.log("description:"+this.description)
+            // console.log("startDate:"+this.startDate)
+            // console.log("endDate:"+this.endDate)
+            // console.log("pusblished:"+this.published)
             this.$router.push({
             name: 'QuestionnaireCreate',
             query: {
                 qnId:this.qnId,
-                qnTitle:this.qnTitle,
-                qnDescription:this.qnDescription,
+                title:this.title,
+                description:this.description,
                 startDate:this.startDate,
-                endDate:this.endDate
+                endDate:this.endDate,
+                published:this.published
             }
             });
         }
@@ -232,14 +241,11 @@ export default {
                         <input type="checkbox" v-model="quiz.checkbox" @change="handleCheckboxChange(quiz.questionnaire.id)" @click="catchIndex(index)">
                     </td>
                     <td>{{ quiz.questionnaire.id }}</td>
-                    <td @click='editQuestion(index)' :key="index" >{{ quiz.questionnaire.title }} </td>
-                    <!-- <td @click='editQuestion(index)' :key="index" >{{ quiz.questionnaire.title }} </td> -->
+                    <td @click='editQuestion(index)' :key="index">{{ quiz.questionnaire.title }} </td>
                     <td>{{ quiz.questionnaire.published?'已發佈':'未發佈' }}</td>
-                    <td v-if="quiz.questionnaire.startDate > nowDate && quiz.questionnaire.published==true">尚未開始</td>
-                    <td v-if="quiz.questionnaire.endDate < nowDate ">已結束</td>
                     <td>{{ quiz.questionnaire.startDate }}</td>
                     <td>{{ quiz.questionnaire.endDate }}</td>
-                    <td @click="goResult">觀看</td>
+                    <td>觀看</td>
                 </tr>
             </table>
         </div>
