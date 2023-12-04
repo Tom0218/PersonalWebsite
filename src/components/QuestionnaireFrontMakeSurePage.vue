@@ -1,6 +1,7 @@
 <script>
 
 export default{
+    
     data(){
         return{
             name:"",
@@ -17,6 +18,7 @@ export default{
     },
 
     mounted(){
+        this.getanswer();
         this.name = this.$route.query.name;
         this.phone = this.$route.query.phone;
         this.email = this.$route.query.email;
@@ -32,6 +34,25 @@ export default{
     },
 
     methods:{
+        //session
+        getanswer(){
+            fetch('http://localhost:8081/api/quiz/getAnswer', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 处理成功响应
+                console.log(data);
+            })
+            .catch(error => {
+                // 处理错误
+                console.error('Error:', error);
+            });
+        },
+
         Back(){
             this.$router.push({
                 name:'QuestionnaireInsidePage',
@@ -44,6 +65,11 @@ export default{
                     qnId: this.qnId
                 }
             })
+            console.log(this.name)
+            console.log(this.phone)
+            console.log(this.age)
+            console.log(this.ansObj)
+            console.log(this.qnId)
         }
     }
 }
@@ -70,24 +96,24 @@ export default{
                     <p>年齡 : {{ this.age }}</p> 
                 </div>
             </div>
-            <div v-for="item in ansObj">
+            <div class="box" v-for="item in ansObj">
                 <div class="box">
                     <p>{{ item.quId }}.</p>
                     <p>{{ item.qTitle }}</p>
                 </div>
                 
-                <div v-if="item.optionType == '單選題'">
+                <div class="box">
                     <p>{{ item.answer }}</p>
                 </div>
 
-                <div v-for="answer in item.answer" v-if="item.optionType == '多選題'">
+                <!-- <div v-for="answer in item.answer" v-if="item.optionType == '多選題'">
                     <div class="box">
-                        <p>{{ answer }}</p>
+                        <p>{{answer }}</p>
                     </div>
                 </div>
                 <div v-if="item.optionType =='短述題'">
-                    <p>{{ item.answer }}</p>
-                </div>
+                    <p>{{ answer }}</p>
+                </div> -->
             </div>
             <button type="button"  @click="Back"><p>修改</p></button>
             <button type="button"><p>送出</p></button>
@@ -125,6 +151,7 @@ p{
     font-size: 16pt;
     font-weight: bold;
     color: white;
+    margin: 20px;
 
 }
 .body{

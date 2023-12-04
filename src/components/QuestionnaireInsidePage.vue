@@ -3,6 +3,10 @@
 export default{
 
 data(){
+        const currentDate = new Date();
+        const startDate = new Date(currentDate);
+        startDate.setDate(startDate.getDate());
+        const formattedStartDate = startDate.toISOString().split('T')[0];
     return{
         questionnaireId:0,
         qnTitle:"",
@@ -12,10 +16,11 @@ data(){
         phone:"",
         email:"",
         age:"",
-        selectedAnswers: {}, // 存放单选题答案的对象
-        selectedOptions: [], // 存放多选题选项的对象
-        shortAnswers: {}, // 存放短述题答案的对象
-        ansObj:{},  
+        quList: [/* your question list here */],
+        selectedAnswers: {}, // Object to store selected answers for single-choice questions
+        selectedOptions: {}, // Object to store selected options for multiple-choice questions
+        shortAnswers: {}, // Object to store short answers
+        dateTime:this.formattedStartDate
     }
 },
 
@@ -26,14 +31,60 @@ mounted() {
     this.getQuestion(); // 內頁資料更新
     this.name = this.$route.query.name;
     this.email = this.$route.queryemail;
-    this.age = this.$route.queryage;
-    this.phone = this.$route.queryphone;
-    this.ansObj = this.$route.queryansObj;
-    this.questionnaireId = this.$route.queryqnId
+    this.age = this.$route.query.age;
+    this.phone = this.$route.query.phone;
+    this.ansObj = this.$route.query.ansObj;
+    this.questionnaireId = this.$route.query.qnId
     },
 
 
 methods:{
+
+    sendd(){
+        const userAnswer = {
+        name: "mark",
+        email: "mark@123",
+        phone: this.phone,
+        age: this.age,
+        qId: 1,
+        qnId: this.questionnaireId,
+        answer: "123",
+        dateTime: this.dateTime
+    };
+
+    // 发起HTTP POST请求
+    fetch('http://localhost:8081/api/quiz/setAnswer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userAnswer)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        // 处理成功响应
+    })
+    .catch(error => {
+        // 处理错误
+        console.error('Error:', error);
+    });
+    this.$router.push({
+            name: 'QuestionnaireFrontMakeSurePage',
+            query: {
+            qnId:this.questionnaireId,
+            qnTitle:this.qnTitle,
+            qnDescription:this.qnDescription,
+            quList:this.quList,
+            name:this.name,
+            phone: this.phone,
+            email: this.email,
+            age: this.age,
+            ansObj:JSON.stringify(this.ansObj),
+        }
+        })
+
+    },
 
     //api獲取quList
     getQuestion() {
@@ -164,39 +215,37 @@ methods:{
                     </div>
                 </div>
             
-                <div class="questionArea">
+                <div>
     <div class="questiontitle" v-for="(question, index) in quList" :key="index">
-        <p>{{ question.quId }}</p>
-        <p>{{ question.qTitle }}</p>
-        <p>({{ question.optionType }})</p>
-        <div class="inputbox" v-if="question.optionType === '單選題'">
-            <div v-for="(option, index) in question.option.split(';')" :key="index">
-            <div class="option">
-                <input type="radio" :name="'answer_' + question.quId" v-model="selectedAnswers[question.quId]" :value="option">
-                <p>{{ option }}</p>
-            </div>
-            </div>
+      <p>{{ question.quId }}</p>
+      <p>{{ question.qTitle }}</p>
+      <p>({{ question.optionType }})</p>
+      <div class="inputbox" v-if="question.optionType === '單選題'">
+        <div v-for="(option, index) in question.option.split(';')" :key="index">
+          <div class="option">
+            <input type="radio" :name="'answer_' + question.quId" v-model="selectedAnswers[question.quId]" :value="option">
+            <p>{{ option }}</p>
+          </div>
         </div>
-        <div class="inputbox" v-if="question.optionType === '多選題'">
-    <div v-for="option in question.option.split(';')" :key="option">
-        <div class="option">
-        <input type="checkbox" v-model="selectedOptions" :value="option">
-        <p>{{ option }}</p>
+      </div>
+      <div class="inputbox" v-if="question.optionType === '多選題'">
+        <div v-for="option in question.option.split(';')" :key="option">
+          <div class="option">
+            <input type="checkbox" v-model="selectedOptions[question.quId]" :value="option">
+            <p>{{ option }}</p>
+          </div>
         </div>
+      </div>
+      <div class="inputbox" v-if="question.optionType === '短述題'">
+        <input id="shortans" type="text" v-model="shortAnswers[question.quId]">
+      </div>
     </div>
+    <div>
+      <button @click="goback">cancel</button>
+      <button @click="sendd">send</button>
     </div>
-        <div class="inputbox" v-if="question.optionType === '短述題'">
-            <input id="shortans" type="text" v-model="shortAnswers[question.quId]">
-        </div>
-        </div>
-        <!-- 显示问题与答案字符串 -->
-        <!-- <button @click="displayResults">显示问题与答案字符串</button> -->
-    </div>
+  </div>
             </div> 
-            <div>             
-            <button @click="goback">cancel</button>
-            <button @click="send">send</button> 
-            </div>
         </div>
     </div>
 </div>
@@ -255,8 +304,8 @@ input[type=number]::-webkit-inner-spin-button {
 }
 ////////////////////////////////////////////////////////////
 .body{
-    width: 70vw;
-    margin: 0 15%;
+    width: 100vw;
+
     min-height: 100vh;
     overflow-y: auto;
     border: 1px solid black;

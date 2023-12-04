@@ -33,6 +33,10 @@ export default{
     ],
 
     mounted(){
+
+        //送答案與資訊去session
+        
+
         //判定是否為編輯模式
         if(this.questionnaire[0].qnId > -1){
             this.getQuestion()
@@ -47,6 +51,8 @@ export default{
     },
 
     methods:{
+            
+
         goMakesurePage(){
             this.page=2;
         },
@@ -172,7 +178,7 @@ export default{
             this.necessary = this.questionList[index].necessary;
             this.questionOption = this.questionList[index].option;
             this.key = index
-            console.log("問卷索引值:"+index)
+            // console.log("問卷索引值:"+index)
         },
         
         //delQn

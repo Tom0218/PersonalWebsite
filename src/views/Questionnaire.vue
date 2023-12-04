@@ -205,6 +205,7 @@ export default {
 <div class="body" >
     <div class="aa">
         <div class="top">
+                <h2>後台</h2>
                 <div class="searchTitle">
                     <h2>問卷標題</h2>
                     <input type="text" v-model="qnTitle" >
@@ -223,6 +224,7 @@ export default {
             >刪除問卷</button>
         </div>
         <div class="bottom">
+            <p>*已發布則無法編輯</p>
             <table>
                 <tr>
                     <td></td>
@@ -238,7 +240,9 @@ export default {
                         <input type="checkbox" v-model="quiz.checkbox" @change="handleCheckboxChange(quiz.questionnaire.id)" @click="catchIndex(index)">
                     </td>
                     <td>{{ quiz.questionnaire.id }}</td>
-                    <td @click='editQuestion(index)' :key="index">{{ quiz.questionnaire.title }} </td>
+                    <!--編輯判斷 -->
+                    <td v-if="quiz.questionnaire.published==false" @click='editQuestion(index)' :key="index">{{ quiz.questionnaire.title }} </td>
+                    <td v-else-if="quiz.questionnaire.published==true">{{ quiz.questionnaire.title }} </td>
                     <td>{{ quiz.questionnaire.published?'已發佈':'未發佈' }}</td>
                     <td>{{ quiz.questionnaire.startDate }}</td>
                     <td>{{ quiz.questionnaire.endDate }}</td>

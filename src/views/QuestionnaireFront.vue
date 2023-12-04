@@ -119,6 +119,7 @@ computed: {
 <div class="body" v-if="page == 1">
     <div class="aa">
         <div class="top">
+            <h2>前台</h2>
                 <div class="searchTitle">
                     <h2>問卷標題</h2>
                     <input type="text" v-model="qnTitle" >

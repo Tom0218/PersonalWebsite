@@ -45,7 +45,8 @@ export default{
                     "id":parseInt(this.questionnaire[0].qnId),
                     "title": this.questionnaire[0].title,
                     "description":this.questionnaire[0].description,
-                    "published":Boolean(this.questionnaire[0].published),
+                    // "published":Boolean(this.questionnaire[0].published),
+                    "published":false,
                     "startDate": this.questionnaire[0].startDate,
                     "endDate": this.questionnaire[0].endDate
                 },
@@ -87,7 +88,7 @@ export default{
                 "questionnaire": {
                     "title": this.questionnaire[0].title,
                     "description":this.questionnaire[0].description,
-                    "published":Boolean(this.questionnaire[0].published),
+                    "published":false,
                     "startDate": this.questionnaire[0].startDate,
                     "endDate": this.questionnaire[0].endDate
                 },
@@ -197,15 +198,15 @@ export default{
                     <p>({{ item.optionType }})</p>
                 </div>
                 <div class="optionArea">
-                    <div  class="option" v-for="question in item.option.split(';')" v-if="item.qOptionType==='單選題'||'多選題'">
+                    <div  class="option" v-for="question in item.option.split(';')" v-if="item.optionType==='單選題'">
                             <input type="radio" value="answer">
                             <p>{{ question }}</p>           
                     </div> 
-                    <div  class="option" v-for="question in item.option.split(';')" v-if="item.qOptionType==='多選題'">
+                    <div  class="option" v-for="question in item.option.split(';')" v-else-if="item.optionType==='多選題'">
                             <input type="checkbox" value="answer">
                             <p>{{ question }}</p>           
                     </div> 
-                    <div v-if="item.qOptionType ==='短述題'">
+                    <div v-else-if="item.optionType ==='短述題'">
                         <input type="text">
                     </div>
                 </div>
