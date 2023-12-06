@@ -224,7 +224,7 @@ export default {
             >刪除問卷</button>
         </div>
         <div class="bottom">
-            <p>*已發布則無法編輯</p>
+            <p>*已發佈則無法編輯</p>
             <table>
                 <tr>
                     <td></td>

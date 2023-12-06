@@ -9,10 +9,11 @@ export default{
             email:"",
             age:0,
             qnId:0,
-            qnTitle:"",
-            qnDescription:"",
+            title:"",
+            description:"",
             quList:[],
-            ansObj:{},
+            answers:{}
+           
 
         }
     },
@@ -24,12 +25,12 @@ export default{
         this.email = this.$route.query.email;
         this.age = this.$route.query.age;
         this.qnId=this.$route.query.qnId;
-        this.qnTitle = this.$route.query.qnTitle;
-        this.qnDescription = this.$route.query.qnDescription;
+        this.title = this.$route.query.title;
+        this.description = this.$route.query.description;
         this.quList = this.$route.query.quList;
-        this.ansObj = JSON.parse(this.$route.query.ansObj);
+        this.answers = JSON.parse(this.$route.query.answers);
         console.log("下面是答案物件")
-        console.log( this.ansObj)
+        console.log(this.$route.query.title)
         // console.log(this.qnId=this.$route.query.qnId)
     },
 
@@ -79,8 +80,8 @@ export default{
 <template>
     <div class="body">
         <div>
-            <h1>{{this.qnTitle}}</h1>
-            <h3>簡介:{{this.qnDescription}}</h3>
+            <h1>{{this.title}}</h1>
+            <h3>簡介:{{this.description}}</h3>
             <div class="personinfo">
                 <div class="info">
                     <p>姓名 :{{ this.name }}</p>
@@ -96,10 +97,10 @@ export default{
                     <p>年齡 : {{ this.age }}</p> 
                 </div>
             </div>
-            <div class="box" v-for="item in ansObj">
+            <div class="box" v-for="item in answers">
                 <div class="box">
                     <p>{{ item.quId }}.</p>
-                    <p>{{ item.qTitle }}</p>
+                    <p>{{ item.title }}</p>
                 </div>
                 
                 <div class="box">
@@ -157,8 +158,6 @@ p{
 .body{
     min-height: 100vh;
     overflow-y: auto;
-    width: 70vw;
-    margin: 0 15%;
     padding: 5%;
     background-color: green;
     

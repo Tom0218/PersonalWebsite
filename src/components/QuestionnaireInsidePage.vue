@@ -9,41 +9,218 @@ data(){
         const formattedStartDate = startDate.toISOString().split('T')[0];
     return{
         questionnaireId:0,
-        qnTitle:"",
-        qnDescription:"",
+        title:"",
+        description:"",
         quList:[],
         name:"",
         phone:"",
         email:"",
         age:"",
-        quList: [/* your question list here */],
-        selectedAnswers: {}, // Object to store selected answers for single-choice questions
-        selectedOptions: {}, // Object to store selected options for multiple-choice questions
-        shortAnswers: {}, // Object to store short answers
-        dateTime:this.formattedStartDate
+        dateTime:formattedStartDate,
+        selectedOptions: [],
+        shortAnswer:"",
+        answers:{},
+        
+        
+
     }
 },
 
 mounted() {
     this.questionnaireId = this.$route.query.qnId; //qnId
-    this.qnTitle = this.$route.query.qnTitle; //qntitle
-    this.qnDescription = this.$route.query.qnDescription;//qndescription
+    this.title = this.$route.query.title; //qntitle
+    this.description = this.$route.query.description;//qndescription
     this.getQuestion(); // 內頁資料更新
     this.name = this.$route.query.name;
     this.email = this.$route.queryemail;
     this.age = this.$route.query.age;
     this.phone = this.$route.query.phone;
-    this.ansObj = this.$route.query.ansObj;
-    this.questionnaireId = this.$route.query.qnId
-    },
 
+    },
 
 methods:{
 
+    getAnswer() {
+        // 处理获取答案逻辑
+        console.log("姓名:", this.name);
+        console.log("手机:", this.phone);
+        console.log("邮箱:", this.email);
+        console.log("年龄:", this.age);
+
+        const answers = this.quList.map(question => {
+            let answer = null;
+
+            if (question.optionType === '單選題') {
+                answer = question.selectedOption || null;
+            } else if (question.optionType === '多選題') {
+                const selectedOptions = question.option.split(';').filter(option => {
+                    // 獲取狀態為 true 的選項
+                    return this.selectedOptions.includes(option);
+                });
+
+                answer = selectedOptions.length > 0 ? selectedOptions.join(';') : null;
+            } else if (question.optionType === '短述題') {
+                answer = question.shortAnswer || null;
+            }
+
+            return {
+                quId: question.quId,
+                qnId: this.questionnaireId,
+                optionType: question.optionType,
+                answer: answer,
+            };
+        });
+
+        console.log("所有答案：", answers);
+    },
+    
+    test(){
+    },
+
+    test2(){
+        var radioArr=[];
+        var checkboxArr=[];
+        var textArr=[];
+
+        //尋找type為單選的答案
+        const form=document.getElementById('createQuestionPlace');
+
+
+        /////將所有單選的資料抓出來
+        const radioAnswers={};
+        const radioInputs = form.querySelectorAll('input[type = "radio"]:checked');
+
+        radioInputs.forEach(input =>{
+            const quName = input.getAttribute('name');
+            const answer = input.value;
+            radioAnswers[quName] = answer;  //??
+            radioArr.push(answer) 
+        });
+        console.log('單選作答:',radioAnswers)
+        
+        console.log("資料型態:",typeof radioAnswers);
+
+        //多選
+        const checkboxAnswers = {};
+        const checkboxInputs = form.querySelectorAll('input[type = "checkbox"]:checked');
+        const checkboxInputsArray = [...checkboxInputs]; //擴展運算符... ， 將List轉換為數組
+        console.log(typeof checkboxInputsArray);
+
+        checkboxInputs.forEach(input =>{
+            const quName = input.getAttribute("name");
+            const answer = input.value;
+
+            //檢查quName是否已存在，若不存在則新建一個屬性
+            if(!checkboxAnswers[quName]){
+                checkboxAnswers[quName] = [answer];
+            } else {
+                checkboxAnswers[quName].push(answer);//若已存在則將答案推進陣列
+            }
+           // ??
+            checkboxArr.push(checkboxAnswers.null)
+        });
+        console.log('多選答案:',checkboxAnswers.null);
+        console.log(typeof checkboxAnswers);
+
+        //問答題
+        const textAnswers = {};
+        const textInputs = form.querySelectorAll('input[type="textarea"]');
+
+        textInputs.forEach(input => {
+                const questionName = input.getAttribute('name');
+                const answer = input.value;
+                textAnswers[questionName] = answer;
+                textArr.push(answer)
+            });
+            console.log('文字輸入框作答答案：', textArr);
+            console.log(typeof textArr);
+
+            var AllanswerArrIndex = 0;
+        // 遍歷問題列表
+        this.questionArr.forEach(question => {
+
+                //設定一個空字串來裝答案
+                var answer = "";
+                // 創建問題的容器 div
+                const questionDiv = document.createElement('div');
+                if(question.optionType=="單選"){
+                    answer =radioArr[0]
+                    if(answer!=null){
+                        this.AllanswerArr[AllanswerArrIndex]=answer
+                    }
+                    if(question.necessary==true&&answer==null){
+                        this.MustBeAnswerNum++
+                    }
+                    if(answer==null){
+                        this.AllanswerArr[AllanswerArrIndex]="該使用者未作答"
+                        answer="該使用者未作答"
+                    }
+                }
+                if(question.optionType=="多選"){
+                    let answerArr = checkboxArr[0]
+                    if(answerArr!=null){
+                        answerArr.forEach(input => {
+                            answer=answer+input+";"
+                        });
+                        this.AllanswerArr[AllanswerArrIndex]=answer
+                    }
+                    if(question.necessary==true&&answerArr==null){
+                        this.MustBeAnswerNum++
+                    }
+                    if(answerArr==null){
+                        this.AllanswerArr[AllanswerArrIndex]="該使用者未作答"
+                        answer="該使用者未作答"
+                    }
+                }
+                if(question.optionType=="文字回答"){
+                    answer =textArr[0]
+                    if(answer!=""){
+                        this.AllanswerArr[AllanswerArrIndex]=answer
+                    }
+                    if(question.necessary==true&&answer==""){
+                        this.MustBeAnswerNum++
+                    }
+                    if(answer==""){
+                        this.AllanswerArr[AllanswerArrIndex]="該使用者未作答"
+                        answer="該使用者未作答"
+                    }
+                }
+
+                // 添加問題標題
+                const questionTitle = document.createElement('p');
+                questionTitle.textContent =question.quid+"."+ question.qtitle;
+                const questionAnswer = document.createElement('p');
+
+                questionAnswer.textContent = answer
+                questionTitle.setAttribute('style', 'font-size: 16pt;font-weight: bold;'); //小問題設定字型大小
+                questionDiv.appendChild(questionTitle);
+                questionDiv.appendChild(questionAnswer);
+
+                // 將問題容器添加到整體容器中
+                checkQuestionPlace.appendChild(questionDiv);
+
+                //判斷問題狀態是什麼把相對應陣列裡面得數字刪掉
+                if(question.optionType=="單選"){
+                    radioArr.splice(0,1)
+                }
+                if(question.optionType=="多選"){
+                    checkboxArr.splice(0,1)
+                }
+                if(question.optionType=="文字回答"){
+                    textArr.splice(0,1)
+                }
+
+                AllanswerArrIndex++
+            });
+
+
+    },
+
+    //session
     sendd(){
         const userAnswer = {
-        name: "mark",
-        email: "mark@123",
+        name: this.name,
+        email: this.email,
         phone: this.phone,
         age: this.age,
         qId: 1,
@@ -80,7 +257,6 @@ methods:{
             phone: this.phone,
             email: this.email,
             age: this.age,
-            ansObj:JSON.stringify(this.ansObj),
         }
         })
 
@@ -113,31 +289,18 @@ methods:{
 
     //router.push傳送答案陣列
     send(){
-        this.ansObj = this.quList.reduce((result, question, index) => {
-        const answer = this.getAnswer(question, index);
-        result[question.quId] = {
-        qTitle: question.qTitle,
-        optionType: question.optionType,
-        quId: question.quId,
-        answer: answer,
-        };
-            return result;
-        }, {});
-        console.log(this.ansObj)
-
-      // 打印问题与答案字符串
         this.$router.push({
             name: 'QuestionnaireFrontMakeSurePage',
             query: {
             qnId:this.questionnaireId,
-            qnTitle:this.qnTitle,
-            qnDescription:this.qnDescription,
+            title:this.title,
+            description:this.description,
             quList:this.quList,
             name:this.name,
             phone: this.phone,
             email: this.email,
             age: this.age,
-            ansObj:JSON.stringify(this.ansObj),
+            answers:JSON.stringify(this.answers),
         }
         })
     },
@@ -148,41 +311,8 @@ methods:{
             name: 'QuestionnaireFront',
         })
     },
-
-    //答案物件測試
-    displayResults() {
-    const resultsObject = this.quList.reduce((result, question, index) => {
-        const answer = this.getAnswer(question, index);
-        result[question.quId] = {
-        qTitle: question.qTitle,
-        optionType: question.optionType,
-        quId: question.quId,
-        answer: answer,
-        };
-        return result;
-    }, {});
-
-    // 输出结果对象
-    console.log(resultsObject);
-    },
-
-    //答案物件測試
-    getAnswer(question, index) {
-    switch (question.optionType) {
-        case '單選題':
-        return this.selectedAnswers[question.quId] || '';
-        case '多選題':
-        return this.selectedOptions
-        case '短述題':
-        return this.shortAnswers[question.quId] || '';
-        default:
-        return '';
-    }
-    },
-},
     
-
-
+}
 }
 
 </script>
@@ -190,66 +320,36 @@ methods:{
 <template>
 <div class="body">
     <div class="mainArea">
-        <h3 class="flicker">{{this.qnTitle}}</h3>
-        <div>
-            <div class="textArea">
-                <p> {{ this.qnDescription }}</p>
-            </div>
-            <div>
-                <div class="d-flex">
-                    <div class="d-flex align-middle">
-                        <p>姓名</p>
-                        <input type="text " v-model="name">
-                    </div>
-                    <div class="d-flex align-middle">
-                        <p>手機</p>
-                        <input type="text" v-model="phone">
-                    </div>
-                    <div class="d-flex align-middle">
-                        <p>信箱</p>
-                        <input type="text" v-model="email">
-                    </div>
-                    <div class="d-flex align-middle">
-                        <p>年齡</p>
-                        <input type="number" v-model="age">
-                    </div>
-                </div>
-            
-                <div>
-    <div class="questiontitle" v-for="(question, index) in quList" :key="index">
-      <p>{{ question.quId }}</p>
-      <p>{{ question.qTitle }}</p>
-      <p>({{ question.optionType }})</p>
-      <div class="inputbox" v-if="question.optionType === '單選題'">
-        <div v-for="(option, index) in question.option.split(';')" :key="index">
-          <div class="option">
-            <input type="radio" :name="'answer_' + question.quId" v-model="selectedAnswers[question.quId]" :value="option">
-            <p>{{ option }}</p>
-          </div>
+        <label>姓名:</label>
+        <input type="text" v-model="name">
+        <label>年齡:</label>
+        <input type="number" v-model="age">
+        <label>email:</label>
+        <input type="text" v-model="email">
+        <label>phone:</label>
+        <input type="text" v-model="phone">
+        <div v-for="question in quList" :key="question.quId">
+    <label>{{ question.quId }}</label>
+    <label>{{ question.qTitle }}</label>
+    <label>{{ question.optionType }}</label>
+    <div v-for="(option, index) in question.option.split(';')" :key="index">
+        <div v-if="question.optionType == '單選題'">
+            <input type="radio" :value="option" :name="question.quId" v-model="question.selectedOption" />
+            {{ option }}
         </div>
-      </div>
-      <div class="inputbox" v-if="question.optionType === '多選題'">
-        <div v-for="option in question.option.split(';')" :key="option">
-          <div class="option">
-            <input type="checkbox" v-model="selectedOptions[question.quId]" :value="option">
-            <p>{{ option }}</p>
-          </div>
+        <div v-if="question.optionType == '多選題'" >
+            <input type="checkbox" :value="option"  v-model="selectedOptions"/>
+            <label>{{ option }}</label>
+        
         </div>
-      </div>
-      <div class="inputbox" v-if="question.optionType === '短述題'">
-        <input id="shortans" type="text" v-model="shortAnswers[question.quId]">
-      </div>
-    </div>
-    <div>
-      <button @click="goback">cancel</button>
-      <button @click="sendd">send</button>
-    </div>
-  </div>
-            </div> 
+        <div v-if="question.optionType == '短述題'">
+            <input type="text" v-model="question.shortAnswer" />
         </div>
     </div>
 </div>
-
+<button @click="getAnswer">提交</button>
+        </div>
+    </div>
 </template>
 
 <style lang="scss" scoped>

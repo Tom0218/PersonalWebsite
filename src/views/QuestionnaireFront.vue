@@ -71,15 +71,15 @@ methods:{
         this.qnId = this.allQn[pageIndex].id;
         this.qnTitle =  this.allQn[pageIndex].title;
         this.qnDescription =  this.allQn[pageIndex].description;
-        console.log("description:"+ this.qnDescription);
-        console.log("title:"+ this.allQn[pageIndex].title);
         console.log("qnId:"+ this.qnId);
+        console.log("title:"+ this.allQn[pageIndex].title);
+        console.log("description:"+ this.qnDescription);
         this.$router.push({
         name: 'QuestionnaireInsidePage',
         query: {
             qnId:this.qnId,
-            qnTitle:this.qnTitle,
-            qnDescription:this.qnDescription,
+            title:this.qnTitle,
+            description:this.qnDescription,
         }
         });
         // 在当前组件中

@@ -20,11 +20,12 @@ export default{
             quId:0,
             question:"",
             optionType:"",
-            necessary:false,
+            necessary:false,//預設未發佈
             questionOption:"",
             questionList:[],
             addbutton:"新增",// 加入問卷按鈕
             selectedIndexes:[],
+            selectedQuIds:[]
         }
     },
 
@@ -33,9 +34,6 @@ export default{
     ],
 
     mounted(){
-
-        //送答案與資訊去session
-        
 
         //判定是否為編輯模式
         if(this.questionnaire[0].qnId > -1){
@@ -57,7 +55,7 @@ export default{
             this.page=2;
         },
 
-         //api獲取quList
+        //api獲取quList
         getQuestion() {
                 console.log("fetch裡的qnId是:"+this.questionnaire[0].qnId)
                 const url = 'http://localhost:8081/api/quiz/searchQuestionList';
@@ -88,7 +86,7 @@ export default{
         addQuetion(){
             //修改模式編輯
             if( this.addbutton == "編輯" &&this.questionnaire[0].qnId > -1){
-                console.log("問卷索引值:"+this.key)
+                // console.log("問卷索引值:"+this.key)
                 this.questionList[this.key].quId = this.quId
                 this.questionList[this.key].qnId = parseInt(this.questionnaire[0].qnId)
                 this.questionList[this.key].qTitle = this.question;
@@ -124,7 +122,7 @@ export default{
 
              //新增模式編輯
             if( this.addbutton == "編輯"){
-                console.log("問卷索引值:"+this.key)
+                // console.log("問卷索引值:"+this.key)
                 this.questionList[this.key].quId = this.quId
                 this.questionList[this.key].qTitle = this.question;
                 this.questionList[this.key].optionType = this.optionType;
@@ -181,8 +179,10 @@ export default{
             // console.log("問卷索引值:"+index)
         },
         
-        //delQn
         delQu(){
+            //編輯模式下delQu
+
+             //新增模式下delQu
             this.selectedIndexes.forEach(item => {
                 this.questionList.splice(item,1);
             });
@@ -191,19 +191,28 @@ export default{
 
         //quindex
         handleCheckboxChange(index) {
-            // checkbox 更動時的處理邏輯
-                if (this.questionList[index].checkbox) {
-                    // 如果 checkbox 被選中，將索引存入陣列
-                    this.selectedIndexes.push(index);
-                } else {
-                    // 如果 checkbox 取消選中，從陣列中刪除索引
-                    const indexToDelete = this.selectedIndexes.indexOf(index);
-                    if (indexToDelete !== -1) {
-                    this.selectedIndexes.splice(indexToDelete, 1);
-                    }
-                }
-                // console.log(this.selectedIndexes)
-            },
+    // 复选框变化时的处理逻辑
+    const currentQuId = this.questionList[index].quId;
+
+    if (this.questionList[index].checkbox) {
+        // 如果复选框被选中，将 quId 存入数组
+        this.selectedQuIds.push(currentQuId);
+        this.selectedIndexes.push(index);
+    } else {
+        // 如果复选框取消选中，从数组中删除 quId
+        const indexToDelete = this.selectedQuIds.indexOf(currentQuId);
+        if (indexToDelete !== -1) {
+            this.selectedQuIds.splice(indexToDelete, 1);
+        }
+
+        // 从数组中删除索引
+        this.selectedIndexes = this.selectedIndexes.filter(i => i !== index);
+    }
+
+    console.log("QuIds:", this.selectedQuIds);
+    console.log("Indexs:", this.selectedIndexes);
+}
+
     }
 }
 </script>
@@ -216,14 +225,13 @@ export default{
                 <h2>問題</h2>
                 <input type="text" v-model="question">
                 <select v-model="optionType">
-                <option value="單選題">單選題</option>
-                <option value="多選題">多選題</option>
-                <option value="短述題">短述題</option>
-            </select>
+                    <option value="單選題">單選題</option>
+                    <option value="多選題">多選題</option>
+                    <option value="短述題">短述題</option>
+                </select>
             <input type="checkbox" name="" id="necessary" v-model="necessary"> 
             <h2>必填</h2>
             </div>
-
             <div class="option Box">
                 <div>
                     <h2>選項 </h2>
@@ -245,7 +253,7 @@ export default{
                     </tr>
                     <tr v-for="(item,index) in questionList" :key="index">
                         <td>
-                        <input type="checkbox" v-model="item.checkbox" :key="index" @change="handleCheckboxChange(index)">
+                            <input type="checkbox" v-model="item.checkbox" :key="index" @change="handleCheckboxChange(index)">
                         </td>
                         <td>{{ item.quId }}</td>
                         <td>{{ item.qTitle }}</td>
