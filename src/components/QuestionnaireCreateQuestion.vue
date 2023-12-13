@@ -25,7 +25,8 @@ export default{
             questionList:[],
             addbutton:"新增",// 加入問卷按鈕
             selectedIndexes:[],
-            selectedQuIds:[]
+            selectedQuIds:[],
+            delQuList:[],
         }
     },
 
@@ -39,13 +40,6 @@ export default{
         if(this.questionnaire[0].qnId > -1){
             this.getQuestion()
         }
-        // console.log(this.questionnaire)
-        // console.log(this.questionnaire[0].qnId)
-        // console.log("title:"+this.title)
-        // console.log("description:"+this.description)
-        // console.log("startDate:"+this.startDate)
-        // console.log("endDate:"+this.endDate)
-        // console.log("pusblished"+this.published)
     },
 
     methods:{
@@ -184,9 +178,10 @@ export default{
 
              //新增模式下delQu
             this.selectedIndexes.forEach(item => {
+                this.delQuList =  this.selectedQuIds
                 this.questionList.splice(item,1);
             });
-            console.log(this.questionList)
+             console.log( this.delQuList)
         },
 
         //quindex
@@ -210,7 +205,7 @@ export default{
     }
 
     console.log("QuIds:", this.selectedQuIds);
-    console.log("Indexs:", this.selectedIndexes);
+    // console.log("Indexs:", this.selectedIndexes);
 }
 
     }
@@ -255,7 +250,12 @@ export default{
                         <td>
                             <input type="checkbox" v-model="item.checkbox" :key="index" @change="handleCheckboxChange(index)">
                         </td>
-                        <td>{{ item.quId }}</td>
+                        <td>
+                            <div v-for="i in questionList.length">
+                            {{ i }}
+                            </div>
+                        </td>
+                        <!-- <td>{{ item.quId }}</td> -->
                         <td>{{ item.qTitle }}</td>
                         <td>{{ item.optionType }}</td>
                         <td>
@@ -278,6 +278,7 @@ export default{
         <makeSurePage
             :quList="this.questionList"
             :questionnaire="this.questionnaire"
+            :deleQuIds = "this.delQuList"
         />
     </div>
 </template>

@@ -1,4 +1,4 @@
-<script>
+th<script>
 
 export default{
     
@@ -11,15 +11,12 @@ export default{
             qnId:0,
             title:"",
             description:"",
-            quList:[],
-            answers:{}
-           
-
+            answers:[],
+            nowDate: new Date(),
         }
     },
 
     mounted(){
-        this.getanswer();
         this.name = this.$route.query.name;
         this.phone = this.$route.query.phone;
         this.email = this.$route.query.email;
@@ -27,50 +24,75 @@ export default{
         this.qnId=this.$route.query.qnId;
         this.title = this.$route.query.title;
         this.description = this.$route.query.description;
-        this.quList = this.$route.query.quList;
-        this.answers = JSON.parse(this.$route.query.answers);
-        console.log("下面是答案物件")
-        console.log(this.$route.query.title)
-        // console.log(this.qnId=this.$route.query.qnId)
+        const answerString = this.$route.query.answers;
+        this.answers = JSON.parse(answerString);
+
     },
 
     methods:{
-        //session
-        getanswer(){
-            fetch('http://localhost:8081/api/quiz/getAnswer', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                // 处理成功响应
-                console.log(data);
-            })
-            .catch(error => {
-                // 处理错误
-                console.error('Error:', error);
-            });
-        },
-
         Back(){
             this.$router.push({
                 name:'QuestionnaireInsidePage',
                 query: {
-                    name: this.name,
-                    phone: this.phone,
-                    email: this.email,
-                    age: this.age,
-                    ansObj: this.ansObj,
-                    qnId: this.qnId
+                    
+                    editName: this.name,
+                    editPhone: this.phone,
+                    editEmail: this.email,
+                    editAge: this.age,
+                    qnId: this.qnId,
+                    editTitle:this.title,
+                    editDescription:this.description,
+                    editAnswer:this.answers
                 }
             })
-            console.log(this.name)
-            console.log(this.phone)
-            console.log(this.age)
-            console.log(this.ansObj)
-            console.log(this.qnId)
+        },
+        
+        finish(){
+            var currentDate = new Date();
+
+        // 获取日期和时间的字符串表示
+        var currentDateTimeString = currentDate.toLocaleString();
+            var url="http://localhost:8081/api/quiz/Submission";
+            var submi ={
+                "Submission_List":[]
+            };
+            for(let i =0; i < this.answers.length;i++){
+                submi.Submission_List.push({
+                    "name":this.name,    
+                    "phoneNumber":this.phone,
+                    "email" : this.email,
+                    "age":parseInt(this.age),
+                    "qnId":parseInt(this.answers[i].qnId),
+                    "quId":this.answers[i].quId,
+                    "answer":this.answers[i].answer,
+                    "dateTime":this.nowDate
+                })
+        
+            }
+            console.log(submi.Submission_List)
+
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify(submi),
+                headers: new Headers({
+                "Content-Type": "application/json",
+                }),
+                })
+                .then((res) => res.json())
+                .then((response) => {
+                    console.log(response);
+                    alert(response.rtncode)
+                    if(response.rtncode =="SUCCESSFUL"){
+                        alert(response.rtncode)
+                        this.$router.push('Questionnaire')
+                    }
+                })
+                .catch((error) => console.error("Error:", error));
+                this.$router.push("QuestionnaireFront")
+
+                return;
+
+
         }
     }
 }
@@ -98,30 +120,30 @@ export default{
                 </div>
             </div>
             <div class="box" v-for="item in answers">
+
                 <div class="box">
                     <p>{{ item.quId }}.</p>
-                    <p>{{ item.title }}</p>
+                    <p>{{ item.question }} : </p>
                 </div>
                 
-                <div class="box">
+                <div class="box" v-if="item.optionType == '單選題' || item.optionType == '短述題'">
                     <p>{{ item.answer }}</p>
-                </div>
-
-                <!-- <div v-for="answer in item.answer" v-if="item.optionType == '多選題'">
-                    <div class="box">
-                        <p>{{answer }}</p>
+                </div> 
+                <div class="box" v-else-if="item.optionType == '多選題'">
+                    <div v-if="item.answer.length >= 2" v-for="ans in item.answer.split(';')">
+                        <p>{{ ans }}</p>
                     </div>
-                </div>
-                <div v-if="item.optionType =='短述題'">
-                    <p>{{ answer }}</p>
-                </div> -->
+                    <div v-else-if="item.answer.length = 1">
+                        <p>{{ item.answer }}</p>
+                    </div>
+                </div> 
+
             </div>
+        </div>
             <button type="button"  @click="Back"><p>修改</p></button>
-            <button type="button"><p>送出</p></button>
+            <button type="button" @click="finish"><p>送出</p></button>
         
         </div>
-    </div>
-
 
 </template>
 

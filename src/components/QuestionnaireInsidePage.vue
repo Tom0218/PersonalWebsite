@@ -20,9 +20,6 @@ data(){
         selectedOptions: [],
         shortAnswer:"",
         answers:{},
-        
-        
-
     }
 },
 
@@ -32,47 +29,76 @@ mounted() {
     this.description = this.$route.query.description;//qndescription
     this.getQuestion(); // 內頁資料更新
     this.name = this.$route.query.name;
-    this.email = this.$route.queryemail;
+    this.email = this.$route.query.email;
     this.age = this.$route.query.age;
     this.phone = this.$route.query.phone;
 
-    },
+    if (this.$route.query.editName) {
+        this.name = this.$route.query.editName;
+    }
+    if (this.$route.query.editPhone) {
+        this.phone = this.$route.query.editPhone;
+    }
+    if (this.$route.query.editEmail) {
+        this.email = this.$route.query.editEmail;
+    }
+    if (this.$route.query.editAge) {
+        this.age = this.$route.query.editAge;
+    }
+    if (this.$route.query.editTitle) {
+        this.title = this.$route.query.editTitle;
+    }
+    if (this.$route.query.editTitle) {
+        this.description = this.$route.query.editDescription;
+    }
+
+},
 
 methods:{
 
     getAnswer() {
-        // 处理获取答案逻辑
-        console.log("姓名:", this.name);
-        console.log("手机:", this.phone);
-        console.log("邮箱:", this.email);
-        console.log("年龄:", this.age);
+    // 处理获取答案逻辑
+    const answers = this.quList.map(question => {
+        let answer = null;
 
-        const answers = this.quList.map(question => {
-            let answer = null;
+        if (question.optionType === '單選題') {
+            answer = question.selectedOption || null;
+        } else if (question.optionType === '多選題') {
+            const selectedOptions = question.option.split(';').filter(option => {
+                return this.selectedOptions.includes(option);
+            });
+            answer = selectedOptions.length > 0 ? selectedOptions.join(';') : null;
+        } else if (question.optionType === '短述題') {
+            answer = question.shortAnswer || null;
+        }
 
-            if (question.optionType === '單選題') {
-                answer = question.selectedOption || null;
-            } else if (question.optionType === '多選題') {
-                const selectedOptions = question.option.split(';').filter(option => {
-                    // 獲取狀態為 true 的選項
-                    return this.selectedOptions.includes(option);
-                });
+        return {
+            quId: question.quId,
+            qnId: this.questionnaireId,
+            question:question.qTitle,
+            optionType: question.optionType,
+            answer: answer,
+        };
+    })
+    console.log(answers)
+    this.$router.push({
+    name: 'QuestionnaireFrontMakeSurePage',
+    query: {
+        name: this.name,
+        phone: this.phone,
+        email: this.email,
+        age: this.age,
+        qnId: this.questionnaireId,
+        title: this.title,
+        description: this.description,
+        answers: JSON.stringify(answers)
+    }
+    }).then(() => {
+        // 此代码块将在导航完成后执行
+        console.log("导航完成");
+    })
 
-                answer = selectedOptions.length > 0 ? selectedOptions.join(';') : null;
-            } else if (question.optionType === '短述題') {
-                answer = question.shortAnswer || null;
-            }
-
-            return {
-                quId: question.quId,
-                qnId: this.questionnaireId,
-                optionType: question.optionType,
-                answer: answer,
-            };
-        });
-
-        console.log("所有答案：", answers);
-    },
+},
     
     test(){
     },
@@ -216,52 +242,6 @@ methods:{
 
     },
 
-    //session
-    sendd(){
-        const userAnswer = {
-        name: this.name,
-        email: this.email,
-        phone: this.phone,
-        age: this.age,
-        qId: 1,
-        qnId: this.questionnaireId,
-        answer: "123",
-        dateTime: this.dateTime
-    };
-
-    // 发起HTTP POST请求
-    fetch('http://localhost:8081/api/quiz/setAnswer', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userAnswer)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data)
-        // 处理成功响应
-    })
-    .catch(error => {
-        // 处理错误
-        console.error('Error:', error);
-    });
-    this.$router.push({
-            name: 'QuestionnaireFrontMakeSurePage',
-            query: {
-            qnId:this.questionnaireId,
-            qnTitle:this.qnTitle,
-            qnDescription:this.qnDescription,
-            quList:this.quList,
-            name:this.name,
-            phone: this.phone,
-            email: this.email,
-            age: this.age,
-        }
-        })
-
-    },
-
     //api獲取quList
     getQuestion() {
         console.log("fetch裡的qnId是:"+this.questionnaireId)
@@ -320,6 +300,8 @@ methods:{
 <template>
 <div class="body">
     <div class="mainArea">
+        <h1>{{ this.title }}</h1>
+        <h1>{{ this.description }}</h1>
         <label>姓名:</label>
         <input type="text" v-model="name">
         <label>年齡:</label>
@@ -329,9 +311,9 @@ methods:{
         <label>phone:</label>
         <input type="text" v-model="phone">
         <div v-for="question in quList" :key="question.quId">
-    <label>{{ question.quId }}</label>
-    <label>{{ question.qTitle }}</label>
-    <label>{{ question.optionType }}</label>
+            <label>{{ question.quId }}</label>
+            <label>{{ question.qTitle }}</label>
+            <label>{{ question.optionType }}</label>
     <div v-for="(option, index) in question.option.split(';')" :key="index">
         <div v-if="question.optionType == '單選題'">
             <input type="radio" :value="option" :name="question.quId" v-model="question.selectedOption" />
@@ -347,6 +329,7 @@ methods:{
         </div>
     </div>
 </div>
+<button @click="goback">取消</button>
 <button @click="getAnswer">提交</button>
         </div>
     </div>

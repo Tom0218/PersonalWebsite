@@ -82,8 +82,18 @@ methods:{
             description:this.qnDescription,
         }
         });
-        // 在当前组件中
     },
+
+    goStatistics(index){
+        var pageIndex = ((this.currentPage-1)*this.perpage+index); 
+        this.qnId = this.allQn[pageIndex].id;
+        this.$router.push({
+            name: 'QuestionnaireFrontstatisticsPage',
+            query:{
+                qnId:this.qnId
+            }
+        })
+    }
 
 },
 
@@ -116,7 +126,7 @@ computed: {
 </script>
 <template>
 
-<div class="body" v-if="page == 1">
+<div class="body">
     <div class="aa">
         <div class="top">
             <h2>前台</h2>
@@ -136,25 +146,24 @@ computed: {
         <div class="bottom">
             <table>
                 <tr>
-                    <!-- <td></td> -->
-                    <td>編號</td>
-                    <td>問卷</td>
-                    <td>狀態</td>
-                    <td>開始時間</td>
-                    <td>結束時間</td>
-                    <td>結果</td>
+                    <th>編號</th>
+                    <th>問卷</th>
+                    <th>狀態</th>
+                    <th>開始時間</th>
+                    <th>結束時間</th>
+                    <th>觀看統計</th>
                 </tr>
 
                 <tr v-for="(quiz,index) in allQn.slice(pageStart,pageEnd)" :key="index" v-if="allQn.length">
                     <td >{{ quiz.id }}</td>
-                    <td @click='getQnId(index)' :key="index"> 
+                    <td style="cursor: pointer" @click='getQnId(index)' :key="index" > 
                         {{ quiz.title }}
                     </td>
 
-                    <td v-if="quiz.published ==true">已發布</td>
+                    <td v-if="quiz.published ==true">進行中</td>
                     <td>{{ quiz.startDate }}</td>
                     <td>{{ quiz.endDate }}</td>
-                    <td><link>前往</td>
+                    <td @click="goStatistics(index)" :key="index">前往</td>
                 </tr>
             </table>
         </div>
@@ -163,7 +172,7 @@ computed: {
         <ul class="pagination">
             <li class="page-item" @click.prevent="setPage(currentPage-1)">
                 <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
+                    <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <li class="page-item" :class="{'active': (currentPage === (n))}"
@@ -172,7 +181,7 @@ computed: {
             </li>
             <li class="page-item" @click.prevent="setPage(currentPage+1)">
                 <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
+                    <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
         </ul>
@@ -204,27 +213,43 @@ span{
 }
 p{
     color: white;
+    font-weight: bold;
 }
 
 table{
+    min-height: 50vh;
     height: 100%;
-    width: 100%;
-    text-align: left;
+    width: 90%;
+    margin: 0 5%;
+    background-color: rgb(31, 30, 30);
 }
 
 tr{
     height: auto;
     display: flex;
     justify-content: space-between;
-    border: 1px white solid;
+    border: 2px black solid;
+}
+
+th{
+    width: 18%;
+    height: auto;
+    display: flex;
+    justify-content: space-around;
+    color: white;
+    background-color: rgb(0, 96, 34);
 }
 
 td{
     height: auto;
-    width: 15%;
+    width: 18%;
     color: white;
     text-align: center;
-
+    font-weight: bold;
+    font-size: 16pt;
+}
+tr:nth-of-type(even) td{
+  background-color:rgb(0, 0, 0);
 }
 
 ul{
@@ -240,9 +265,7 @@ ul{
     width:100%;
     height: 100vh;
     .aa{
-        width: 80%;
-        margin: 0 10%;
-        height: 73%;
+        width: 100%;
         
         .searchTitle{
             display: flex;

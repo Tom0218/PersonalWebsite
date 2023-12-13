@@ -7,23 +7,27 @@ export default{
             phone:"",
             email:"",
             age:"",
+            qnId : 0,
             question:this.quList,
             qulength:this.quList.length,
-            deleteQus:[]
+            deleteQus:this.deleQuIds
         }
     },
     props:[
         'questionnaire',
         'quList',
+        'deleQuIds'
     ],
 
     mounted(){
         console.log("qnId:"+this.questionnaire[0].qnId)
+        this.qnId = this.questionnaire[0].qnId
         console.log("title:"+this.questionnaire[0].title)
         console.log("description:"+this.questionnaire[0].description)
         console.log("startDate:"+this.questionnaire[0].startDate)
         console.log("endDate:"+this.questionnaire[0].endDate)
         console.log("pusblished:"+this.questionnaire[0].published)
+        console.log("deleQuIds:"+this.deleQuIds)
         console.log(this.quList)
         console.log(this.questionnaire)
         
@@ -39,7 +43,7 @@ export default{
         save(){
             var questionList = this.quList;
             
-            //update
+            //update not publish
             if(this.questionnaire[0].qnId > -1){
                 var url = "http://localhost:8081/api/quiz/update";
                 var Qn = {
@@ -51,18 +55,28 @@ export default{
                     "startDate": this.questionnaire[0].startDate,
                     "endDate": this.questionnaire[0].endDate
                 },
-                "question_list": []
+                "question_list": [],
+
+                "deleteQuestionList":[],
+
                 };
                 for (let i = 0; i < questionList.length; i++) {
                 Qn.question_list.push({
-                "quId": questionList[i].quId,
-                "qnId":parseInt(this.questionnaire[0].qnId),
-                "qTitle": questionList[i].qTitle,
-                "optionType": questionList[i].optionType,
-                "isnecessary": questionList[i].necessary,
-                "option": questionList[i].option
-                });
-                }
+                    "quId": questionList[i].quId,
+                    "qnId":parseInt(this.questionnaire[0].qnId),
+                    "qTitle": questionList[i].qTitle,
+                    "optionType": questionList[i].optionType,
+                    "isnecessary": questionList[i].necessary,
+                    "option": questionList[i].option
+                })
+                };
+
+                for(let i = 0; i < this.deleteQus.length; i++){
+                    Qn.deleteQuestionList.push({
+                        "qnId":parseInt(this.qnId),
+                        "quId":this.deleQuIds[i],
+                    })
+                };
                 console.log(Qn)
 
                 fetch(url, {
@@ -81,7 +95,7 @@ export default{
                 .catch((error) => console.error("Error:", error));
 
                 return;
-                };
+            };
 
             //create not publish
             var url = "http://localhost:8081/api/quiz/create";
@@ -124,7 +138,6 @@ export default{
             .catch((error) => console.error("Error:", error));
             
         },
-      
 
         //存DB且發佈
         saveAndpub(){

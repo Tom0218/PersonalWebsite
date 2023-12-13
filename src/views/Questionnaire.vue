@@ -1,11 +1,6 @@
 <script>
-import qnInsidePage from '../components/QuestionnaireInsidePage.vue';
 
 export default {
-    components:{
-        qnInsidePage,
-    },
-
     data(){
         return{
             allQn:[], //所有問卷
@@ -26,6 +21,23 @@ export default {
     },
 
     methods:{
+        //觀看結果
+        goResult(index){
+            var pageIndex = ((this.currentPage-1)*this.perpage+index); 
+            this.qnId = this.allQn[pageIndex].questionnaire.id;
+            this.title =  this.allQn[pageIndex].questionnaire.title;
+            this.description =  this.allQn[pageIndex].questionnaire.description;
+            console.log(this.qnId )
+            this.$router.push({
+                name:"QuestionnaireStaticPage",
+                query:{
+                    qnId:this.qnId,
+                    title:this.title,
+                    description: this.description,
+                }
+            })
+        },
+
         //search 
         fetchData() {
             //將要查詢的字串附加到url
@@ -52,7 +64,7 @@ export default {
                 .then((data)=>{
                     this.allQn = data;
                     this.allQn = this.allQn.quizVoList;
-                    console.log(this.allQn)
+                    // console.log(this.allQn)
                 })
         },
 
@@ -155,11 +167,6 @@ export default {
             this.endDate = this.allQn[pageIndex].questionnaire.endDate;
             this.published=this.allQn[pageIndex].questionnaire.published;
             console.log("qnId:"+this.qnId)
-            // console.log("title:"+this.title)
-            // console.log("description:"+this.description)
-            // console.log("startDate:"+this.startDate)
-            // console.log("endDate:"+this.endDate)
-            // console.log("pusblished:"+this.published)
             this.$router.push({
             name: 'QuestionnaireCreate',
             query: {
@@ -173,6 +180,7 @@ export default {
             });
         }
 },
+
         mounted() {
             this.fetchData(); // 将方法调用放在函数体内
             this.isPublished();
@@ -183,7 +191,6 @@ export default {
             //Math.ceil()取最小整數
             totalPage() {
                 return Math.ceil(this.allQn.length / this.perpage)
-                
             },
 
              //取得該頁第一個值的index
@@ -200,7 +207,6 @@ export default {
 }
 
 </script>
-
 <template>
 <div class="body" >
     <div class="aa">
@@ -224,29 +230,32 @@ export default {
             >刪除問卷</button>
         </div>
         <div class="bottom">
-            <p>*已發佈則無法編輯</p>
+            <p>*狀態 : 進行中與已結束無法編輯</p>
             <table>
                 <tr>
-                    <td></td>
-                    <td>編號</td>
-                    <td>問卷</td>
-                    <td>狀態</td>
-                    <td>開始時間</td>
-                    <td>結束時間</td>
-                    <td>觀看統計</td>
+                    <th class="checkboxTd"></th>
+                    <th>編號</th>
+                    <th>問卷</th>
+                    <th>狀態</th>
+                    <th>開始時間</th>
+                    <th>結束時間</th>
+                    <th>結果</th>
                 </tr>
                 <tr v-for="(quiz,index) in allQn.slice(pageStart, pageEnd)" :key="index">
-                    <td>
+                    <td class="checkboxTd">
                         <input type="checkbox" v-model="quiz.checkbox" @change="handleCheckboxChange(quiz.questionnaire.id)" @click="catchIndex(index)">
                     </td>
                     <td>{{ quiz.questionnaire.id }}</td>
                     <!--編輯判斷 -->
-                    <td v-if="quiz.questionnaire.published==false" @click='editQuestion(index)' :key="index">{{ quiz.questionnaire.title }} </td>
-                    <td v-else-if="quiz.questionnaire.published==true">{{ quiz.questionnaire.title }} </td>
-                    <td>{{ quiz.questionnaire.published?'已發佈':'未發佈' }}</td>
+                    <td v-if="quiz.questionnaire.published == false ||quiz.questionnaire.published == true && nowDate <= quiz.questionnaire.startDate" @click='editQuestion(index)' :key="index" style="cursor: pointer;">{{ quiz.questionnaire.title }} </td>
+                    <td v-else-if="quiz.questionnaire.published==true"  style="cursor: not-allowed;">{{ quiz.questionnaire.title }} </td>
+                    <td v-if=" quiz.questionnaire.published == true && nowDate < quiz.questionnaire.startDate || quiz.questionnaire.published == false && nowDate < quiz.questionnaire.startDate">尚未開始</td>
+                    <td v-if="quiz.questionnaire.endDate < nowDate ">已結束</td>
+                    <td v-else-if="quiz.questionnaire.startDate <= nowDate && nowDate <= quiz.questionnaire.endDate ">進行中</td>
                     <td>{{ quiz.questionnaire.startDate }}</td>
                     <td>{{ quiz.questionnaire.endDate }}</td>
-                    <td>觀看</td>
+                    <!-- 進行中、已結束可以觀看結果 -->
+                    <td @click="goResult(index)" :key="index">前往</td>
                 </tr>
             </table>
         </div>
@@ -274,12 +283,18 @@ export default {
 
 <style lang="scss" scoped>
 
+.bottom{
+    min-height: 60%;
+    // overflow-y: auto;
+}
+
+
 a{
     text-decoration: none;
 }
 
 button{
-    margin: 2%;
+    margin:0  2%;
 }
 
 h2{
@@ -288,35 +303,55 @@ h2{
     font-weight: bold;
 }
 
-span{
-    border: 1px solid black;
-    padding: 0 3%;
-    margin: 0%;
-
-}
 p{
     color: white;
+    text-align: center;
+    font-weight: bold;
 }
 
 table{
+    min-height: 50vh;
     height: 100%;
-    width: 100%;
+    width: 90%;
+    margin: 0 5%;
+    background-color: rgb(31, 30, 30);
 }
 
 tr{
     height: auto;
     display: flex;
     justify-content: space-between;
-    border: 1px white solid;
+    border-left: rgb(0, 0, 0) 1px solid;
+}
+
+th{
+    width: 18%;
+    height: auto;
+    display: flex;
+    justify-content: space-around;
+    color: white;
+    background-color: rgb(0, 96, 34);
+}
+
+.checkboxTd{
+    width: 5%;
 }
 
 td{
     height: auto;
-    width: 15%;
+    width: 18%;
     color: white;
     text-align: center;
     font-size: 16pt;
+    font-weight: bold;
+}
 
+// tr:last-of-type{
+//   border-bottom: 2px solid #009879;
+// }
+
+tr:nth-of-type(even) td{
+  background-color:rgb(0, 0, 0);
 }
 
 ul{
@@ -328,20 +363,14 @@ ul{
 
 
 .body{
-    padding: 2%;
-    width:90vw;
-    margin: 0 5%;
     min-height: 100vh;
     overflow-y: auto;
     .aa{
-        width: 80%;
-        margin: 0 10%;
-        height: 73%;
-        
+        width: 99%;
+        height: 100%;
         .searchTitle{
             display: flex;
             justify-content: center;
-            align-items: center;
             input,p{
                 margin: 0 10px;
             }
@@ -354,12 +383,11 @@ ul{
                 margin: 0 10px;
             }
         }
+
         .btnArea{
             display: flex;
             justify-content: center;
         }
-
-        
     }
 }
 </style>

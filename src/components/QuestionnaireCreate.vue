@@ -44,12 +44,6 @@ export default{
             this.endDate = this.$route.query.endDate;
             this.published = this.$route.query.published;
         }
-        // console.log("qnId:"+this.qnId);
-        // console.log("title:"+this.$route.query.title);
-        // console.log("description:"+this.qnDescription);
-        // console.log("startDate:"+this.startDate);
-        // console.log("endDate:"+this.endDate);
-        // console.log("published"+this.published);
     },
 
     methods:{
