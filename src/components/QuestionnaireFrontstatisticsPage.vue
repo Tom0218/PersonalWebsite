@@ -7,268 +7,179 @@
             userList: [],
             quList: [],
             optionArr: [],
-            y:[],
-            sortedQuList: [], // 新增一個 sortedQuList 屬性
+            answerCountsByQuestion: {},  // 新增答案计数数据
             };
         },
 
-        methods:{
-
-            
-            aa() {
-                const questionIds = Array.from(new Set(this.userList.map(user => user.quId)));
-
-                questionIds.forEach(questionId => {
-                    const answersForQuestion = this.userList.filter(user => user.quId === questionId);
-                    const answerCounts = {};
-
-                    answersForQuestion.forEach(answerObj => {
-                        const answers = answerObj.answer.split(';');
-
-                        answers.forEach(answer => {
-                            if (answerCounts[answer]) {
-                                answerCounts[answer]++;
-                            } else {
-                                answerCounts[answer] = 1;
-                            }
-                        });
-                    });
-
-                    console.log(`Question ${questionId} Answer Counts:`, answerCounts);
-                });
-            },
-
-            questionType() {
-    // 清空 optionArr
-    this.optionArr = [];
-
-    // 篩選問題類型
-    for (let i = 0; i < this.quList.length; i++) {
-        if (this.quList[i].optionType === '單選題' || this.quList[i].optionType === '多選題') {
-            this.optionArr.push(this.quList[i].option.split(';'));
-        } else {
-            // 如果不是單選題或多選題，將所有用戶的答案合併為一個字串
-            const allAnswers = this.userList.map(user => user.answer).join(';');
-            this.optionArr.push(allAnswers.split(';'));
-        }
-    }
-
-    console.log("optionArr", this.optionArr);
-
-    // 檢查 optionArr 是否為 null
-    if (this.optionArr.includes(null) || this.optionArr.includes(undefined)) {
-        console.error("optionArr is null or undefined!");
-    } else {
-        console.log("optionArr is filled correctly!");
-        this.createCharts();
-    }
-
-                    
-            //     var Allanswer="" 
-            //     for(let i= 0; i < this.userList.length; i++){
-            //         Allanswer += this.userList[i].answer + ';'
-            //     }
-            //       //所有使用者回答
-            //     console.log("Allanswer") 
-            //     console.log(Allanswer) 
-
-            //     for(let i = 0; i < this.quList.length; i++){
-            //         this.optionArr.push( this.quList[i].option.split(";"))
-            //     }
-            //     //所有選項之陣列
-            //     console.log("optionArr") 
-            //     console.log(this.optionArr) 
-
-            //     var chartY = [];
-            //     chartY = Allanswer.split(';')
-            //     //user的回答
-            //     console.log(chartY)
-            //     // console.log(this.optionArr[1])
-
-            //     for (let i = 0; i < this.optionArr.length; i++) {
-            //     let Y = 0;
-            //     for (let k = 0; k < this.optionArr[i].length; k++) {
-            //         for (let j = 0; j < chartY.length; j++) {
-            //             if (chartY[j] !== "" && this.optionArr[i][k] === chartY[j]) {
-            //                 Y += 1;
-            //                 console.log("chartY[j]:", chartY[j]);
-            //                 console.log("optionArr[i][k]:", this.optionArr[i][k]);
-            //             }
-            //         }
-            //         this.y.push(Y);
-            //     }
-            // }
-
-            // console.log("y");
-            // console.log(this.y);
-            },
-
-            createCharts() {
-    this.optionArr.forEach((questionData, index) => {
-        const canvasId = `myChart${index}`;
-        const ctx = document.getElementById(canvasId);
-
-        if (ctx) {
-            // 在創建新 Chart 之前檢查並銷毀舊的 Chart 實例
-            if (ctx.chart) {
-                ctx.chart.destroy();
-            }
-
-            // 新增的部分：從 aa 方法中取得的統計結果
-            const answerCounts = this.calculateAnswerCounts(questionData);
-
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(answerCounts),
-                    datasets: [{
-                        label: '# of Votes',
-                        data: Object.values(answerCounts),
-                        borderWidth: 1,
-                    }],
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                        },
-                    },
-                },
+        methods: {
+        getSubmission() {
+            const url = 'http://localhost:8081/api/quiz/getSubmission';
+            const queryParams = new URLSearchParams({
+                qnId: this.qnId,
             });
-        } else {
-            console.error(`找不到 ID 為 ${canvasId} 的元素。`);
-        }
-    });
-},
-
-calculateAnswerCounts(questionData) {
-    const answerCounts = {};
-
-    // 在 aa 方法中的統計邏輯，這裡僅供參考
-    for (let i = 0; i < this.userList.length; i++) {
-        const answers = this.userList[i].answer.split(';');
-
-        answers.forEach(answer => {
-            if (answerCounts[answer]) {
-                answerCounts[answer]++;
-            } else {
-                answerCounts[answer] = 1;
-            }
-        });
-    }
-
-    return answerCounts;
-},
-
-            // 獲取所有該 qnId 提交資訊
-            // getSubmission() {
-            //     const url = 'http://localhost:8081/api/quiz/getSubmission';
-            //     const queryParams = new URLSearchParams({
-            //         qnId: this.qnId
-            //     });
-            //     const urlWithParams = `${url}?${queryParams}`;
-            //     fetch(urlWithParams, {
-            //         method: 'GET',
-            //         headers: {
-            //             "Accept": "application/json", // 指定接受的回應類型
-            //         },
-            //     })
-            //     .then(response => response.json())
-            //     .then(data => {    
-            //         if (data.userList == null) {
-            //             alert("User list is null");
-            //             return
-            //         } else {
-            //             console.log("UserList");
-            //             this.userList = data.userList;
-            //             console.log(this.userList);
-            //             this.questionType() 
-            //         }
-            //     })
-            //     .catch(error => {
-            //         console.error("Error fetching data:", error);
-            //         // Handle error, show alert, etc.
-            //     });
-            // },
-
-            getSubmission() {
-                const url = 'http://localhost:8081/api/quiz/getSubmission';
-                const queryParams = new URLSearchParams({
-                    qnId: this.qnId,
-                });
-                const urlWithParams = `${url}?${queryParams}`;
-                fetch(urlWithParams, {
-                    method: 'GET',
-                    headers: {
+            const urlWithParams = `${url}?${queryParams}`;
+            fetch(urlWithParams, {
+                method: 'GET',
+                headers: {
                     "Accept": "application/json",
-                    },
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                    if (data.userList == null) {
-                        alert("User list is null");
-                        return;
-                    } else {
-                        console.log("UserList");
-                        this.userList = data.userList;
-                        console.log(this.userList);
-                        this.questionType();
-                        this.aa();
-                    }
-                    })
-                    .catch(error => {
-                    console.error("Error fetching data:", error);
-                // Handle error, show alert, etc.
-                });
-            },
-
-            getQuestion() {
-        const url = 'http://localhost:8081/api/quiz/searchQuestionList';
-        const queryParams = new URLSearchParams({
-            qnId: this.qnId,
-        });
-        const urlWithParams = `${url}?${queryParams}`;
-
-        fetch(urlWithParams, {
-            method: 'GET',
-            headers: {
-            "Accept": "application/json",
-            },
-        })
+                },
+            })
             .then(response => response.json())
             .then(data => {
-            this.quList = data.questionList;
-            console.log("questionList", this.quList);
-        })
-        .catch(error => console.error('Error:', error));
-            },
-
+                if (data.userList == null) {
+                    alert("User list is null");
+                    return;
+                } else {
+                    this.userList = data.userList;
+                    this.col();
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
         },
 
-        mounted(){
-            this.qnId = this.$route.query.qnId;
-            this.getQuestion();
-            this.getSubmission();
-            // this.createCharts();
-        
-        }
+        getQuestion() {
+            const url = 'http://localhost:8081/api/quiz/searchQuestionList';
+            const queryParams = new URLSearchParams({
+                qnId: this.qnId,
+            });
+            const urlWithParams = `${url}?${queryParams}`;
 
-    }
-    </script>
-    <template>
-    <div class="body">
-        <div v-for="(questionData, index) in this.quList" :key="index" class="chart">
-            <p>{{ questionData.qTitle }}</p>
-            <canvas :id="'myChart' + index"></canvas>
+            fetch(urlWithParams, {
+                method: 'GET',
+                headers: {
+                    "Accept": "application/json",
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.quList = data.questionList;
+                console.log("quList", this.quList);
+            })
+            .catch(error => console.error('Error:', error));
+        },
+
+        col() {
+            // quList
+            let optionArr = []
+            for (let i = 0; i < this.quList.length; i++) {
+                optionArr.push(this.quList[i].option.split(';'))
+            }
+            console.log(optionArr)
+
+            // userList
+            let ansArr = [];
+            for (let i = 0; i < this.userList.length; i++) {
+                ansArr.push({
+                    quId: this.userList[i].quId,
+                    answer: this.userList[i].answer.split(';')
+                })
+            }
+            console.log(ansArr)
+
+            // 初始化答案计数数据
+            this.answerCountsByQuestion = {};
+
+            for (let i = 0; i < this.quList.length; i++) {
+                const quId = this.quList[i].quId;
+                this.answerCountsByQuestion[quId] = {};
+
+                for (let j = 0; j < optionArr[i].length; j++) {
+                    this.answerCountsByQuestion[quId][optionArr[i][j]] = 0;
+                }
+            }
+
+            for (let i = 0; i < ansArr.length; i++) {
+                const quId = ansArr[i].quId;
+                const answers = ansArr[i].answer;
+
+                for (let j = 0; j < answers.length; j++) {
+                    this.answerCountsByQuestion[quId][answers[j]]++;
+                }
+            }
+
+            console.log("Answer Counts by Question:", this.answerCountsByQuestion);
+
+            // 创建图表
+            this.createCharts();
+        },
+
+        createCharts() {
+        this.$nextTick(() => {
+            // 循環處理每個問題
+            this.quList.forEach((questionData) => {
+            const quId = questionData.quId;
+
+            // 檢查 optionType 是否為短述題
+            if (questionData.optionType !== 'short') {
+            const labels = Object.keys(this.answerCountsByQuestion[quId]);
+            const data = Object.values(this.answerCountsByQuestion[quId]);
+
+            const canvasId = `myChart${quId}`;
+            const canvasElement = document.getElementById(canvasId);
+            const ctx = canvasElement?.getContext('2d');
+
+            if (ctx) {
+                if (ctx.chart) {
+                    ctx.chart.destroy();
+                }
+
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        // 如果需要，可以添加更多顏色
+                        ],
+                    }],
+                    },
+                    options: {
+                    title: {
+                        display: true,
+                        text: `Question ${quId} - Answer Distribution`,
+                    },
+                    },
+                });
+                } else {
+                console.error(`找不到 ID 為 ${canvasId} 的元素。`);
+                }
+            }
+            });
+        });
+    },
+    },
+
+    mounted() {
+    this.qnId = this.$route.query.qnId;
+    this.getQuestion();
+    this.getSubmission();
+    
+    // 在获取数据后调用 createCharts
+    this.$nextTick(() => {
+        this.createCharts();
+    });
+},
+};
+</script>
+
+<template>
+     <div class="body">
+        <!-- 循环渲染每个图表 -->
+        <div class="chart" v-for="(question, index) in quList" :key="index">
+            <canvas :id="'myChart' + question.quId" ref="myChart"  width="600" height="800"></canvas>
         </div>
-        <button>test</button>
     </div>
-    </template>
+</template>
 
 <style lang="scss" scoped>
-.chart{
-    height: 80vh;
-}
+
 
 
 p{
@@ -276,7 +187,7 @@ p{
 }
 .chart{
     width: 30%;
-    height: 20%;
+    height: 30%;
 }
 .body{
     min-height: 100vh;
