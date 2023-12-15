@@ -21,7 +21,7 @@ export default{
             <p>v-if條件成立才會建立標籤</p>
 <pre>
 <code>
- &lt;script>
+&lt;script>
 export default{
     data(){
         return{

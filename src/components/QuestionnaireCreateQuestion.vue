@@ -1,4 +1,5 @@
 <script>
+import { Alert } from 'bootstrap';
 import makeSurePage from '../components/QuestionnaireCreateMakeSurePage.vue';
 
 export default{
@@ -43,8 +44,6 @@ export default{
     },
 
     methods:{
-            
-
         goMakesurePage(){
             this.page=2;
         },
@@ -95,7 +94,7 @@ export default{
             }   
 
             //修改模式新增
-            if(this.addbutton == "新增"&& this.questionnaire[0].qnId > -1){
+            if(this.addbutton == "新增" && this.questionnaire[0].qnId > -1){
                 this.quId=this.questionList.length+1;
                 this.questionList.push({
                     quId:this.quId,
@@ -116,6 +115,16 @@ export default{
 
              //新增模式編輯
             if( this.addbutton == "編輯"){
+                if(this.question == ""){
+                    alert("問題不能為空")
+                    return
+                } else if(this.optionType ==""){
+                    alert("題行不得為空")
+                    return
+                } else if(this.questionOption ==""){
+                    alert("選項不得為空")
+                    return
+                }
                 // console.log("問卷索引值:"+this.key)
                 this.questionList[this.key].quId = this.quId
                 this.questionList[this.key].qTitle = this.question;
@@ -132,16 +141,19 @@ export default{
                 console.log(this.questionList)
                 return
             }
+
             //新增模式新增
             if(this.addbutton == "新增"){
-                // this.quId=this.questionList.length+1;
-                // this.questionList.push({
-                //     quId:this.quId,
-                //     qTitle:this.question,
-                //     optionType:this.optionType,
-                //     necessary:this.necessary,
-                //     option:this.questionOption,
-
+                if(this.question == ""){
+                    alert("問題不能為空")
+                    return
+                } else if(this.optionType ==""){
+                    alert("題行不得為空")
+                    return
+                } else if(this.questionOption ==""){
+                    alert("選項不得為空")
+                    return
+                }
                 this.quId=this.questionList.length+1;
                 this.questionList.push({
                     quId:this.quId,
@@ -181,32 +193,32 @@ export default{
                 this.delQuList =  this.selectedQuIds
                 this.questionList.splice(item,1);
             });
-             console.log( this.delQuList)
+            console.log( this.delQuList)
         },
 
         //quindex
         handleCheckboxChange(index) {
-    // 复选框变化时的处理逻辑
-    const currentQuId = this.questionList[index].quId;
+            // 复选框变化时的处理逻辑
+            const currentQuId = this.questionList[index].quId;
 
-    if (this.questionList[index].checkbox) {
-        // 如果复选框被选中，将 quId 存入数组
-        this.selectedQuIds.push(currentQuId);
-        this.selectedIndexes.push(index);
-    } else {
-        // 如果复选框取消选中，从数组中删除 quId
-        const indexToDelete = this.selectedQuIds.indexOf(currentQuId);
-        if (indexToDelete !== -1) {
-            this.selectedQuIds.splice(indexToDelete, 1);
+            if (this.questionList[index].checkbox) {
+                // 如果复选框被选中，将 quId 存入数组
+                this.selectedQuIds.push(currentQuId);
+                this.selectedIndexes.push(index);
+            } else {
+                // 如果复选框取消选中，从数组中删除 quId
+                const indexToDelete = this.selectedQuIds.indexOf(currentQuId);
+                if (indexToDelete !== -1) {
+                    this.selectedQuIds.splice(indexToDelete, 1);
+                }
+
+                // 从数组中删除索引
+                this.selectedIndexes = this.selectedIndexes.filter(i => i !== index);
+            }
+
+            console.log("QuIds:", this.selectedQuIds);
+            // console.log("Indexs:", this.selectedIndexes);
         }
-
-        // 从数组中删除索引
-        this.selectedIndexes = this.selectedIndexes.filter(i => i !== index);
-    }
-
-    console.log("QuIds:", this.selectedQuIds);
-    // console.log("Indexs:", this.selectedIndexes);
-}
 
     }
 }
@@ -217,20 +229,22 @@ export default{
     <div class="mainArea">
         <div class="setQuestion">
             <div class="question Box">
-                <h2>問題</h2>
+                <div></div>
+                <h2>問題 :</h2>
                 <input type="text" v-model="question">
+                <h2>題型 : </h2>
                 <select v-model="optionType">
                     <option value="單選題">單選題</option>
                     <option value="多選題">多選題</option>
                     <option value="短述題">短述題</option>
                 </select>
+                <h2>必填 : </h2>
             <input type="checkbox" name="" id="necessary" v-model="necessary"> 
-            <h2>必填</h2>
             </div>
             <div class="option Box">
-                <div>
+                <div class="optionDescription">
                     <h2>選項 </h2>
-                    <p>(多個答案請以";"分號做分隔)</p>
+                    <p>(多個選項請以 " ; " 分號做分隔)</p>
                     <button @click="delQu">刪除</button>
                 </div>
                 <input type="text" class="optionInputBox" v-model="questionOption">
@@ -251,9 +265,7 @@ export default{
                             <input type="checkbox" v-model="item.checkbox" :key="index" @change="handleCheckboxChange(index)">
                         </td>
                         <td>
-                            <div v-for="i in questionList.length">
-                            {{ i }}
-                            </div>
+                        {{ index +1}}
                         </td>
                         <!-- <td>{{ item.quId }}</td> -->
                         <td>{{ item.qTitle }}</td>
@@ -274,33 +286,40 @@ export default{
         </div>
     </div>
     </div>
-    <div v-else-if="page==2">
-        <makeSurePage
-            :quList="this.questionList"
-            :questionnaire="this.questionnaire"
-            :deleQuIds = "this.delQuList"
-        />
-    </div>
+<div v-else-if="page==2">
+    <makeSurePage
+        :quList="this.questionList"
+        :questionnaire="this.questionnaire"
+        :deleQuIds = "this.delQuList"
+    />
+</div>
 </template>
 <style lang="scss" scoped>
+.optionDescription{
+    margin-left: 1%;
+}
+
+
 #necessary{
     width: 40px;
-    margin-left: 20px;
 }
 
 h2{
     margin: 0 2%;
     color: white;
+    font-weight: bold;
 }
 
 button{
     margin: 0 1%;
     width: 100px;
+    font-weight: bold;
 }
 
 p{
     margin: 0%;
     color: white;
+    font-weight: bold;
 }
 
 
@@ -308,12 +327,14 @@ tr{
     height: auto;
     justify-content: space-between;
     border: 1px white solid;
+    font-weight: bold;
 }
 
 td{
     height: auto;
     color: white;
     text-align: center;
+    font-weight: bold;
 
 }
 
@@ -322,10 +343,8 @@ table{
     text-align: left;
 }
 .body{
-    width: 100vw;
     min-height: 100vh;
     overflow-y: auto;
-    background-color: green;
     .Box{
         display: flex;
         margin: 2% 0;

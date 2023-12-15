@@ -67,6 +67,13 @@ export default{
                 this.page = 2 ;
                 return
             }
+            if(this.qnTitle =="" ){
+                alert("'問卷名稱'不得為空!!")
+                return
+            }else if(this.qnDescription == ""){
+                alert("'問卷描述'不得為空!!")
+                return
+            }
             this.Questionnaire.push({
                     title: this.qnTitle,   
                     description: this.qnDescription,
@@ -140,29 +147,40 @@ export default{
 <style lang="scss" scoped>
 
 input{
-    margin: 0 1%s;
+    margin: 0 1%;
 }
 
 a{
     text-decoration: none;
 }
+h1{
+    color: white;
+    font-weight: bold;
+}
 
 h2{
     margin: 0 1%;
     color: white;
+    font-weight: bold;
+}
+
+.btnBox{
+    width: 20%;
+    margin: 0 40%;
 }
 
 button{
-    margin: 0 1%;
+    margin: 0 2%;
+    font-size: 16pt;
+    font-weight: bold;
 }
 .body{
     padding: 2%;
     width: 100vw;
     min-height: 100vh;
     overflow-y: auto;
-    background-color: green;
-    display: flex;
     justify-content: center;
+    display: flex;
 
     .Box{
         display: flex;
@@ -172,9 +190,11 @@ button{
     .setQuestionnaire{
         width: 60%;
         height: 60%;
-        border: 1px white solid;
         .qnDesInputBox{
             height: 40px;
+            width: 80%;
+        }
+        .qnTileInputBox{
             width: 80%;
         }
     }

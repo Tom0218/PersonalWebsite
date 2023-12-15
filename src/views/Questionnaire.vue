@@ -16,18 +16,34 @@ export default {
             currentPage: 1,
             selectedqnIds:[],
             selectQnIndexArr:[],  
-            nowDate:"",     
+            nowDate:"",  
+            controshowdel:true,
+            isdele:false,   
         }
     },
 
     methods:{
+        closedele(){
+            this.isdele = false
+            this.controshowdel = true;
+        },
+
+        showdele(){
+            this.isdele = true
+            this.controshowdel = false;
+        },
+
+        gofront(){
+            this.$router.push('QuestionnaireFront')
+        },
+
         //觀看結果
         goResult(index){
             var pageIndex = ((this.currentPage-1)*this.perpage+index); 
             this.qnId = this.allQn[pageIndex].questionnaire.id;
             this.title =  this.allQn[pageIndex].questionnaire.title;
             this.description =  this.allQn[pageIndex].questionnaire.description;
-            console.log(this.qnId )
+            console.log("qnId : ",this.qnId )
             this.$router.push({
                 name:"QuestionnaireStaticPage",
                 query:{
@@ -63,7 +79,7 @@ export default {
                 .catch((error) =>console.error("Error:",error))
                 .then((data)=>{
                     this.allQn = data;
-                    this.allQn = this.allQn.quizVoList;
+                    this.allQn = this.allQn.quizVoList.slice().reverse();
                     // console.log(this.allQn)
                 })
         },
@@ -135,6 +151,7 @@ export default {
             .then((response) => {
                 console.log("Success:", response);
                 // 在成功完成 API 請求後執行 fetchData()
+                this.isdele = false;
                 this.fetchData();
             })
             .catch((error) => console.error("Error:", error));
@@ -187,7 +204,6 @@ export default {
         },
 
         computed: {
-
             //Math.ceil()取最小整數
             totalPage() {
                 return Math.ceil(this.allQn.length / this.perpage)
@@ -208,32 +224,40 @@ export default {
 
 </script>
 <template>
-<div class="body" >
-    <div class="aa">
-        <div class="top">
-                <h2>後台</h2>
+    <button @click="gofront" id="gofrontcss">前往前台</button>
+    <div class="body" >
+        <div class="aa">
+        <div class="bb">
+            <div class="top">
+            <div>
                 <div class="searchTitle">
                     <h2>問卷標題</h2>
-                    <input type="text" v-model="qnTitle" >
+                    <input type="text" v-model="qnTitle" id="titleSerach">
                 </div>
                 <div class="date" >
-                    <h2>開始/結束</h2>
+                    <h2>開始時間/結束時間</h2>
                     <input type="date" id="startDate" v-model="startDate">
                     <input type="date" id="endDate" v-model="endDate">
-                </div>             
+                </div> 
+            </div>
         </div>
         <div class="btnArea">
-            <button @click='fetchData()'>search</button>
+            <button @click='fetchData()'>搜尋問卷</button>
             <button><RouterLink to="/QuestionnaireCreate" id="addqn">新增問卷</RouterLink></button>
-            <button type="button" 
-            @click=deleQn
-            >刪除問卷</button>
+            <button type="button" @click="showdele" v-show="controshowdel">刪除問卷</button>
+            <button type="button" @click="closedele" v-show="isdele">取消刪除</button>
+            <button type="button" @click=deleQn v-show="isdele">確認刪除</button>
         </div>
         <div class="bottom">
-            <p>*狀態 : 進行中與已結束無法編輯</p>
+            <div class="notice">
+                <div class="tips">
+                    <label>*狀態 : 進行中與已結束無法編輯</label>
+                    <label>*狀態 : 未發佈與尚未開始不可觀看結果</label>
+                </div>
+            </div>
             <table>
                 <tr>
-                    <th class="checkboxTd"></th>
+                    <th class="checkboxTd" v-show="isdele"></th>
                     <th>編號</th>
                     <th>問卷</th>
                     <th>狀態</th>
@@ -242,8 +266,8 @@ export default {
                     <th>結果</th>
                 </tr>
                 <tr v-for="(quiz,index) in allQn.slice(pageStart, pageEnd)" :key="index">
-                    <td class="checkboxTd">
-                        <input type="checkbox" v-model="quiz.checkbox" @change="handleCheckboxChange(quiz.questionnaire.id)" @click="catchIndex(index)">
+                    <td class="checkboxTd" v-show="isdele">
+                        <input type="checkbox" v-model="quiz.checkbox" @change="handleCheckboxChange(quiz.questionnaire.id)" @click="catchIndex(index)" >
                     </td>
                     <td>{{ quiz.questionnaire.id }}</td>
                     <!--編輯判斷 -->
@@ -255,12 +279,13 @@ export default {
                     <td>{{ quiz.questionnaire.startDate }}</td>
                     <td>{{ quiz.questionnaire.endDate }}</td>
                     <!-- 進行中、已結束可以觀看結果 -->
-                    <td @click="goResult(index)" :key="index">前往</td>
+                    <td style="cursor: pointer;" @click="goResult(index)" :key="index" v-if="quiz.questionnaire.startDate <= nowDate && nowDate <= quiz.questionnaire.endDate || this.nowDate > quiz.questionnaire.endDate">前往</td>
+                    <td v-else  style="cursor: not-allowed;">尚未開始</td>
                 </tr>
             </table>
         </div>
-    </div>
-    <!-- ==========================================================================分頁 -->
+ 
+    <!--分頁 -->
         <ul class="pagination">
             <li class="page-item" @click.prevent="setPage(currentPage-1)">
                 <a class="page-link" href="#" aria-label="Previous">
@@ -277,24 +302,48 @@ export default {
                 </a>
             </li>
         </ul>
-        <!-- ==========================================================================分頁 -->
+    </div>
+    </div>
 </div>
 </template>
 
 <style lang="scss" scoped>
+#gofrontcss{
+    margin: 0;
+}
 
+
+//左上狀態提示
+.tips{
+margin-left: 5%;
+display: flex;
+flex-direction: column;
+}
+
+.bb{
+    width: 100%;
+    height: 100%;
+}
+.notice{
+    display: flex;
+    flex-direction: column;
+}
+label{
+    color: white;
+}
 .bottom{
     min-height: 60%;
     // overflow-y: auto;
 }
-
 
 a{
     text-decoration: none;
 }
 
 button{
-    margin:0  2%;
+    margin: 1%;
+    font-weight: bold;
+    font-size: 16pt;
 }
 
 h2{
@@ -346,12 +395,8 @@ td{
     font-weight: bold;
 }
 
-// tr:last-of-type{
-//   border-bottom: 2px solid #009879;
-// }
-
 tr:nth-of-type(even) td{
-  background-color:rgb(0, 0, 0);
+    background-color:rgb(0, 0, 0);
 }
 
 ul{
@@ -361,28 +406,34 @@ ul{
     margin-top: 1%;
 }
 
-
 .body{
+    width: 100%;
     min-height: 100vh;
     overflow-y: auto;
+    padding-top: 2% 5%;
     .aa{
-        width: 99%;
-        height: 100%;
+        width: 100%;
+        display: flex;
+    .top{
+        display: flex;
+        justify-content: center;
         .searchTitle{
             display: flex;
-            justify-content: center;
+            margin-bottom: 2%;
+            #titleSerach{
+                width: 74.5%;
+            }
             input,p{
                 margin: 0 10px;
             }
         }
         .date{
             display: flex;
-            align-items: center;
-            justify-content: center;
             input,p{
                 margin: 0 10px;
             }
         }
+    }
 
         .btnArea{
             display: flex;

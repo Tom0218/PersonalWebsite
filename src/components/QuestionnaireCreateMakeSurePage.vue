@@ -56,7 +56,6 @@ export default{
                     "endDate": this.questionnaire[0].endDate
                 },
                 "question_list": [],
-
                 "deleteQuestionList":[],
 
                 };
@@ -93,12 +92,12 @@ export default{
                     this.$router.push('Questionnaire')
                 })
                 .catch((error) => console.error("Error:", error));
-
                 return;
             };
 
             //create not publish
             var url = "http://localhost:8081/api/quiz/create";
+            
             var Qn = {
             "questionnaire": {
                 "title": this.questionnaire[0].title,
@@ -132,7 +131,6 @@ export default{
             .then((response) => {
                 console.log(response);
                 alert(response.rtncode)
-                // 在成功完成 API 請求後執行 fetchData()
                 this.$router.push('Questionnaire')
             })
             .catch((error) => console.error("Error:", error));
@@ -178,15 +176,14 @@ export default{
             .then((response) => {
                 console.log(response);
                 alert(response.rtncode)
-                // 在成功完成 API 請求後執行 fetchData()
                 this.$router.push('Questionnaire')
             })
             .catch((error) => console.error("Error:", error));
                 return;
             }
-
+            var url = "http://localhost:8081/api/quiz/create";
             var Qn = {
-            "questionnaire": {
+                "questionnaire": {
                 "title": this.questionnaire[0].title,
                 "description":this.questionnaire[0].description,
                 "published":true,
@@ -217,7 +214,6 @@ export default{
             .then((response) => {
                 console.log(response);
                 alert(response.rtncode)
-                // 在成功完成 API 請求後執行 fetchData()
                 this.$router.push('Questionnaire')
             })
             .catch((error) => console.error("Error:", error));
@@ -234,7 +230,7 @@ export default{
             <h1>問卷: {{ this.questionnaire[0].title }}</h1>
             <h1>問卷描述:{{ this.questionnaire[0].description }}</h1>
             <div class="info">
-                <p>姓名 :</p>
+                <p>姓名 : </p>
                 <input type="text" v-model="userName">
             </div>
             <div class="info">
@@ -252,7 +248,7 @@ export default{
             <div v-for="item in quList">
                 <div class="question">
                     <p>{{ item.quId }}.</p>
-                    <p>{{ item.qTitle }}</p>
+                    <p> {{ item.qTitle }}</p>
                     <p>({{ item.optionType }})</p>
                 </div>
                 <div class="optionArea">
@@ -269,15 +265,24 @@ export default{
                     </div>
                 </div>
             </div>
-            <!-- <button type="button" @click="$emit('goSetQuestion',1)">上一頁</button> -->
-            <!-- <button @click="goHome">回首頁</button> -->
-            <button type="button" @click="save">儲存</button>
-            <button type="button" @click="saveAndpub">儲存並發布</button>
+            <div id="btnBox">
+                <button type="button" @click="save">儲存</button>
+                <button type="button" @click="saveAndpub">儲存並發布</button>
+            </div>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
+#btnBox{
+    width: 50%;
+    margin: 2% 25%;
+}
+input{
+    height: 30px;
+    margin: 0 1%;
+}
+
 .option{
     display: flex;
     width: 50%;
@@ -288,23 +293,28 @@ h1{
 }
 
 button{
-    width: 100px;
+    height: auto;
+    font-size: 16pt;
+    font-weight: bold;
+    width: 150px;
     margin: 0 1%;
-    background-color: rgb(228, 24, 228);
+    background-color: rgb(210, 123, 16);
     border-radius: 10px;
     box-shadow: 1px 1px 0px 1px;
 }
 p{
     font-weight: bold;
     font-size: 16pt;
-    color: black;
+    color: white;
+    margin: 0 5px;
 }
 .body{
     min-height: 100vh;
     overflow-y: auto;
-    width: 100vw;
-    padding: 5% 10%;
-    background-color: #495E57;
+    width: 60%;
+    margin: 0 20%;
+    padding: 5%;
+    background-color: rgb(0, 68, 0);
 }
 .question{
     display: flex;

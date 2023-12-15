@@ -26,7 +26,7 @@ export default{
         this.description = this.$route.query.description;
         const answerString = this.$route.query.answers;
         this.answers = JSON.parse(answerString);
-
+        console.log(this.nowDate)
     },
 
     methods:{
@@ -48,51 +48,47 @@ export default{
         },
         
         finish(){
-            var currentDate = new Date();
+        var currentDate = new Date();
 
         // 获取日期和时间的字符串表示
         var currentDateTimeString = currentDate.toLocaleString();
-            var url="http://localhost:8081/api/quiz/Submission";
-            var submi ={
-                "Submission_List":[]
-            };
-            for(let i =0; i < this.answers.length;i++){
-                submi.Submission_List.push({
-                    "name":this.name,    
-                    "phoneNumber":this.phone,
-                    "email" : this.email,
-                    "age":parseInt(this.age),
-                    "qnId":parseInt(this.answers[i].qnId),
-                    "quId":this.answers[i].quId,
-                    "answer":this.answers[i].answer,
-                    "dateTime":this.nowDate
-                })
-        
-            }
-            console.log(submi.Submission_List)
+        var url="http://localhost:8081/api/quiz/Submission";
+        var submi ={
+            "Submission_List":[]
+        };
+        for(let i =0; i < this.answers.length;i++){
+            submi.Submission_List.push({
+                "name":this.name,    
+                "phoneNumber":this.phone,
+                "email" : this.email,
+                "age":parseInt(this.age),
+                "qnId":parseInt(this.answers[i].qnId),
+                "quId":this.answers[i].quId,
+                "answer":this.answers[i].answer,
+                "dateTime":this.nowDate
+            })
+        }
 
-            fetch(url, {
-                method: "POST",
-                body: JSON.stringify(submi),
-                headers: new Headers({
-                "Content-Type": "application/json",
-                }),
-                })
-                .then((res) => res.json())
-                .then((response) => {
-                    console.log(response);
+        fetch(url, {
+            method: "POST",
+            body: JSON.stringify(submi),
+            headers: new Headers({
+            "Content-Type": "application/json",
+            }),
+            })
+            .then((res) => res.json())
+            .then((response) => {
+                console.log(response);
+                alert(response.rtncode)
+                if(response.rtncode =="SUCCESSFUL"){
                     alert(response.rtncode)
-                    if(response.rtncode =="SUCCESSFUL"){
-                        alert(response.rtncode)
-                        this.$router.push('Questionnaire')
-                    }
-                })
-                .catch((error) => console.error("Error:", error));
-                this.$router.push("QuestionnaireFront")
-
-                return;
-
-
+                    this.$router.push('Questionnaire')
+                }
+                alert(response.rtncode)
+            })
+            .catch((error) => console.error("Error:", error));
+            this.$router.push("Questionnaire")
+            return;
         }
     }
 }
@@ -102,8 +98,8 @@ export default{
 <template>
     <div class="body">
         <div>
-            <h1>{{this.title}}</h1>
-            <h3>簡介:{{this.description}}</h3>
+            <h1>問卷 : {{this.title}}</h1>
+            <h1>簡介 : {{this.description}}</h1>
             <div class="personinfo">
                 <div class="info">
                     <p>姓名 :{{ this.name }}</p>
@@ -140,36 +136,41 @@ export default{
 
             </div>
         </div>
-            <button type="button"  @click="Back"><p>修改</p></button>
-            <button type="button" @click="finish"><p>送出</p></button>
-        
+            <div id="btnBox">
+                <button type="button"  @click="Back">修改</button>
+                <button type="button" @click="finish">送出</button>
+            </div>
         </div>
 
 </template>
 
 <style lang="scss" scoped>
+#btnBox{
+    width: 40%;
+    margin: 2% 30%;
+}
 .questionarea{
     display: flex;
 }
 .box{
     display: flex;
 }
-.personinfo{
-    display: flex;
-    justify-content: space-between;
-}
 
 h1,h3{
     color: white;
 }
 
-
 button{
+    height: auto;
+    font-size: 16pt;
+    font-weight: bold;
+    width: 100px;
     margin: 0 1%;
-    background-color: rgb(228, 24, 228);
+    background-color: rgb(210, 123, 16);
     border-radius: 10px;
     box-shadow: 1px 1px 0px 1px;
 }
+
 p{
     font-size: 16pt;
     font-weight: bold;
@@ -181,7 +182,9 @@ p{
     min-height: 100vh;
     overflow-y: auto;
     padding: 5%;
-    background-color: green;
+    width: 60%;
+    margin: 0 20%;
+    background-color: rgb(0, 68, 0);
     
 }
 

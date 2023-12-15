@@ -1,4 +1,5 @@
 <script>
+
 export default{
     data(){
         return{
@@ -15,6 +16,15 @@ export default{
     },
 
     methods:{
+        backStatic(){
+            this.$router.push({
+             name:'QuestionnaireStaticPage',
+             query:{
+                backQnId:this.qnId
+             }   
+            })
+        },
+
         //獲取問題
         getQuestion(){
             console.log("fetch裡的qnId是:"+this.qnId)
@@ -59,36 +69,45 @@ export default{
 }
 </script>
 <template>
-
-    <div class="body">
-        <h1>問卷名稱:{{ this.title }}</h1>
-        <h3>說明:{{ this.description }}</h3>
-        <div class="personinfo">
-            <div class="info">
-                <p>姓名 :{{ this.userName }}</p>
-            </div>
-            <div class="info">
-                <p>手機 :{{ this.userphone }} </p>
-            </div>
-            <div class="info">
-                <p>信箱 :{{ this.userEmail }} </p>
-            </div>
-            <div class="info">
-                <p>年齡 : {{ this.userAge }}</p> 
-            </div>
-        </div>
-        <div v-for="question in this.quList" class="answerBox">
-            <p>{{ question.quId }}.</p>
-            <p>{{ question.qTitle }} :</p>
-            <div v-for="answer in this.userList" >
-                <div  v-if="answer.name == this.userName &&answer.quId == question.quId ">
-                    <label>{{ answer.answer }}</label>
+    <div>
+        <div class="body">
+            <div class="mainArea">
+                <h1>{{ this.title }}</h1>
+                <h3>{{ this.description }}</h3>
+                <div class="personinfo">
+                    <div class="info">
+                        <p>姓名 : {{ this.userName }}</p>
+                    </div>
+                    <div class="info">
+                        <p>手機 : {{ this.userphone }} </p>
+                    </div>
+                    <div class="info">
+                        <p>信箱 : {{ this.userEmail }} </p>
+                    </div>
+                    <div class="info">
+                        <p>年齡 : {{ this.userAge }}</p> 
+                    </div>
                 </div>
+                <div v-for="question in this.quList" class="answerBox">
+                    <p>{{ question.quId }}.</p>
+                    <p>{{ question.qTitle }} :</p>
+                    <div v-for="answer in this.userList" >
+                        <div  v-if="answer.name == this.userName &&answer.quId == question.quId ">
+                            <label>{{ answer.answer }}</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- <button @click="backStatic">上一頁</button> -->
             </div>
         </div>
     </div>
 </template>
 <style lang="scss" scoped>
+.mainArea{
+    height: 100vh;
+    padding: 2%;
+    background-color: rgb(0, 68, 0);
+}
 .answerBox{
     display: flex;
     align-items: center;

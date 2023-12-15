@@ -1,10 +1,28 @@
 <script>
+import statisticsPage from '../components/QuestionnaireFrontstatisticsPage.vue'
 export default{
+    data(){
+        return{
+            qnId:0,
+            title:"",
+            description:"",
+            userList:[],
+            datas:this.uniqueUsers,//要呈現的資料
+            perpage: 10, //一頁的資料數
+            currentPage: 1,
+            page :1,
+        }
+    },
+    components:{
+        statisticsPage
+    },
+
     computed: {
+
         //分頁
-          //Math.ceil()取最小整數
+        //Math.ceil()取最小整數
         totalPage() {
-                return Math.ceil(this.userList.length / this.perpage)
+                return Math.ceil(this.uniqueUsers.length / this.perpage)
             },
 
         //取得該頁第一個值的index
@@ -16,7 +34,6 @@ export default{
         pageEnd() {
             return this.currentPage * this.perpage
         },
-
 
         //時間換算
         sortedUsers() {
@@ -33,30 +50,16 @@ export default{
         uniqueUsers() {
             const uniqueUsers = [];
             const addedQnIds = [];
-
             this.userList.forEach((user) => {
                 if (!addedQnIds.includes(user.name)) {
                 uniqueUsers.push(user);
                 addedQnIds.push(user.name);
                 }
             });
-
             return uniqueUsers.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
             },
             
         },
-
-    data(){
-        return{
-            qnId:0,
-            title:"",
-            description:"",
-            userList:[],
-            datas:this.userList,//要呈現的資料
-            perpage: 10, //一頁的資料數
-            currentPage: 1,
-        }
-    },
 
     mounted(){
         this.qnId =this.$route.query.qnId
@@ -67,6 +70,15 @@ export default{
     },
     
     methods:{
+        
+        goChart(){
+            this.page =2;
+        },
+
+        goStaticPage(){
+            this.page =1;
+        },
+
         //前往單一問卷回饋(id,name,phone,email,age)
         gofeedback(x,y,z,a,b){
             this.$router.push({
@@ -103,9 +115,9 @@ export default{
         });
         return formattedDate;
         },
-        //取得所有填寫資料
+
+        //取得所有user資料
         getSubmission() {
-            console.log("fetch裡的qnId是:"+this.qnId)
             const url = 'http://localhost:8081/api/quiz/getSubmission';
             const queryParams = new URLSearchParams({
                 qnId: this.qnId
@@ -120,10 +132,11 @@ export default{
             .then(response => response.json())
             .then(data => {    
                 if (data.userList == null) {
-                    alert("User list is null");
+                    alert("無填寫資料!!");
+                    this.$router.push('Questionnaire')
                     return
                 } else {
-                    console.log("下面是fetch的UserList");
+                    console.log("UserList");
                     this.userList = data.userList;
                     console.log(this.userList);
                 }
@@ -140,9 +153,14 @@ export default{
 </script>
 
 <template>
-<div class="body">
+<div>
+    <button @click="goStaticPage">填寫紀錄</button>
+    <button  @click="goChart">統計圖表</button>
+</div>
+
+<div class="body" v-if="page ==1">
     <div>
-        <h1>問卷回饋</h1>
+        <h1>填寫紀錄</h1>
         <table>
             <tr>
                 <th>編號</th>
@@ -177,6 +195,9 @@ export default{
         <!-- ==========================================================================分頁 -->
     </div>
 </div>
+<div v-else-if="page ==2">
+            <statisticsPage/>
+        </div>
 </template>
 
 <style lang="scss" scoped>
@@ -188,19 +209,25 @@ ul{
 table{
     // min-height: 50vh;
     height: 100%;
-    width: 90%;
-    margin: 0 5%;
+    width: 100%;
     background-color: rgb(31, 30, 30);
 }
 
 tr{
-   
+    border-left: rgb(0, 0, 0) 1px solid;
 }
+
+tr:nth-of-type(even) td{
+    background-color:rgb(0, 0, 0);
+}
+
 
 td{
     font-weight: bold;
     color: white;
     width: 5%;
+    font-size: 16pt;
+    text-align:center;
     
 }
 
@@ -210,6 +237,7 @@ th{
     width: 5%;
     background-color: rgb(0, 96, 34);
     height: auto;
+    text-align:center;
     
 }
 
