@@ -26,9 +26,9 @@ export default{
         <RouterLink to="/" class="Home Btn Btn shape-ex1">Home</RouterLink>
         <RouterLink to="/Note" class=" Btn shape-ex1" >Note</RouterLink>
         <RouterLink to="/About" class=" Btn shape-ex1" >About</RouterLink>
-
-        <!-- <p class=" Btn shape-ex1 Pinia" >{{ this.location }}</p> -->
+        <p class=" Btn shape-ex1 Pinia" >{{ this.location }}</p>
     </div>
+    
 </template>
 
 <style lang="scss" scoped>

@@ -5,7 +5,7 @@ export default defineStore("indexState", {
     //與<script>預設匯出概念相同
     //data
     state:() => ({
-        location:867  //起始值不能為0 ex.0678
+        location:1  //起始值不能為0 ex.0678
     }),
     //computed
     getters:{
@@ -16,7 +16,7 @@ export default defineStore("indexState", {
     //methods
     actions:{
         getLocation(){
-            console.log(this.location)
+            // console.log(this.location)
         },
         setLocation(num){
             this.location = num;
