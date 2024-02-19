@@ -77,7 +77,7 @@ hr{
 }
 .body{
     height: auto;
-    width:100%;
+    width:98.2vw;
     background-color: #BEC0CD;
     padding: 2%;
 }

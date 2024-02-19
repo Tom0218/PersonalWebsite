@@ -125,11 +125,9 @@ computed: {
 
 </script>
 <template>
-
-    <button @click="goback" id="gobackcss">前往後台</button>
 <div class="body">
-    <div class="aa">
-        <div class="top">
+    <div class="mainArea">
+        <div class="inputArea">
             <div>
                 <div class="searchTitle">
                     <h2>問卷標題</h2>
@@ -141,10 +139,10 @@ computed: {
                     <input type="date" id="endDate" v-model="endDate">
                 </div> 
             </div>
+            <div class="btnArea">
+                <button @click='fetchData()'>搜尋問卷</button>
+            </div>            
         </div>
-        <div class="btnArea">
-            <button @click='fetchData()'>搜尋問卷</button>
-        </div>            
         <div class="bottom">
             <table>
                 <tr>
@@ -194,13 +192,17 @@ computed: {
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
-        </ul>>
+        </ul>
+        <button @click="goback" id="gobackcss">前往後台</button>
 </div>
 
 </template>
 
 
 <style lang="scss" scoped>
+$background-color:#001B79;
+$maincolor:#1640D6;
+
 #gobackcss{
     margin: 0%;
 }
@@ -210,7 +212,6 @@ a{
 }
 
 button{
-    margin: 2%;
     font-weight: bold;
     font-size: 16pt;
 }
@@ -278,14 +279,19 @@ ul{
 .body{
     padding: 2% 5%;
     width:100%;
-    height: 100vh;
-    overflow-y: auto;
-    .aa{
+    .mainArea{
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-        .top{
+        .inputArea{
             display: flex;
             justify-content: center;
+            border-radius: 10px;
+            padding: 2%;
+            margin-bottom: 2%;
+            background: rgb(31, 30, 30);
         }
         
         .searchTitle{
@@ -308,6 +314,10 @@ ul{
         .btnArea{
             display: flex;
             justify-content: center;
+        }
+
+        .bottom{
+            width: 100%;
         }
     }
 }

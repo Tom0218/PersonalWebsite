@@ -46,7 +46,8 @@ export default{
         margin: 0;
         width: 300px;
         height: 30px;
-        font-size: 16pt;
+        padding: 0 10px;
+        font-size: 14pt;
         border-radius: 10px;
         border-color: #3C7FA5;
     }
@@ -78,6 +79,19 @@ export default{
 
     
         }
+    }
+
+    /* Chrome, Safari, Edge, Opera */
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+
+
+    /* Firefox */
+    input[type=number] {
+    -moz-appearance: textfield;
     }
     
 </style>

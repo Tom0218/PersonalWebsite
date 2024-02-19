@@ -16,48 +16,55 @@ data() {
 
 
 methods: {
-    addNItem(info){//計算總合
-    this.arr.push(info) //推進主陣列
+    //計算總合
+    addNItem(info){
+         //推進主陣列
+        this.arr.push(info)
 
-    if(info.Amount > 0){ 
-        this.plusNum = this.plusNum + info.Amount;
-    }else{
-        this.neNum = this.neNum +info.Amount;
-    }
-    this.netIncome = this.plusNum + this.neNum;
-},
+        if(info.Amount > 0){ 
+            this.plusNum = this.plusNum + info.Amount;
+        }else{
+            this.neNum = this.neNum +info.Amount;
+        }
+        this.netIncome = this.plusNum + this.neNum;
+        },
 
-
-  changePageDelete(index){ //跳出確認刪除視窗
+     //跳出確認刪除視窗
+    changePageDelete(index){
         this.key = index;
         this.page = 2
-    },
+        },
 
-moneyDele(dele){
-      //若被刪除的money > 0 plusNum -money
-    if (dele >=0) { 
-        this.plusNum = this.plusNum - dele
-    }
-    else{
-        //將支出進行絕對值轉為正數
-        this.aa = Math.abs(dele)
-        this.neNum = this.neNum + this.aa //把要刪除的數加回去
-    }
-    this.netIncome = this.neNum + this.plusNum;
-    },
-deletedArrfn(arr){ //刪除元素後的陣列取代主陣列
-    this.arr = arr
-},
-closePage(x){   //刪除元素後帶出的關閉視窗值
+    moneyDele(dele){
+        //若被刪除的money > 0 plusNum -money
+        if (dele >=0) { 
+            this.plusNum = this.plusNum - dele
+        } else {
+            //將支出進行絕對值轉為正數
+            this.aa = Math.abs(dele)
+            this.neNum = this.neNum + this.aa //把要刪除的數加回去
+            }
+            this.netIncome = this.neNum + this.plusNum;
+        },
+
+    deletedArrfn(arr){ //刪除元素後的陣列取代主陣列
+        this.arr = arr
+        },
+
+    closePage(x){   //刪除元素後帶出的關閉視窗值
         this.page = x
-    },
-Addtransaction(){
-      this.page = 1 //新增物件
-    },
-AddObj(){
-    this.page = 0
+        },
+
+    //新增物件
+    Addtransaction(){
+        this.page = 1 
+        },
+
+    AddObj(){
+        this.page = 0
     }
 },
+
 components: {
     AddObject,
     DeleteBox,
@@ -72,7 +79,7 @@ components: {
     <div class="blueArea">
         <div class="mainArea">
             <h3 class="ExpenseTracker">Expense Tracker</h3>
-            <h3 class="Kouhei">Kouhei</h3>
+            <h3 class="Kouhei">Tom</h3>
             <p class="Yourbalance">YOUR BALANCE</p>
             <h1 class="moneyyy">${{ netIncome}}</h1>
         </div>
@@ -116,11 +123,11 @@ components: {
     <div class="popup-content">
         <!-- <h2>{{ title }}</h2> -->
         <div class="popup-body">
-        <!-- 弹出窗口的内容放在这里 -->
-        <div class="dlepage">
-    <i class="fa-solid fa-xmark closeWindows" @click="AddObj()"></i>
-    <AddObject @dog1 = "addNItem" @delpage = "closePage"/>
-    </div>
+            <!-- 弹出窗口的内容放在这里 -->
+            <div class="dlepage">
+                <i class="fa-solid fa-xmark closeWindows" @click="AddObj()"></i>
+                <AddObject @dog1 = "addNItem" @delpage = "closePage"/>
+            </div>
         </div>
     </div>
 </div>
@@ -130,9 +137,8 @@ components: {
 <div class="popup"  v-if="page ==2">
     <div class="popup-content">
         <div class="popup-body">
+            <i class="fa-solid fa-xmark Closewindow" @click="AddObj()"></i>
         <!-- 弹出窗口的内容放在这里 -->
-        <!-- <div v-if="page ==2" class="dlepage"> -->
-    <i class="fa-solid fa-xmark Closewindow" @click="changePage1()"></i>
     <DeleteBox :DelIndex ="this.key" :delarr="this.arr" 
 
     @delemoney = "moneyDele" @deletedArr = "deletedArrfn" @closepage = "closePage"/>
@@ -151,12 +157,14 @@ components: {
 
 <style lang="scss" scoped>
 .Closewindow{
-    margin-left: 190px;
+    margin-left: 226px;
+    cursor: pointer;
 }
 .bgArea {
     width: 100%;
     height: 100vh;
     display: flex;
+    background: whitesmoke;
 
 .blueArea {
     width: 40vw;
@@ -308,7 +316,7 @@ components: {
 
 .popup-content {
     background: #fff;
-  // padding: 20px;
+    padding: 10px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -332,6 +340,7 @@ components: {
     position: absolute;
     right: 0;
     color: #4b85a0;
+    cursor: pointer;
 }
 }
 

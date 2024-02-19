@@ -140,7 +140,6 @@ export default{
     }
 
 .v2Body{
-  width: 100vw;
   height: 100vh;
   background-color: #232D3F;
   display: flex;

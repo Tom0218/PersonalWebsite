@@ -23,7 +23,7 @@ export default{
 <style lang="scss" scoped>
 .body{
     height: 90vh;
-    width: 100%;
+    width: 98.7vw;
     background-color: #BEC0CD;
     padding-top: 100px;
     .MainArea{

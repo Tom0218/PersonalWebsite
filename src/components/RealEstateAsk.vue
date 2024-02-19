@@ -4,32 +4,28 @@
 
 <template>
 <div class="body">
-    <div class="backdrop-blur">
-    <div class="img"></div>
-    </div>
-
+        <div class="img"></div>
 </div>
 </template>
 
 <style lang="scss" scoped>
+
 .body{
-    width: 100%;
-    height: auto;
-    background-color: #BEC0CD;
+    width: 98.5vw;
+    height: 85vh;
+    background: #BEC0CD;
     display: flex;
     justify-content: center;
+    align-items: center;
+
     .img{
         background-image: url(../../public/4037098.jpg);
-        height: 1000px;
+        height: 400px;
         width: 600px;
         background-size: contain;
-        background-repeat: no-repeat;
-        margin-top: 5%;
         filter: blur(5px);
     }
-    .backdrop-blur {
-        backdrop-filter: blur(5px);
-    }
 }
+
 
 </style>

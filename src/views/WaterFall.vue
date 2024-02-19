@@ -17,8 +17,6 @@ export default{
             ],
         }
     },
-    methods:{
-    },
 }
 </script>
 
@@ -65,10 +63,6 @@ export default{
             </div>
         </div>
     </div>
-
-
-
-
 </div>
 </template>
 
@@ -86,6 +80,7 @@ a{
         margin: 0 10px;
 }
 .body{
+        
         height: auto;
         margin: 0%;
 }
