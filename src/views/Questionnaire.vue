@@ -27,13 +27,24 @@ export default {
             popup:0,
             //建立問卷步驟
             createStep:1,
+            //新增問題or修改問題button
+            EditAndSaveBtn:"新增",
+            //建立問卷要素
+            questionnaire:[],
+            question:"",
+            optionType:"",
+            necessary:false,
+            questionOption:"",
+            questionList:[],
+
+
         
         }
     },
 
     methods:{
 
-         //新增物件
+         //新增問卷
         Addtransaction(){
             this.popup = 1 
             },
@@ -45,15 +56,117 @@ export default {
         closedele(){
             this.isdele = false
             this.controshowdel = true;
-        },
+            },
 
         showdele(){
             this.isdele = true
             this.controshowdel = false;
-        },
+            },
 
         gofront(){
             this.$router.push('QuestionnaireFront')
+            },
+
+        //新增或編輯問卷題目
+        addOREditQuetion(){
+
+            //修改模式
+            if(this.EditAndSaveBtn == "編輯"){
+                //編輯
+
+            }
+            if( this.EditAndSaveBtn == "編輯" &&this.questionnaire != ""){
+                // console.log("問卷索引值:"+this.key)
+                this.questionList[this.key].quId = this.quId
+                this.questionList[this.key].qnId = parseInt(this.questionnaire[0].qnId)
+                this.questionList[this.key].qTitle = this.question;
+                this.questionList[this.key].optionType = this.optionType;
+                this.questionList[this.key].necessary = this.necessary;
+                this.questionList[this.key].option = this.questionOption;
+                this.addbutton = "新增";
+                alert("修改模式編輯成功");
+                console.log(this.questionList)
+                this.qnId = -1;
+                return
+            }   
+
+            //修改模式新增
+            if(this.EditAndSaveBtn == "新增" && this.questionnaire != ""){
+                this.quId=this.questionList.length+1;
+                this.questionList.push({
+                    quId:this.quId,
+                    qnId:parseInt(this.questionnaire[0].qnId),
+                    qTitle:this.question,
+                    optionType:this.optionType,
+                    necessary:this.necessary,
+                    option:this.questionOption,
+                });
+                this.qnId = -1;
+                this.question = "";
+                this.optionType = "";
+                this.necessary = false;
+                this.questionOption = "";
+                alert("修改模式新增成功");
+                return
+            }
+
+             //新增模式編輯
+            if( this.EditAndSaveBtn == "編輯"){
+                if(this.question == ""){
+                    alert("問題不能為空")
+                    return
+                } else if(this.optionType ==""){
+                    alert("題行不得為空")
+                    return
+                } else if(this.questionOption ==""){
+                    alert("選項不得為空")
+                    return
+                }
+                // console.log("問卷索引值:"+this.key)
+                this.questionList[this.key].quId = this.quId
+                this.questionList[this.key].qTitle = this.question;
+                this.questionList[this.key].optionType = this.optionType;
+                this.questionList[this.key].necessary = this.necessary;
+                this.questionList[this.key].option = this.questionOption;
+                this.addbutton = "新增";
+                alert("新增模式編輯成功");
+                this.qnId = -1;
+                this.question = "";
+                this.optionType = "";
+                this.necessary = false;
+                this.questionOption = "";
+                console.log(this.questionList)
+                return
+            }
+
+            //新增模式新增
+            if(this.EditAndSaveBtn == "新增"){
+                if(this.question == ""){
+                    alert("問題不能為空")
+                    return
+                } else if(this.optionType ==""){
+                    alert("題行不得為空")
+                    return
+                } else if(this.questionOption ==""){
+                    alert("選項不得為空")
+                    return
+                }
+                this.quId=this.questionList.length+1;
+                this.questionList.push({
+                    quId:this.quId,
+                    qTitle:this.question,
+                    optionType:this.optionType,
+                    necessary:this.necessary,
+                    option:this.questionOption,
+                });
+                this.qnId = -1;
+                this.question = "";
+                this.optionType = "";
+                this.necessary = false;
+                this.questionOption = "";
+                console.log(this.questionList)
+                alert("新增模式新增成功");
+            }
         },
 
         //觀看結果
@@ -71,7 +184,7 @@ export default {
                     description: this.description,
                 }
             })
-        },
+            },
 
         //search 
         fetchData() {
@@ -102,7 +215,7 @@ export default {
                     }
                     // console.log(this.allQn)
                 })
-        },
+            },
 
         //分頁方法
         setPage(page) {
@@ -110,14 +223,14 @@ export default {
             return
         }
         this.currentPage = page
-        },
-        
+            },
+
         //計算索引值
         catchIndex(index){
             var pageIndex = (this.currentPage-1)*10 + index;
             this.selectQnIndexArr.push({qnId:this.allQn[pageIndex].questionnaire.id, currentPage:this.currentPage, index:index}); 
             console.log(this.selectQnIndexArr);
-        },
+            },
 
         //deleteQuestionnaire
         deleQn() {
@@ -175,7 +288,7 @@ export default {
                 this.fetchData();
             })
             .catch((error) => console.error("Error:", error));
-        },
+            },
 
         //checkboxgeQnId fn
         handleCheckboxChange(questionnaireId) {
@@ -187,12 +300,12 @@ export default {
             }
             console.log('Selected Questionnaire Ids:',this.selectedqnIds); // 输出更新后的数组
             console.log(this.nowDate > 2023-12-3)
-        },
+            },
 
         //獲取当前日期
         isPublished() {
             this.nowDate = new Date().toISOString().split('T')[0];   
-        },
+            },
 
         //edit Question
         editQuestion(index){
@@ -215,41 +328,40 @@ export default {
                 published:this.published
             }
             });
-        }
+            }
 },
 
         mounted() {
             this.fetchData(); // 将方法调用放在函数体内
             this.isPublished();
-        },
+            },
 
         computed: {
             //Math.ceil()取最小整數
             totalPage() {
                 if (this.allQn !== null && this.allQn !== undefined) {
                     return Math.ceil(this.allQn.length / this.perpage);
-                }
-            },
+                    }
+                },
 
              //取得該頁第一個值的index
             pageStart() {
                 if(this.currentPage < 0 ){
                     this.currentPage = 1;
                     return (this.currentPage - 1) * this.perpage 
-                }
-                return (this.currentPage - 1) * this.perpage      
-            },
+                    }
+                    return (this.currentPage - 1) * this.perpage      
+                },
 
             //取得該頁最後一個值的index
             pageEnd() {
                 if(this.currentPage < 0 ){
                     this.currentPage = 1;
                     return (this.currentPage - 1) * this.perpage 
-                }
-                return this.currentPage * this.perpage
-            },
-
-        }
+                    }
+                    return this.currentPage * this.perpage
+                },
+            }
 }
 
 </script>
@@ -364,7 +476,59 @@ export default {
                             
                         </div>
                         <div class="BuildQn-step-two" v-if="this.createStep == 2">
-                            as
+                            <div class="Box">
+                                <label>題目 &nbsp;</label>
+                                <input type="text" v-model="question">
+                            </div>
+                            <div  class="Box">
+                                <label>選項 &nbsp;</label>
+                                <input type="text" placeholder="選項請以 ; (分號)做分隔" v-model="questionOption">
+                            </div>
+                            <div  class="Box">
+                                <label>題型 &nbsp;</label>
+                                <select v-model="optionType">
+                                    <option value="單選題">單選題</option>
+                                    <option value="多選題">多選題</option>
+                                    <option value="短述題">短述題</option>
+                                </select>
+                            </div>
+                            <div class="EditSaveArea">
+                                <label>必填 &nbsp;</label>
+                                <input type="checkbox" class="StepTwoCheckbox">
+                                <div id="cancelAndSaveBtn">
+                                    <button v-if="this.EditAndSaveBtn =='編輯'">取消</button>
+                                    <button @click="addOREditQuetion">{{this.EditAndSaveBtn}}</button>
+                                </div>
+                            </div>
+                            <table>
+                                <tr>
+                                    <td class="smallbox">#</td>
+                                    <td class="smallbox">編號</td>
+                                    <td class="bigbox">題目</td>
+                                    <td class="midbox">問題種類</td>
+                                    <td class=" midbox">必填</td>
+                                    <td class="smallbox">編輯</td>
+                                </tr>
+                                <tr v-for="(item,index) in questionList" :key="index">
+                                    <th class="smallbox">
+                                        <input type="checkbox" v-model="item.checkbox" :key="index" @change="handleCheckboxChange(index)">
+                                    </th>
+                                    <th class="smallbox">
+                                    {{ index +1}}
+                                    </th>
+                                    <th class="bigbox">{{ item.qTitle }}</th>
+                                    <th  class="midbox">{{ item.optionType }}</th>
+                                    <th>
+                                        <input type="checkbox" class=" midbox" v-model="item.necessary ">
+                                    </th>
+                                    <th>
+                                        <button class="smallbox" @click="eidt(index)" :key="index">編輯</button>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="BuildQn-step-three" v-if="this.createStep == 3">
+                            
                         </div>
                     </div>
                 </div>
@@ -397,37 +561,61 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.popup-body{
+    padding: 5% 0;
+    position: relative;
+    background-color: rgb(0, 96, 34);
+    .closeWindows{
+        font-size: 26pt;
+        position: absolute;
+        right: 0;
+        color: #4b85a0;
     }
+}
 
 .popup-content {
-    background: #fff;
-    border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .popup-content .popup-header{
+    background: #fff;
     display: flex;
     padding: 10px;
+    position: relative;
 }
 
+/////關閉視窗 icon/////
 .popup-content .popup-header i{
+    position: absolute;
+    right: 10px;
     cursor: pointer;
-    margin-left: 460px;
+    margin-left: 76%;
     margin-top: 10px;
 }
 
+/////popup header/////
 .popup-content .popup-header h3{
     margin: 0;
 }
 
+/////popup header/////
+.popup-content .popup-header label{
+    color: black;
+    font-weight: bold;
+}
+
+/////popup bottom/////
 .popup-content .popup-bottom{
     background: rgb(0, 96, 34);
-    padding: 30px 0;   
+    padding: 20px 0;   
     width: 100%;
     display: flex;
     justify-content: center;
 }
 
+/////popup bottom-button/////
 .popup-conten .popup-bottom button{
     color: white;
     margin: 0 10px;
@@ -441,15 +629,88 @@ export default {
 }
 
 .popup .Build-Qn{
-    height: 400px;
-    width: 700px;
     background-color: rgb(0, 96, 34);
 }
 
+/////Step two/////
+.popup .Build-Qn  .BuildQn-step-two{
+    width: 80vw;
+    height: 300px;
+    padding: 0 4%;
+}
+
+.popup .Build-Qn  .BuildQn-step-two .EditSaveArea{
+    display: flex;
+    align-items: center;
+    margin-bottom: 1%;
+    position: relative;
+    .StepTwoCheckbox{
+        width: 3%;
+        margin-left: 3%;
+        height: 25px;
+        justify-content: center;
+    }
+
+    #cancelAndSaveBtn{
+        display: flex;
+        position: absolute;
+        right: 0;
+    }
+}
+
+.popup .Build-Qn  .BuildQn-step-two label{
+    color: white;
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+.popup .Build-Qn  .BuildQn-step-two input{
+    width: 91%;
+    height: 100%;
+    border-radius: 10px;
+    padding:  1%;
+}
+
+.popup .Build-Qn  .BuildQn-step-two select{
+    border-radius: 10px;
+    padding: 0.5%;
+}
+
+.popup .Build-Qn  .BuildQn-step-two table{
+    width: 100%;
+    height: 25vh;
+    border: 1px white solid;
+
+    background-color: rgb(0, 96, 34);
+
+    td{
+        border: 1px white solid;
+    }
+
+    .smallbox{
+        width: 10%;
+    }
+    .bigbox{
+        width: 35%;
+    }
+
+    
+}
+
+.popup .Build-Qn  .BuildQn-step-two .Box{
+    input{
+        width: 92%;
+    }
+
+    label{
+        width: 8%;
+    }
+}
+
+/////Step one/////
 .popup .Build-Qn  .BuildQn-step-one{
-        height: 100%;
-        width: 70%;
-        margin: 0 15%;
+        width: 60vw;
+        padding: 0 4%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -461,30 +722,13 @@ export default {
 
 .popup .Build-Qn  .BuildQn-step-one input{
     width: 70%;
-    height: 100%;
     border-radius: 10px;
     padding: 0 10px;
 }
 
 .popup .Build-Qn .Box{
     display: flex;
-    margin: 10px 0;
-}
-
-
-.popup label{
-    color: black;
-    font-weight: bold;
-    }
-
-.popup-body{
-    position: relative;
-    .closeWindows{
-        font-size: 26pt;
-        position: absolute;
-        right: 0;
-        color: #4b85a0;
-    }
+    margin: 5px 0;
 }
 
 #gofrontcss{
@@ -536,7 +780,7 @@ p{
     font-weight: bold;
 }
 
-table{
+.bottom table{
     min-height: 50vh;
     width: 100%;
     background-color: rgb(31, 30, 30);  
