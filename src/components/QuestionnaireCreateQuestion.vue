@@ -36,7 +36,6 @@ export default{
     ],
 
     mounted(){
-
         //判定是否為編輯模式
         if(this.questionnaire[0].qnId > -1){
             this.getQuestion()

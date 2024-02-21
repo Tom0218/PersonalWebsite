@@ -30,6 +30,7 @@ export default {
             //新增問題or修改問題button
             EditAndSaveBtn:"新增",
             //建立問卷要素
+            NewQuestionnareName:"",
             questionnaire:[],
             question:"",
             optionType:"",
@@ -459,7 +460,7 @@ export default {
                         <div class="BuildQn-step-one"  v-if="this.createStep == 1">
                             <div class="qnTile Box">
                                 <h2>問卷名稱 &nbsp;</h2>
-                                <input type="text" class="qnTileInputBox" v-model="qnTitle">
+                                <input type="text" class="qnTileInputBox" v-model="NewQuestionnareName">
                             </div>
                             <div class="qnDesp Box">
                                 <h2>問卷說明 &nbsp;</h2>
@@ -502,40 +503,78 @@ export default {
                             </div>
                             <table>
                                 <tr>
-                                    <td class="smallbox">#</td>
-                                    <td class="smallbox">編號</td>
-                                    <td class="bigbox">題目</td>
-                                    <td class="midbox">問題種類</td>
-                                    <td class=" midbox">必填</td>
-                                    <td class="smallbox">編輯</td>
+                                    <td class="line1">#</td>
+                                    <td class="line2">編號</td>
+                                    <td class="line3">題目</td>
+                                    <td class="line4">問題種類</td>
+                                    <td class="line5">必填</td>
+                                    <td class="line6">編輯</td>
                                 </tr>
                                 <tr v-for="(item,index) in questionList" :key="index">
-                                    <th class="smallbox">
+                                    <th  class="line1">
                                         <input type="checkbox" v-model="item.checkbox" :key="index" @change="handleCheckboxChange(index)">
                                     </th>
-                                    <th class="smallbox">
+                                    <th class="line2">
                                     {{ index +1}}
                                     </th>
-                                    <th class="bigbox">{{ item.qTitle }}</th>
-                                    <th  class="midbox">{{ item.optionType }}</th>
-                                    <th>
-                                        <input type="checkbox" class=" midbox" v-model="item.necessary ">
+                                    <th class="line3">{{ item.qTitle }}</th>
+                                    <th class="line4">{{ item.optionType }}</th>
+                                    <th class="line5">
+                                        <i class="fa-solid fa-check" v-if="item.necessary == true"></i>
                                     </th>
-                                    <th>
-                                        <button class="smallbox" @click="eidt(index)" :key="index">編輯</button>
+                                    <th class="line6">
+                                        <button  @click="eidt(index)" :key="index">編輯</button>
                                     </th>
                                 </tr>
                             </table>
                         </div>
                         <div class="BuildQn-step-three" v-if="this.createStep == 3">
-                            
+                            <div>
+                                <div>
+                                    <label for="">問卷名稱  &nbsp;</label>
+                                    {{ this.NewQuestionnareName }}
+                                </div>
+                                <div>
+                                    <label for="">問卷描述  &nbsp;</label>
+                                    {{ this.qnDescription }}
+                                </div>
+                                <div>
+                                    <label for="">開始日期  &nbsp;</label>
+                                    {{ this.startDate }}
+                                </div>
+                                <div>
+                                    <label for="">結束日期  &nbsp;</label>
+                                    {{ this.endDate }}
+                                </div>
+                            </div>
+                            <div v-for="question in questionList" class="Question">
+                                <div class="Question-Title">
+                                    <p>{{ question.quId }}.</p>
+                                    <p> {{ question.qTitle }}</p>
+                                    <p>({{ question.optionType }})</p>
+                                </div>
+                                <div class="Question-Option">
+                                    <div class="option" v-for="item in question.option.split(';')" v-if="question.optionType==='單選題'">
+                                        &nbsp;<input type="radio" valuev = "answer">
+                                        <label>&nbsp;{{ item }}</label>           
+                                    </div> 
+                                    <div  class="option" v-for="item in question.option.split(';')" v-else-if="question.optionType =='多選題'">
+                                            <input type="checkbox" value="answer">
+                                            <label> &nbsp;{{ item }}</label>           
+                                    </div> 
+                                    <div v-else-if="question.optionType =='短述題'">
+                                        <input type="text">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="popup-bottom">
                     <button type="button" @click="this.popup = 0">取消</button>
                     <button type="button" @click="this.createStep -=1" v-if="this.createStep > 1">上一步</button>
-                    <button type="button" @click="this.createStep +=1">下一步</button>
+                    <button type="button" v-if="this.createStep !=3" @click="this.createStep +=1">下一步</button>
+                    <button v-if="this.createStep ==3">儲存</button>
                 </div>
             </div>
         </div>
@@ -632,6 +671,28 @@ export default {
     background-color: rgb(0, 96, 34);
 }
 
+.popup .Build-Qn  .BuildQn-step-three{
+    height: 50vh;
+    width: 50vw;
+}
+
+.popup .Build-Qn  .BuildQn-step-three .Question-Title{
+    display: flex;
+
+}
+
+.popup .Build-Qn  .BuildQn-step-three .Question-Title p{
+    margin: 0;
+}
+
+.popup .Build-Qn  .BuildQn-step-three .Question-Option .option{
+    display: flex;
+}
+
+.popup .Build-Qn  .BuildQn-step-three .Question-Option .option label{
+    text-align: center;
+}
+
 /////Step two/////
 .popup .Build-Qn  .BuildQn-step-two{
     width: 80vw;
@@ -680,18 +741,47 @@ export default {
     width: 100%;
     height: 25vh;
     border: 1px white solid;
-
     background-color: rgb(0, 96, 34);
+    overflow-y: auto;
 
     td{
         border: 1px white solid;
     }
 
-    .smallbox{
+    th{
+        height: 35px;
+        font-size: 12pt;
+        align-items: center;
+    }
+
+    button{
+        height: 80%;
+        font-size: 12pt;
+    }
+
+    input{
+        height: 70%;
+    }
+
+    .line1{
+        width: 10%;
+        align-items: center;
+    }
+    .line2{
         width: 10%;
     }
-    .bigbox{
-        width: 35%;
+    .line3{
+        width: 40%;
+    }
+    .line4{
+        width: 15%;
+    }
+    .line5{
+        width: 10%;
+    }
+    .line6{
+        width: 15%;
+        align-items: center;
     }
 
     
