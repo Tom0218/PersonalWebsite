@@ -68,47 +68,224 @@ export default {
             this.$router.push('QuestionnaireFront')
             },
 
+        //下一步
+        next(){
+            this.createStep +=1;
+            //step 1
+            if(this.createStep == 1){
+                if(this.NewQuestionnareName ==""){
+                    alert("問卷名稱不得為空!!")
+                    return
+                } else if (this.qnDescription =="") {
+                    alert("問卷描述不得為空!!")
+                    return
+                } else if (this.startDate =="") {
+                    alert("起始時間不得為空!!")
+                    return
+                }  else if(this.endDate =="")   {
+                    alert("結束時間不得為空!!")
+                    return
+                }
+
+                if(this.qnId > -1){        
+                this.Questionnaire.push({
+                    qnId:this.qnId,
+                    title: this.qnTitle,   
+                    description: this.qnDescription,
+                    published:this.published,
+                    endDate: this.endDate,
+                    startDate: this.startDate,
+                })
+                console.log("Questionnaire",this.questionnaire);
+            }
+            }
+
+            //step 2
+            if(this.createStep == 2){
+                //編輯模式
+                if(this.questionnaire[0].qnId > -1){
+                    //get
+                    this.getQuestion();
+                }
+            }
+
+
+        },
+
+        //取得questionList
+        getQuestion() {
+                console.log("fetch裡的qnId是:"+this.questionnaire[0].qnId)
+                const url = 'http://localhost:8081/api/quiz/searchQuestionList';
+                const queryParams = new URLSearchParams({
+                    qnId: this.questionnaire[0].qnId
+                });
+                const urlWithParams = `${url}?${queryParams}`;
+    
+                fetch(urlWithParams, {
+                    method: 'GET',
+                    headers: {
+                        "Accept": "application/json", // 指定接受的回應類型
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    //將 data 添加到 quList
+                    // console.log(data)
+                    this.questionList = data.questionList;
+                    console.log("下面是fetch的question")
+                    console.log( this.questionList);
+                })
+                .catch(error => console.error('Error:', error));
+            
+        },
+
+        //儲存問卷
+        save(){
+
+            var questionList = this.questionList;
+        
+            //update not publish
+            if(this.questionnaire[0].qnId > -1){
+                var url = "http://localhost:8081/api/quiz/update";
+                var Qn = {
+                "questionnaire": {
+                    "id":parseInt(this.questionnaire[0].qnId),
+                    "title": this.questionnaire[0].title,
+                    "description":this.questionnaire[0].description,
+                    "published":false,
+                    "startDate": this.questionnaire[0].startDate,
+                    "endDate": this.questionnaire[0].endDate
+                },
+                "question_list": [],
+                "deleteQuestionList":[],
+
+                };
+                for (let i = 0; i < questionList.length; i++) {
+                    Qn.question_list.push({
+                        "quId": questionList[i].quId,
+                        "qnId":parseInt(this.questionnaire[0].qnId),
+                        "qTitle": questionList[i].qTitle,
+                        "optionType": questionList[i].optionType,
+                        "isnecessary": questionList[i].necessary,
+                        "option": questionList[i].option
+                    })
+                };
+
+                for(let i = 0; i < this.deleteQus.length; i++){
+                    Qn.deleteQuestionList.push({
+                        "qnId":parseInt(this.qnId),
+                        "quId":this.deleQuIds[i],
+                    })
+                };
+                console.log(Qn)
+
+                fetch(url, {
+                method: "POST",
+                body: JSON.stringify(Qn),
+                headers: new Headers({
+                "Content-Type": "application/json",
+                }),
+                })
+                .then((res) => res.json())
+                .then((response) => {
+                    console.log(response);
+                    alert(response.rtncode)
+                    this.$router.push('Questionnaire')
+                })
+                .catch((error) => console.error("Error:", error));
+                return;
+            };
+
+            //create not publish
+            var url = "http://localhost:8081/api/quiz/create";
+            
+            var Qn = {
+            "questionnaire": {
+                "title": this.questionnaire[0].title,
+                "description":this.questionnaire[0].description,
+                "published":false,
+                "startDate": this.questionnaire[0].startDate,
+                "endDate": this.questionnaire[0].endDate
+            },
+
+            "question_list": []
+            };   
+                
+            for (let i = 0; i < this.quList.length; i++) {
+                Qn.question_list.push({
+                "quId": questionList[i].quId,
+                "qTitle": questionList[i].qTitle,
+                "optionType": questionList[i].optionType,
+                "necessary": questionList[i].necessary,
+                "option": questionList[i].option
+                });
+            }
+            console.log(Qn)
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify(Qn),
+                headers: new Headers({
+                "Content-Type": "application/json",
+                }),
+            })
+            .then((res) => res.json())
+            .then((response) => {
+                console.log(response);
+                alert(response.rtncode)
+                this.$router.push('Questionnaire')
+            })
+            .catch((error) => console.error("Error:", error));
+            },
+
         //新增或編輯問卷題目
         addOREditQuetion(){
 
             //修改模式
-            if(this.EditAndSaveBtn == "編輯"){
+            if(this.questionnaire != "" ){
                 //編輯
-
-            }
-            if( this.EditAndSaveBtn == "編輯" &&this.questionnaire != ""){
-                // console.log("問卷索引值:"+this.key)
-                this.questionList[this.key].quId = this.quId
-                this.questionList[this.key].qnId = parseInt(this.questionnaire[0].qnId)
-                this.questionList[this.key].qTitle = this.question;
-                this.questionList[this.key].optionType = this.optionType;
-                this.questionList[this.key].necessary = this.necessary;
-                this.questionList[this.key].option = this.questionOption;
-                this.addbutton = "新增";
-                alert("修改模式編輯成功");
-                console.log(this.questionList)
-                this.qnId = -1;
-                return
-            }   
-
-            //修改模式新增
-            if(this.EditAndSaveBtn == "新增" && this.questionnaire != ""){
-                this.quId=this.questionList.length+1;
-                this.questionList.push({
-                    quId:this.quId,
-                    qnId:parseInt(this.questionnaire[0].qnId),
-                    qTitle:this.question,
-                    optionType:this.optionType,
-                    necessary:this.necessary,
-                    option:this.questionOption,
-                });
-                this.qnId = -1;
-                this.question = "";
-                this.optionType = "";
-                this.necessary = false;
-                this.questionOption = "";
-                alert("修改模式新增成功");
-                return
+                if( this.EditAndSaveBtn == "編輯"){
+                    if(this.question == ""){
+                    alert("問題不能為空")
+                    return
+                    } else if(this.optionType ==""){
+                        alert("題行不得為空")
+                        return
+                    } else if(this.questionOption ==""){
+                        alert("選項不得為空")
+                        return
+                    }
+                    // console.log("問卷索引值:"+this.key)
+                    this.questionList[this.key].quId = this.quId
+                    this.questionList[this.key].qnId = parseInt(this.questionnaire[0].qnId)
+                    this.questionList[this.key].qTitle = this.question;
+                    this.questionList[this.key].optionType = this.optionType;
+                    this.questionList[this.key].necessary = this.necessary;
+                    this.questionList[this.key].option = this.questionOption;
+                    this.addbutton = "新增";
+                    alert("修改模式編輯成功");
+                    console.log(this.questionList)
+                    this.qnId = -1;
+                    return
+                }   
+                //新增
+                if(this.EditAndSaveBtn == "新增"){
+                    this.quId = this.questionList.length+1;
+                    this.questionList.push({
+                        quId:this.quId,
+                        qnId:parseInt(this.questionnaire[0].qnId),
+                        qTitle:this.question,
+                        optionType:this.optionType,
+                        necessary:this.necessary,
+                        option:this.questionOption,
+                    });
+                    this.qnId = -1;
+                    this.question = "";
+                    this.optionType = "";
+                    this.necessary = false;
+                    this.questionOption = "";
+                    alert("修改模式新增成功");
+                    return
+                }
             }
 
              //新增模式編輯
@@ -168,7 +345,7 @@ export default {
                 console.log(this.questionList)
                 alert("新增模式新增成功");
             }
-        },
+            },
 
         //觀看結果
         goResult(index){
@@ -443,8 +620,6 @@ export default {
                 </a>
             </li>
         </ul>
-
-        
         <!-- 新增物件 -->
         <div class="popup"  v-if ="popup == 1">
             <div class="popup-content">
@@ -529,27 +704,28 @@ export default {
                             </table>
                         </div>
                         <div class="BuildQn-step-three" v-if="this.createStep == 3">
-                            <div>
+                            <div class="Question-head">
                                 <div>
-                                    <label for="">問卷名稱  &nbsp;</label>
-                                    {{ this.NewQuestionnareName }}
+                                    <label for="">問卷名稱 : &nbsp;</label>
+                                    <label for="">{{ this.NewQuestionnareName }}</label>
                                 </div>
                                 <div>
-                                    <label for="">問卷描述  &nbsp;</label>
-                                    {{ this.qnDescription }}
+                                    <label for="">問卷描述 : &nbsp;</label>
+                                    <label for="">{{ this.qnDescription }}</label>
                                 </div>
                                 <div>
-                                    <label for="">開始日期  &nbsp;</label>
-                                    {{ this.startDate }}
+                                    <label for="">開始日期 : &nbsp;</label>
+                                    <label for="">{{ this.startDate }}</label>                             
                                 </div>
                                 <div>
-                                    <label for="">結束日期  &nbsp;</label>
-                                    {{ this.endDate }}
+                                    <label for="">結束日期 : &nbsp;</label>
+                                    <label for="">{{ this.endDate }}</label>
+                                    
                                 </div>
                             </div>
                             <div v-for="question in questionList" class="Question">
                                 <div class="Question-Title">
-                                    <p>{{ question.quId }}.</p>
+                                    <p>{{ question.quId }}.&nbsp;</p>
                                     <p> {{ question.qTitle }}</p>
                                     <p>({{ question.optionType }})</p>
                                 </div>
@@ -574,7 +750,9 @@ export default {
                     <button type="button" @click="this.popup = 0">取消</button>
                     <button type="button" @click="this.createStep -=1" v-if="this.createStep > 1">上一步</button>
                     <button type="button" v-if="this.createStep !=3" @click="this.createStep +=1">下一步</button>
-                    <button v-if="this.createStep ==3">儲存</button>
+                    <button type="button" v-if="this.createStep !=3" @click="next">下一步</button>
+                    <button v-if="this.createStep ==3" @click="save">儲存</button>
+                    <button v-if="this.createStep ==3" @click="saveAndpub">儲存並發布</button>
                 </div>
             </div>
         </div>
@@ -603,7 +781,7 @@ export default {
 }
 
 .popup-body{
-    padding: 5% 0;
+    padding: 3% 0;
     position: relative;
     background-color: rgb(0, 96, 34);
     .closeWindows{
@@ -674,6 +852,17 @@ export default {
 .popup .Build-Qn  .BuildQn-step-three{
     height: 50vh;
     width: 50vw;
+    padding:  2%;
+    overflow-y: auto;
+    
+
+}
+
+.popup .Build-Qn  .BuildQn-step-three .Question-head{
+    border: 1px white solid;
+    border-radius: 10px;
+    padding: 2%;
+    margin-bottom: 2%;
 }
 
 .popup .Build-Qn  .BuildQn-step-three .Question-Title{
@@ -685,8 +874,16 @@ export default {
     margin: 0;
 }
 
+.popup .Build-Qn  .BuildQn-step-three .Question-Option {
+    border: 1px white solid;
+    border-radius: 10px;
+    padding: 2%;
+    margin-bottom: 2%;
+}
+
 .popup .Build-Qn  .BuildQn-step-three .Question-Option .option{
     display: flex;
+    
 }
 
 .popup .Build-Qn  .BuildQn-step-three .Question-Option .option label{
