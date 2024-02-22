@@ -26,10 +26,10 @@ export default {
             //彈出視窗
             popup:0,
             //建立問卷步驟
-            createStep:1,
+            createStep:0,
             //新增問題or修改問題button
             EditAndSaveBtn:"新增",
-            //建立問卷要素
+            //建立問卷要素_new
             NewQuestionnareName:"",
             questionnaire:[],
             question:"",
@@ -37,6 +37,11 @@ export default {
             necessary:false,
             questionOption:"",
             questionList:[],
+
+            //刪除問題用
+            selectedIndexes:[],
+            selectedQuIds:[],
+            delQuList:[],
 
 
         
@@ -47,7 +52,9 @@ export default {
 
          //新增問卷
         Addtransaction(){
-            this.popup = 1 
+            this.popup = 1 ;
+            this.createStep = 1;
+            console.log("step:", this.createStep)
             },
 
         AddObj(){
@@ -70,46 +77,115 @@ export default {
 
         //下一步
         next(){
+            console.log("step:", this.createStep)
             this.createStep +=1;
             //step 1
-            if(this.createStep == 1){
-                if(this.NewQuestionnareName ==""){
-                    alert("問卷名稱不得為空!!")
-                    return
-                } else if (this.qnDescription =="") {
-                    alert("問卷描述不得為空!!")
-                    return
-                } else if (this.startDate =="") {
-                    alert("起始時間不得為空!!")
-                    return
-                }  else if(this.endDate =="")   {
-                    alert("結束時間不得為空!!")
-                    return
-                }
+            if(this.createStep == 2){
+                //新增模式
+                if(this.qnId == 0){
+                    if(this.NewQuestionnareName ==""){
+                        alert("問卷名稱不得為空!!")
+                        this.createStep = 1;
+                        return
+                    } else if (this.qnDescription =="") {
+                        alert("問卷描述不得為空!!")
+                        this.createStep = 1;
+                        return
+                    } else if (this.startDate =="") {
+                        alert("起始時間不得為空!!")
+                        this.createStep = 1;
+                        return
+                    }  else if(this.endDate =="")   {
+                        alert("結束時間不得為空!!")
+                        this.createStep = 1;
+                        return
+                    }
 
-                if(this.qnId > -1){        
-                this.Questionnaire.push({
-                    qnId:this.qnId,
-                    title: this.qnTitle,   
-                    description: this.qnDescription,
-                    published:this.published,
-                    endDate: this.endDate,
-                    startDate: this.startDate,
-                })
-                console.log("Questionnaire",this.questionnaire);
-            }
+                    this.questionnaire.push({
+                        title: this.NewQuestionnareName,   
+                        description: this.qnDescription,
+                        published:this.published,
+                        startDate: this.startDate,
+                        endDate: this.endDate
+                    })
+                    console.log("New questionnaire :",this.questionnaire)
+                }
+                //編輯模式
+                if(this.qnId > 0){        
+                    this.questionnaire.push({
+                        qnId:this.qnId,
+                        title: this.NewQuestionnareName,   
+                        description: this.qnDescription,
+                        published:this.published,
+                        endDate: this.endDate,
+                        startDate: this.startDate,
+                    })
+                    console.log("Edited questionnaire",this.questionnaire);
+                }
             }
 
             //step 2
-            if(this.createStep == 2){
-                //編輯模式
-                if(this.questionnaire[0].qnId > -1){
-                    //get
+            if(this.createStep == 3){
+                //編輯模式若qnId大於0表示為編輯模式
+                if(this.qnId > 0){
+                    //獲取現有問題
                     this.getQuestion();
+                    if(this.EditAndSaveBtn == "編輯"){
+                        this.questionList[this.key].quId = this.quId
+                        this.questionList[this.key].qnId = parseInt(this.questionnaire[0].qnId)
+                        this.questionList[this.key].qTitle = this.question;
+                        this.questionList[this.key].optionType = this.optionType;
+                        this.questionList[this.key].necessary = this.necessary;
+                        this.questionList[this.key].option = this.questionOption;
+                        this.EditAndSaveBtn = "新增";
+                        alert("編輯模式編輯成功!!");
+                        console.log(this.questionList)
+                        this.qnId = -1;
+                        return
+                    } else if(this.EditAndSaveBtn == "新增"){
+                        this.quId=this.questionList.length+1;
+                        this.questionList.push({
+                            quId:this.quId,
+                            qnId:parseInt(this.questionnaire[0].qnId),
+                            qTitle:this.question,
+                            optionType:this.optionType,
+                            necessary:this.necessary,
+                            option:this.questionOption,
+                        });
+                    }
+                }
+                //新增模式
+                //新增模式編輯
+                if( this.EditAndSaveBtn == "編輯"){
+                    if(this.question == ""){
+                        alert("問題不能為空")
+                        return
+                    } else if(this.optionType ==""){
+                        alert("題行不得為空")
+                        return
+                    } else if(this.questionOption ==""){
+                        alert("選項不得為空")
+                        return
+                    }
+
+                    this.questionList[this.key].quId = this.quId
+                    this.questionList[this.key].qTitle = this.question;
+                    this.questionList[this.key].optionType = this.optionType;
+                    this.questionList[this.key].necessary = this.necessary;
+                    this.questionList[this.key].option = this.questionOption;
+                    this.EditAndSaveBtn = "新增";
                 }
             }
+        },
 
-
+        cancel(){
+            this.createStep = 0;
+            this.popup = 0 ;
+            this.NewQuestionnareName ="";   
+            this.qnDescription = "";
+            this.published = false;
+            this.startDate = "";
+            this.endDate = "";
         },
 
         //取得questionList
@@ -141,11 +217,11 @@ export default {
 
         //儲存問卷
         save(){
-
+            console.log("questionnaire:",this.questionnaire)
             var questionList = this.questionList;
         
             //update not publish
-            if(this.questionnaire[0].qnId > -1){
+            if( this.qnId > 0){
                 var url = "http://localhost:8081/api/quiz/update";
                 var Qn = {
                 "questionnaire": {
@@ -190,7 +266,7 @@ export default {
                 .then((response) => {
                     console.log(response);
                     alert(response.rtncode)
-                    this.$router.push('Questionnaire')
+                    this.popup = 0;
                 })
                 .catch((error) => console.error("Error:", error));
                 return;
@@ -211,7 +287,7 @@ export default {
             "question_list": []
             };   
                 
-            for (let i = 0; i < this.quList.length; i++) {
+            for (let i = 0; i < this.questionList.length; i++) {
                 Qn.question_list.push({
                 "quId": questionList[i].quId,
                 "qTitle": questionList[i].qTitle,
@@ -232,7 +308,7 @@ export default {
             .then((response) => {
                 console.log(response);
                 alert(response.rtncode)
-                this.$router.push('Questionnaire')
+                this.popup = 0;
             })
             .catch((error) => console.error("Error:", error));
             },
@@ -241,7 +317,7 @@ export default {
         addOREditQuetion(){
 
             //修改模式
-            if(this.questionnaire != "" ){
+            if(this.qnId > 0  ){
                 //編輯
                 if( this.EditAndSaveBtn == "編輯"){
                     if(this.question == ""){
@@ -261,7 +337,7 @@ export default {
                     this.questionList[this.key].optionType = this.optionType;
                     this.questionList[this.key].necessary = this.necessary;
                     this.questionList[this.key].option = this.questionOption;
-                    this.addbutton = "新增";
+                    this.EditAndSaveBtn = "新增";
                     alert("修改模式編輯成功");
                     console.log(this.questionList)
                     this.qnId = -1;
@@ -283,7 +359,7 @@ export default {
                     this.optionType = "";
                     this.necessary = false;
                     this.questionOption = "";
-                    alert("修改模式新增成功");
+                    alert("修改模式新增成功!!");
                     return
                 }
             }
@@ -291,13 +367,70 @@ export default {
              //新增模式編輯
             if( this.EditAndSaveBtn == "編輯"){
                 if(this.question == ""){
-                    alert("問題不能為空")
+                    alert("問題不能為空!!")
                     return
                 } else if(this.optionType ==""){
-                    alert("題行不得為空")
+                    alert("題型不得為空!!")
                     return
                 } else if(this.questionOption ==""){
-                    alert("選項不得為空")
+                    alert("選項不得為空!!")
+                    return
+                }
+                // console.log("問卷索引值:"+this.key)
+                this.questionList[this.key].quId = this.quId
+                this.questionList[this.key].qTitle = this.question;
+                this.questionList[this.key].optionType = this.optionType;
+                this.questionList[this.key].necessary = this.necessary;
+                this.questionList[this.key].option = this.questionOption;
+                this.EditAndSaveBtn = "新增";
+                alert("新增模式編輯成功!!");
+                this.qnId = -1;
+                this.question = "";
+                this.optionType = "";
+                this.necessary = false;
+                this.questionOption = "";
+                console.log(this.questionList)
+                return
+            }
+
+            //新增模式新增
+            if(this.EditAndSaveBtn == "新增"){
+                if(this.question == ""){
+                    alert("問題不能為空!!")
+                    return
+                } else if(this.optionType ==""){
+                    alert("題行不得為空!!")
+                    return
+                } else if(this.questionOption ==""){
+                    alert("選項不得為空!!")
+                    return
+                }
+                this.quId=this.questionList.length+1;
+                this.questionList.push({
+                    quId:this.quId,
+                    qTitle:this.question,
+                    optionType:this.optionType,
+                    necessary:this.necessary,
+                    option:this.questionOption,
+                });
+                this.qnId = -1;
+                this.question = "";
+                this.optionType = "";
+                this.necessary = false;
+                this.questionOption = "";
+                console.log(this.questionList)
+                alert("新增模式新增成功!!");
+            }
+            //新增模式編輯
+            if(this.EditAndSaveBtn == "編輯"){
+                if(this.question == ""){
+                    alert("問題不能為空!!")
+                    return
+                } else if(this.optionType ==""){
+                    alert("題行不得為空!!")
+                    return
+                } else if(this.questionOption ==""){
+                    alert("選項不得為空!!")
                     return
                 }
                 // console.log("問卷索引值:"+this.key)
@@ -316,36 +449,30 @@ export default {
                 console.log(this.questionList)
                 return
             }
-
-            //新增模式新增
-            if(this.EditAndSaveBtn == "新增"){
-                if(this.question == ""){
-                    alert("問題不能為空")
-                    return
-                } else if(this.optionType ==""){
-                    alert("題行不得為空")
-                    return
-                } else if(this.questionOption ==""){
-                    alert("選項不得為空")
-                    return
-                }
-                this.quId=this.questionList.length+1;
-                this.questionList.push({
-                    quId:this.quId,
-                    qTitle:this.question,
-                    optionType:this.optionType,
-                    necessary:this.necessary,
-                    option:this.questionOption,
-                });
-                this.qnId = -1;
-                this.question = "";
-                this.optionType = "";
-                this.necessary = false;
-                this.questionOption = "";
-                console.log(this.questionList)
-                alert("新增模式新增成功");
-            }
             },
+        
+        edit(index){
+            //編輯模式下編輯
+            if(this.qnId > -1){ 
+                this.EditAndSaveBtn = "編輯"
+                this.quId = this.questionList[index].quId;
+                this.qnId = parseInt(this.questionnaire[0].qnId)
+                this.question = this.questionList[index].qTitle;
+                this.optionType = this.questionList[index].optionType;
+                this.necessary = this.questionList[index].necessary;
+                this.questionOption = this.questionList[index].option;
+                this.key = index
+                // console.log("問卷索引值:"+index)
+            }
+            //新增模式下編輯
+            this.EditAndSaveBtn = "編輯"
+                this.quId = this.questionList[index].quId;
+                this.question = this.questionList[index].qTitle;
+                this.optionType = this.questionList[index].optionType;
+                this.necessary = this.questionList[index].necessary;
+                this.questionOption = this.questionList[index].option;
+                this.key = index
+        },
 
         //觀看結果
         goResult(index){
@@ -468,6 +595,41 @@ export default {
             .catch((error) => console.error("Error:", error));
             },
 
+        //deleteQuestion
+        delQu(){
+             //新增模式下delQu
+            this.selectedIndexes.forEach(item => {
+                this.delQuList =  this.selectedQuIds
+                this.questionList.splice(item,1);
+            });
+
+            this.questionList.forEach((item, index) => {
+                item.quId = index + 1;
+            });
+
+            console.log("Updated QuestionList :", this.questionList)
+
+            console.log("Deleteed QuList :", this.delQuList)
+            },
+
+        handleCheckboxChangeForStepTwo(index){
+            const currentQuId = this.questionList[index].quId;
+            if (this.questionList[index].checkbox) {
+                // 如果复选框被选中，将 quId 存入数组
+                this.selectedQuIds.push(currentQuId);
+                this.selectedIndexes.push(index);
+            } else {
+                // 如果复选框取消选中，从数组中删除 quId
+                const indexToDelete = this.selectedQuIds.indexOf(currentQuId);
+                if (indexToDelete !== -1) {
+                    this.selectedQuIds.splice(indexToDelete, 1);
+                }
+                // 从数组中删除索引
+                this.selectedIndexes = this.selectedIndexes.filter(i => i !== index);
+            }
+            console.log("QuIds:", this.selectedQuIds);
+            },
+
         //checkboxgeQnId fn
         handleCheckboxChange(questionnaireId) {
             const selectQnIds = this.selectedqnIds.indexOf(questionnaireId);
@@ -489,23 +651,27 @@ export default {
         editQuestion(index){
             var pageIndex = ((this.currentPage-1)*this.perpage+index); 
             this.qnId = this.allQn[pageIndex].questionnaire.id;
-            this.title =  this.allQn[pageIndex].questionnaire.title;
-            this.description =  this.allQn[pageIndex].questionnaire.description;
+            this.NewQuestionnareName =  this.allQn[pageIndex].questionnaire.title;
+            this.qnDescription =  this.allQn[pageIndex].questionnaire.description;
             this.startDate =  this.allQn[pageIndex].questionnaire.startDate;
             this.endDate = this.allQn[pageIndex].questionnaire.endDate;
             this.published=this.allQn[pageIndex].questionnaire.published;
             console.log("qnId:"+this.qnId)
-            this.$router.push({
-            name: 'QuestionnaireCreate',
-            query: {
-                qnId:this.qnId,
-                title:this.title,
-                description:this.description,
-                startDate:this.startDate,
-                endDate:this.endDate,
-                published:this.published
-            }
-            });
+            this.popup = 1;
+            this.next();
+            
+            /////old edition/////
+            // this.$router.push({
+            // name: 'QuestionnaireCreate',
+            // query: {
+            //     qnId:this.qnId,
+            //     title:this.title,
+            //     description:this.description,
+            //     startDate:this.startDate,
+            //     endDate:this.endDate,
+            //     published:this.published
+            // }
+            // });
             }
 },
 
@@ -589,7 +755,7 @@ export default {
                             <input type="checkbox" v-model="quiz.checkbox" @change="handleCheckboxChange(quiz.questionnaire.id)" @click="catchIndex(index)" >
                         </td>
                         <td>{{ quiz.questionnaire.id }}</td>
-                        <!--編輯判斷 -->
+                        <!--Question_title 是否可編輯判斷-->
                         <td v-if="quiz.questionnaire.published == false ||quiz.questionnaire.published == true && nowDate <= quiz.questionnaire.startDate" @click='editQuestion(index)' :key="index" style="cursor: pointer;">{{ quiz.questionnaire.title }} </td>
                         <td v-else-if="quiz.questionnaire.published==true"  style="cursor: not-allowed;">{{ quiz.questionnaire.title }} </td>
                         <td v-if=" quiz.questionnaire.published == true && nowDate < quiz.questionnaire.startDate || quiz.questionnaire.published == false && nowDate < quiz.questionnaire.startDate">尚未開始</td>
@@ -625,7 +791,7 @@ export default {
             <div class="popup-content">
                 <div class="popup-header">
                     <h3>建立問卷(步驟{{this.createStep}})</h3>
-                    <i class="fa-solid fa-circle-xmark" @click="this.popup = 0"></i>
+                    <i class="fa-solid fa-circle-xmark" @click="cancel()"></i>
                     <!-- <h2>{{ title }}</h2> -->
                 </div>
 
@@ -670,9 +836,10 @@ export default {
                             </div>
                             <div class="EditSaveArea">
                                 <label>必填 &nbsp;</label>
-                                <input type="checkbox" class="StepTwoCheckbox">
+                                <input type="checkbox" class="StepTwoCheckbox" v-model="necessary">
                                 <div id="cancelAndSaveBtn">
                                     <button v-if="this.EditAndSaveBtn =='編輯'">取消</button>
+                                    <button title="刪除以勾選問題" @click="delQu()">刪除</button>
                                     <button @click="addOREditQuetion">{{this.EditAndSaveBtn}}</button>
                                 </div>
                             </div>
@@ -687,7 +854,7 @@ export default {
                                 </tr>
                                 <tr v-for="(item,index) in questionList" :key="index">
                                     <th  class="line1">
-                                        <input type="checkbox" v-model="item.checkbox" :key="index" @change="handleCheckboxChange(index)">
+                                        <input type="checkbox" v-model="item.checkbox" :key="index" @change="handleCheckboxChangeForStepTwo(index)">
                                     </th>
                                     <th class="line2">
                                     {{ index +1}}
@@ -698,7 +865,7 @@ export default {
                                         <i class="fa-solid fa-check" v-if="item.necessary == true"></i>
                                     </th>
                                     <th class="line6">
-                                        <button  @click="eidt(index)" :key="index">編輯</button>
+                                        <button  @click="edit(index)" :key="index">編輯</button>
                                     </th>
                                 </tr>
                             </table>
@@ -747,9 +914,8 @@ export default {
                     </div>
                 </div>
                 <div class="popup-bottom">
-                    <button type="button" @click="this.popup = 0">取消</button>
+                    <button type="button" @click="cancel()">取消</button>
                     <button type="button" @click="this.createStep -=1" v-if="this.createStep > 1">上一步</button>
-                    <button type="button" v-if="this.createStep !=3" @click="this.createStep +=1">下一步</button>
                     <button type="button" v-if="this.createStep !=3" @click="next">下一步</button>
                     <button v-if="this.createStep ==3" @click="save">儲存</button>
                     <button v-if="this.createStep ==3" @click="saveAndpub">儲存並發布</button>
