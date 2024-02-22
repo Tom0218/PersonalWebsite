@@ -79,7 +79,7 @@ export default {
         next(){
             console.log("step:", this.createStep)
             this.createStep +=1;
-            //step 1
+            //step 1 當按下next會驗證所以條件為2
             if(this.createStep == 2){
                 //新增模式
                 if(this.qnId == 0){
@@ -121,60 +121,63 @@ export default {
                         startDate: this.startDate,
                     })
                     console.log("Edited questionnaire",this.questionnaire);
+                    this.getQuestion();
                 }
             }
 
-            //step 2
+            //step 2 當按下next會驗證所以條件為3
             if(this.createStep == 3){
                 //編輯模式若qnId大於0表示為編輯模式
-                if(this.qnId > 0){
-                    //獲取現有問題
-                    this.getQuestion();
-                    if(this.EditAndSaveBtn == "編輯"){
-                        this.questionList[this.key].quId = this.quId
-                        this.questionList[this.key].qnId = parseInt(this.questionnaire[0].qnId)
-                        this.questionList[this.key].qTitle = this.question;
-                        this.questionList[this.key].optionType = this.optionType;
-                        this.questionList[this.key].necessary = this.necessary;
-                        this.questionList[this.key].option = this.questionOption;
-                        this.EditAndSaveBtn = "新增";
-                        alert("編輯模式編輯成功!!");
-                        console.log(this.questionList)
-                        this.qnId = -1;
-                        return
-                    } else if(this.EditAndSaveBtn == "新增"){
-                        this.quId=this.questionList.length+1;
-                        this.questionList.push({
-                            quId:this.quId,
-                            qnId:parseInt(this.questionnaire[0].qnId),
-                            qTitle:this.question,
-                            optionType:this.optionType,
-                            necessary:this.necessary,
-                            option:this.questionOption,
-                        });
-                    }
-                }
-                //新增模式
-                //新增模式編輯
-                if( this.EditAndSaveBtn == "編輯"){
-                    if(this.question == ""){
-                        alert("問題不能為空")
-                        return
-                    } else if(this.optionType ==""){
-                        alert("題行不得為空")
-                        return
-                    } else if(this.questionOption ==""){
-                        alert("選項不得為空")
-                        return
-                    }
+                // if(this.qnId > 0){
+                //     //獲取現有問題
+                //     if(this.EditAndSaveBtn == "編輯"){
+                //         this.questionList[this.key].quId = this.quId
+                //         this.questionList[this.key].qnId = parseInt(this.questionnaire[0].qnId)
+                //         this.questionList[this.key].qTitle = this.question;
+                //         this.questionList[this.key].optionType = this.optionType;
+                //         this.questionList[this.key].necessary = this.necessary;
+                //         this.questionList[this.key].option = this.questionOption;
+                //         this.EditAndSaveBtn = "新增";
+                //         alert("編輯模式編輯成功!!");
+                //         console.log(this.questionList)
+                //         return
+                //     } else if(this.EditAndSaveBtn == "新增"){
+                //         this.quId=this.questionList.length+1;
+                //         this.questionList.push({
+                //             quId:this.quId,
+                //             qnId:parseInt(this.questionnaire[0].qnId),
+                //             qTitle:this.question,
+                //             optionType:this.optionType,
+                //             necessary:this.necessary,
+                //             option:this.questionOption,
+                //         });
+                //         return
+                //     }
+                // }
 
-                    this.questionList[this.key].quId = this.quId
-                    this.questionList[this.key].qTitle = this.question;
-                    this.questionList[this.key].optionType = this.optionType;
-                    this.questionList[this.key].necessary = this.necessary;
-                    this.questionList[this.key].option = this.questionOption;
-                    this.EditAndSaveBtn = "新增";
-                }
+                //新增模式
+                // if(this.qnId == 0){
+                //     //新增模式編輯
+                //     if( this.EditAndSaveBtn == "編輯"){
+                //         if(this.question == ""){
+                //             alert("問題不能為空")
+                //             return
+                //         } else if(this.optionType ==""){
+                //             alert("題行不得為空")
+                //             return
+                //         } else if(this.questionOption ==""){
+                //             alert("選項不得為空")
+                //             return
+                //         }
+    
+                //         this.questionList[this.key].quId = this.quId
+                //         this.questionList[this.key].qTitle = this.question;
+                //         this.questionList[this.key].optionType = this.optionType;
+                //         this.questionList[this.key].necessary = this.necessary;
+                //         this.questionList[this.key].option = this.questionOption;
+                //         this.EditAndSaveBtn = "新增";
+                //     }
+                // }
             }
         },
 
@@ -186,6 +189,16 @@ export default {
             this.published = false;
             this.startDate = "";
             this.endDate = "";
+
+            this.questionnaire = [];
+            this.question = "";
+            this.optionType = "";
+            this.necessary = false;
+            this.questionOption = "";
+            this.questionList = [];
+            this.selectedIndexes = [];
+            this.selectedQuIds = [];
+            this.delQuList = [];
         },
 
         //取得questionList
@@ -219,7 +232,7 @@ export default {
         save(){
             console.log("questionnaire:",this.questionnaire)
             var questionList = this.questionList;
-        
+            console.log("qnId:",this.qnId)
             //update not publish
             if( this.qnId > 0){
                 var url = "http://localhost:8081/api/quiz/update";
@@ -247,12 +260,14 @@ export default {
                     })
                 };
 
-                for(let i = 0; i < this.deleteQus.length; i++){
-                    Qn.deleteQuestionList.push({
-                        "qnId":parseInt(this.qnId),
-                        "quId":this.deleQuIds[i],
-                    })
-                };
+                if(this.delQuList !=""){
+                    for(let i = 0; i < this.delQuList.length; i++){
+                        Qn.deleteQuestionList.push({
+                            "qnId":parseInt(this.qnId),
+                            "quId":this.deleQuIds[i],
+                        })
+                    };
+                }
                 console.log(Qn)
 
                 fetch(url, {
@@ -267,6 +282,7 @@ export default {
                     console.log(response);
                     alert(response.rtncode)
                     this.popup = 0;
+                    this.qnId = 0;
                 })
                 .catch((error) => console.error("Error:", error));
                 return;
@@ -309,6 +325,7 @@ export default {
                 console.log(response);
                 alert(response.rtncode)
                 this.popup = 0;
+                this.qnId = 0;
             })
             .catch((error) => console.error("Error:", error));
             },
@@ -316,6 +333,7 @@ export default {
         //新增或編輯問卷題目
         addOREditQuetion(){
 
+            console.log("qnId :",this.qnId)
             //修改模式
             if(this.qnId > 0  ){
                 //編輯
@@ -330,7 +348,7 @@ export default {
                         alert("選項不得為空")
                         return
                     }
-                    // console.log("問卷索引值:"+this.key)
+                    console.log("問題索引值:"+this.key)
                     this.questionList[this.key].quId = this.quId
                     this.questionList[this.key].qnId = parseInt(this.questionnaire[0].qnId)
                     this.questionList[this.key].qTitle = this.question;
@@ -339,8 +357,7 @@ export default {
                     this.questionList[this.key].option = this.questionOption;
                     this.EditAndSaveBtn = "新增";
                     alert("修改模式編輯成功");
-                    console.log(this.questionList)
-                    this.qnId = -1;
+                    console.log("questionList:",this.questionList)
                     return
                 }   
                 //新增
@@ -354,100 +371,72 @@ export default {
                         necessary:this.necessary,
                         option:this.questionOption,
                     });
-                    this.qnId = -1;
                     this.question = "";
                     this.optionType = "";
                     this.necessary = false;
                     this.questionOption = "";
                     alert("修改模式新增成功!!");
+                    console.log("updated quList:",this.questionList)
                     return
                 }
             }
 
              //新增模式編輯
-            if( this.EditAndSaveBtn == "編輯"){
-                if(this.question == ""){
-                    alert("問題不能為空!!")
-                    return
-                } else if(this.optionType ==""){
-                    alert("題型不得為空!!")
-                    return
-                } else if(this.questionOption ==""){
-                    alert("選項不得為空!!")
-                    return
-                }
-                // console.log("問卷索引值:"+this.key)
-                this.questionList[this.key].quId = this.quId
-                this.questionList[this.key].qTitle = this.question;
-                this.questionList[this.key].optionType = this.optionType;
-                this.questionList[this.key].necessary = this.necessary;
-                this.questionList[this.key].option = this.questionOption;
-                this.EditAndSaveBtn = "新增";
-                alert("新增模式編輯成功!!");
-                this.qnId = -1;
-                this.question = "";
-                this.optionType = "";
-                this.necessary = false;
-                this.questionOption = "";
-                console.log(this.questionList)
-                return
-            }
-
-            //新增模式新增
-            if(this.EditAndSaveBtn == "新增"){
-                if(this.question == ""){
-                    alert("問題不能為空!!")
-                    return
-                } else if(this.optionType ==""){
-                    alert("題行不得為空!!")
-                    return
-                } else if(this.questionOption ==""){
-                    alert("選項不得為空!!")
+            if(this.qnId == 0){
+                //編輯
+                if( this.EditAndSaveBtn == "編輯"){
+                    if(this.question == ""){
+                        alert("問題不能為空!!")
+                        return
+                    } else if(this.optionType ==""){
+                        alert("題型不得為空!!")
+                        return
+                    } else if(this.questionOption ==""){
+                        alert("選項不得為空!!")
+                        return
+                    }
+                    // console.log("問卷索引值:"+this.key)
+                    this.questionList[this.key].quId = this.quId
+                    this.questionList[this.key].qTitle = this.question;
+                    this.questionList[this.key].optionType = this.optionType;
+                    this.questionList[this.key].necessary = this.necessary;
+                    this.questionList[this.key].option = this.questionOption;
+                    this.EditAndSaveBtn = "新增";
+                    alert("新增模式編輯成功!!");
+                    this.question = "";
+                    this.optionType = "";
+                    this.necessary = false;
+                    this.questionOption = "";
+                    console.log(this.questionList)
                     return
                 }
-                this.quId=this.questionList.length+1;
-                this.questionList.push({
-                    quId:this.quId,
-                    qTitle:this.question,
-                    optionType:this.optionType,
-                    necessary:this.necessary,
-                    option:this.questionOption,
-                });
-                this.qnId = -1;
-                this.question = "";
-                this.optionType = "";
-                this.necessary = false;
-                this.questionOption = "";
-                console.log(this.questionList)
-                alert("新增模式新增成功!!");
-            }
-            //新增模式編輯
-            if(this.EditAndSaveBtn == "編輯"){
-                if(this.question == ""){
-                    alert("問題不能為空!!")
-                    return
-                } else if(this.optionType ==""){
-                    alert("題行不得為空!!")
-                    return
-                } else if(this.questionOption ==""){
-                    alert("選項不得為空!!")
-                    return
+                //新增
+                if(this.EditAndSaveBtn == "新增"){
+                    if(this.question == ""){
+                        alert("問題不能為空!!")
+                        return
+                    } else if(this.optionType ==""){
+                        alert("題行不得為空!!")
+                        return
+                    } else if(this.questionOption ==""){
+                        alert("選項不得為空!!")
+                        return
+                    }
+                    this.quId=this.questionList.length+1;
+                    this.questionList.push({
+                        quId:this.quId,
+                        qTitle:this.question,
+                        optionType:this.optionType,
+                        necessary:this.necessary,
+                        option:this.questionOption,
+                    });
+                    this.question = "";
+                    this.optionType = "";
+                    this.necessary = false;
+                    this.questionOption = "";
+                    console.log(this.questionList)
+                    alert("新增模式新增成功!!");
                 }
-                // console.log("問卷索引值:"+this.key)
-                this.questionList[this.key].quId = this.quId
-                this.questionList[this.key].qTitle = this.question;
-                this.questionList[this.key].optionType = this.optionType;
-                this.questionList[this.key].necessary = this.necessary;
-                this.questionList[this.key].option = this.questionOption;
-                this.addbutton = "新增";
-                alert("新增模式編輯成功");
-                this.qnId = -1;
-                this.question = "";
-                this.optionType = "";
-                this.necessary = false;
-                this.questionOption = "";
-                console.log(this.questionList)
-                return
             }
             },
         
@@ -473,6 +462,32 @@ export default {
                 this.questionOption = this.questionList[index].option;
                 this.key = index
         },
+
+        editQuestion(index){
+            var pageIndex = ((this.currentPage-1)*this.perpage+index); 
+            this.qnId = this.allQn[pageIndex].questionnaire.id;
+            this.NewQuestionnareName =  this.allQn[pageIndex].questionnaire.title;
+            this.qnDescription =  this.allQn[pageIndex].questionnaire.description;
+            this.startDate =  this.allQn[pageIndex].questionnaire.startDate;
+            this.endDate = this.allQn[pageIndex].questionnaire.endDate;
+            this.published=this.allQn[pageIndex].questionnaire.published;
+            console.log("qnId:"+this.qnId)
+            this.popup = 1;
+            this.next();
+            
+            /////old edition/////
+            // this.$router.push({
+            // name: 'QuestionnaireCreate',
+            // query: {
+            //     qnId:this.qnId,
+            //     title:this.title,
+            //     description:this.description,
+            //     startDate:this.startDate,
+            //     endDate:this.endDate,
+            //     published:this.published
+            // }
+            // });
+            },
 
         //觀看結果
         goResult(index){
@@ -628,7 +643,7 @@ export default {
                 this.selectedIndexes = this.selectedIndexes.filter(i => i !== index);
             }
             console.log("QuIds:", this.selectedQuIds);
-            },
+        },
 
         //checkboxgeQnId fn
         handleCheckboxChange(questionnaireId) {
@@ -648,31 +663,6 @@ export default {
             },
 
         //edit Question
-        editQuestion(index){
-            var pageIndex = ((this.currentPage-1)*this.perpage+index); 
-            this.qnId = this.allQn[pageIndex].questionnaire.id;
-            this.NewQuestionnareName =  this.allQn[pageIndex].questionnaire.title;
-            this.qnDescription =  this.allQn[pageIndex].questionnaire.description;
-            this.startDate =  this.allQn[pageIndex].questionnaire.startDate;
-            this.endDate = this.allQn[pageIndex].questionnaire.endDate;
-            this.published=this.allQn[pageIndex].questionnaire.published;
-            console.log("qnId:"+this.qnId)
-            this.popup = 1;
-            this.next();
-            
-            /////old edition/////
-            // this.$router.push({
-            // name: 'QuestionnaireCreate',
-            // query: {
-            //     qnId:this.qnId,
-            //     title:this.title,
-            //     description:this.description,
-            //     startDate:this.startDate,
-            //     endDate:this.endDate,
-            //     published:this.published
-            // }
-            // });
-            }
 },
 
         mounted() {
@@ -897,7 +887,7 @@ export default {
                                     <p>({{ question.optionType }})</p>
                                 </div>
                                 <div class="Question-Option">
-                                    <div class="option" v-for="item in question.option.split(';')" v-if="question.optionType==='單選題'">
+                                    <div class="option" v-for="item in question.option.split(';')" v-if="question.optionType =='單選題'">
                                         &nbsp;<input type="radio" valuev = "answer">
                                         <label>&nbsp;{{ item }}</label>           
                                     </div> 
