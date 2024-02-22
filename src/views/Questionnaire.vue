@@ -43,6 +43,9 @@ export default {
             selectedQuIds:[],
             delQuList:[],
 
+            //控制btnArea
+            containerWidth: '100%', // 初始容器宽度  
+
 
         
         }
@@ -702,7 +705,7 @@ export default {
 <template>
     <div class="body" >
         <div class="mainArea">
-            <div class="inputArea">
+            <div class="inputArea" >
                 <div>
                     <div class="searchTitle">
                         <h2>問卷標題</h2>
@@ -716,11 +719,11 @@ export default {
                 </div>
                 <div class="btnArea">
                     <button @click='fetchData()'>搜尋問卷</button>
-                    <button><RouterLink to="/QuestionnaireCreate" id="addqn">新增問卷</RouterLink></button>
+                    <button type="button" class="numBtn"   @click="Addtransaction()"> 新增問卷</button>
+                    <!-- <button><RouterLink to="/QuestionnaireCreate" id="addqn">新增問卷</RouterLink></button> -->
                     <button type="button" @click="showdele" v-show="controshowdel">刪除問卷</button>
                     <button type="button" @click="closedele" v-show="isdele">取消刪除</button>
                     <button type="button" @click=deleQn v-show="isdele">確認刪除</button>
-                    <button type="button" class="numBtn"   @click="Addtransaction()">Add transaction</button>
                 </div>
             </div>
             <div class="bottom">
@@ -906,7 +909,7 @@ export default {
                 <div class="popup-bottom">
                     <button type="button" @click="cancel()">取消</button>
                     <button type="button" @click="this.createStep -=1" v-if="this.createStep > 1">上一步</button>
-                    <button type="button" v-if="this.createStep !=3" @click="next">下一步</button>
+                    <button type="button" class="flicker" v-if="this.createStep !=3" @click="next">下一步</button>
                     <button v-if="this.createStep ==3" @click="save">儲存</button>
                     <button v-if="this.createStep ==3" @click="saveAndpub">儲存並發布</button>
                 </div>
@@ -1049,7 +1052,7 @@ export default {
 /////Step two/////
 .popup .Build-Qn  .BuildQn-step-two{
     width: 80vw;
-    height: 300px;
+    height: 25vw;
     padding: 0 4%;
 }
 
@@ -1279,8 +1282,6 @@ ul{
         align-items: center;
     .inputArea{
         display: flex;
-        // margin: 2% 0;
-        width: 100%;
         padding: 2% ;
         margin: 1% 0;
         background: rgb(31, 30, 30);
@@ -1304,12 +1305,31 @@ ul{
                 border-radius: 10px;
                 }
             }
-        }
-
         .btnArea{
             display: flex;
             justify-content: center;
         }
+        }
     }
+}
+
+//動畫
+.flicker{
+        color:#24e451; /*設定文字顏色*/
+        // font-size:64px; /*設定字型大小*/
+        font-weight:bolder; /*設定字型粗細*/
+        -webkit-animation: flicker 2s infinite;    /*設定動畫*/
+}
+@-webkit-keyframes flicker{                    /*建立動畫*/
+    0%{
+        opacity: 1;
+    }
+    50%{
+        opacity: 0.5;
+    }
+    100%{
+        opacity: 1;
+    }
+
 }
 </style>
