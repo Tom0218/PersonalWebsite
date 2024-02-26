@@ -1090,6 +1090,7 @@ export default {
 .popup .Build-Qn  .BuildQn-step-two select{
     border-radius: 10px;
     padding: 0.5%;
+    font-weight: bold;
 }
 
 .popup .Build-Qn  .BuildQn-step-two table{
