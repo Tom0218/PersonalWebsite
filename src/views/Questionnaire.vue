@@ -335,7 +335,6 @@ export default {
 
         //新增或編輯問卷題目
         addOREditQuetion(){
-
             console.log("qnId :",this.qnId)
             //修改模式
             if(this.qnId > 0  ){
